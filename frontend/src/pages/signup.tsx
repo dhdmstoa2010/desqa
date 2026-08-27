@@ -13,6 +13,10 @@ import {
 } from "./styles/signup.style";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { signupRequest } from "../api/auth";
+import { useAuthStore } from "../store/authStore";
 import { EyeIcon, EyeOffIcon } from "../components/icons";
 
 type SignupForm = {
@@ -24,14 +28,32 @@ type SignupForm = {
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignupForm>();
 
-  const onSubmit = (data: SignupForm) => {
-    console.log(data);
+  const onSubmit = async (data: SignupForm) => {
+    setServerError(null);
+    try {
+      const { token, user } = await signupRequest({
+        loginId: data.ID,
+        name: data.name,
+        password: data.password,
+      });
+      login(user, token);
+      navigate("/");
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setServerError(err.response.data.message);
+      } else {
+        setServerError("회원가입 중 오류가 발생했습니다");
+      }
+    }
   };
 
   return (
@@ -82,7 +104,11 @@ function SignupPage() {
             )}
           </Field>
 
-          <SubmitButton type="submit">Sign up</SubmitButton>
+          {serverError && <ErrorText>{serverError}</ErrorText>}
+
+          <SubmitButton type="submit" disabled={isSubmitting}>
+            Sign up
+          </SubmitButton>
         </Form>
       </Content>
     </Wrapper>

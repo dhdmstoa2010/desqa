@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { loginRequest } from "../api/auth";
+import { useAuthStore } from "../store/authStore";
 import { EyeIcon, EyeOffIcon } from "../components/icons";
 import {
   Wrapper,
@@ -24,14 +28,31 @@ type LoginForm = {
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginForm>();
 
-  const onSubmit = (data: LoginForm) => {
-    console.log(data);
+  const onSubmit = async (data: LoginForm) => {
+    setServerError(null);
+    try {
+      const { token, user } = await loginRequest({
+        loginId: data.ID,
+        password: data.password,
+      });
+      login(user, token);
+      navigate("/");
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setServerError(err.response.data.message);
+      } else {
+        setServerError("로그인 중 오류가 발생했습니다");
+      }
+    }
   };
 
   return (
@@ -73,7 +94,11 @@ function LoginPage() {
             )}
           </Field>
 
-          <SubmitButton type="submit">Log in</SubmitButton>
+          {serverError && <ErrorText>{serverError}</ErrorText>}
+
+          <SubmitButton type="submit" disabled={isSubmitting}>
+            Log in
+          </SubmitButton>
         </Form>
 
         <Footer>
