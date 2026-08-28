@@ -23,12 +23,9 @@ function MyPage() {
   const [user, setUser] = useState<AuthUser | null>(storedUser);
   const [error, setError] = useState<string | null>(null);
 
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
-
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -72,14 +69,7 @@ function MyPage() {
               <RowLabel>ID</RowLabel>
               <RowValue>{user.loginId}</RowValue>
             </Row>
-            <Logout
-              onClick={() => {
-                logout();
-                navigate("/login");
-              }}
-            >
-              로그아웃
-            </Logout>
+            <Logout onClick={handleLogout}>로그아웃</Logout>
           </>
         )}
       </Card>

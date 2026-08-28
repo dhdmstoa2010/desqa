@@ -29,10 +29,19 @@ export const Links = styled.div`
 export const NavLink = styled(Link)`
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 999px;
   color: #f5f5f5;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
+  transition: background 0.15s ease, opacity 0.15s ease;
+
+  &:hover {
+    background: #1c1c1f;
+    opacity: 0.85;
+  }
 `;
 
 export const LoginLink = styled(Link)`
