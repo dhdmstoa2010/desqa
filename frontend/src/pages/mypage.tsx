@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { meRequest } from "../api/auth";
 import { useAuthStore, type AuthUser } from "../store/authStore";
+
 import {
   Wrapper,
   Card,
@@ -21,6 +22,14 @@ function MyPage() {
   const logout = useAuthStore((state) => state.logout);
   const [user, setUser] = useState<AuthUser | null>(storedUser);
   const [error, setError] = useState<string | null>(null);
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     let cancelled = false;

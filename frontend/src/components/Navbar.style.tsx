@@ -35,6 +35,17 @@ export const NavLink = styled(Link)`
   text-decoration: none;
 `;
 
+export const LoginLink = styled(Link)`
+  color: #f5f5f5;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    color: #b8b8b8;
+  }
+`;
+
 export const LogoutButton = styled.button`
   padding: 8px 14px;
   border-radius: 10px;
