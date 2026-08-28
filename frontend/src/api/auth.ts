@@ -19,3 +19,8 @@ export async function loginRequest(data: { loginId: string; password: string }) 
   const res = await apiClient.post<AuthResponse>("/api/auth/login", data);
   return res.data;
 }
+
+export async function meRequest() {
+  const res = await apiClient.get<{ user: AuthUser }>("/api/auth/me");
+  return res.data;
+}

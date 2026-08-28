@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 
 export const Bar = styled.nav`
   width: 100%;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
+  padding: 0 32px;
   background: #0a0a0b;
   border-bottom: 1px solid #1c1c1f;
   box-sizing: border-box;
@@ -26,15 +27,12 @@ export const Links = styled.div`
 `;
 
 export const NavLink = styled(Link)`
+  display: flex;
+  align-items: center;
   color: #f5f5f5;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-`;
-
-export const Greeting = styled.span`
-  color: #9a9a9f;
-  font-size: 14px;
 `;
 
 export const LogoutButton = styled.button`
