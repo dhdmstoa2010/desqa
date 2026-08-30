@@ -7,7 +7,10 @@ export const Bar = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 32px;
+  padding-right: 16px;
   background: #0a0a0b;
   border-bottom: 1px solid #1c1c1f;
   box-sizing: border-box;
@@ -36,7 +39,9 @@ export const NavLink = styled(Link)`
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  transition: background 0.15s ease, opacity 0.15s ease;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
 
   &:hover {
     background: #1c1c1f;
@@ -52,20 +57,5 @@ export const LoginLink = styled(Link)`
 
   &:hover {
     color: #b8b8b8;
-  }
-`;
-
-export const LogoutButton = styled.button`
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #1c1c1f;
-  color: #f5f5f5;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover {
-    background: #2a2a2e;
   }
 `;
