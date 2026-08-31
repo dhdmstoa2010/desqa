@@ -3,17 +3,23 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { meRequest } from "../api/auth";
 import { useAuthStore, type AuthUser } from "../store/authStore";
+import { profileColors } from "../utils/gradient";
 
 import {
   Wrapper,
-  Card,
-  Title,
-  Row,
-  RowLabel,
-  RowValue,
+  Container,
+  Cover,
+  Actions,
+  ActionButton,
+  Header,
+  Avatar,
+  Identity,
+  Name,
+  Badge,
+  Tabs,
+  Tab,
   StatusText,
   ErrorText,
-  Logout,
 } from "./styles/mypage.style";
 
 function MyPage() {
@@ -22,6 +28,11 @@ function MyPage() {
   const logout = useAuthStore((state) => state.logout);
   const [user, setUser] = useState<AuthUser | null>(storedUser);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"profile" | "activity">("profile");
+
+  const colors = profileColors(
+    user ? `${user.id}-${user.loginId}` : "guest",
+  );
 
   const handleLogout = () => {
     logout();
@@ -52,8 +63,14 @@ function MyPage() {
 
   return (
     <Wrapper>
-      <Card>
-        <Title>마이페이지</Title>
+      <Container>
+        <Cover style={{ background: colors.cover }}>
+          <Actions>
+            <ActionButton type="button" onClick={handleLogout}>
+              로그아웃
+            </ActionButton>
+          </Actions>
+        </Cover>
 
         {error && <ErrorText>{error}</ErrorText>}
 
@@ -61,18 +78,35 @@ function MyPage() {
 
         {user && (
           <>
-            <Row>
-              <RowLabel>이름</RowLabel>
-              <RowValue>{user.name}</RowValue>
-            </Row>
-            <Row>
-              <RowLabel>ID</RowLabel>
-              <RowValue>{user.loginId}</RowValue>
-            </Row>
-            <Logout onClick={handleLogout}>로그아웃</Logout>
+            <Header>
+              <Avatar style={{ background: colors.avatar }}>
+                {user.name.charAt(0)}
+              </Avatar>
+              <Identity>
+                <Name>{user.name}</Name>
+                <Badge>Members</Badge>
+              </Identity>
+            </Header>
+
+            <Tabs>
+              <Tab
+                type="button"
+                active={activeTab === "profile"}
+                onClick={() => setActiveTab("profile")}
+              >
+                {user.name}'s Profile
+              </Tab>
+              <Tab
+                type="button"
+                active={activeTab === "activity"}
+                onClick={() => setActiveTab("activity")}
+              >
+                See my activity
+              </Tab>
+            </Tabs>
           </>
         )}
-      </Card>
+      </Container>
     </Wrapper>
   );
 }

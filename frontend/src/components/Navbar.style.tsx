@@ -29,6 +29,13 @@ export const Links = styled.div`
   gap: 16px;
 `;
 
+export const Myaccount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+`;
+
 export const NavLink = styled(Link)`
   display: flex;
   align-items: center;

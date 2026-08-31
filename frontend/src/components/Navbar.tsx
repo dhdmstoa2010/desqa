@@ -1,6 +1,12 @@
 import { useAuthStore } from "../store/authStore";
-import { Bar, Brand, Links, NavLink, LoginLink } from "./Navbar.style";
-import { ProfileIcon } from "./icons";
+import {
+  Bar,
+  Brand,
+  Links,
+  NavLink,
+  Myaccount,
+  LoginLink,
+} from "./Navbar.style";
 
 function Navbar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -11,7 +17,7 @@ function Navbar() {
       <Links>
         {isAuthenticated ? (
           <NavLink to="/mypage" aria-label="마이페이지">
-            <ProfileIcon />
+            <Myaccount>My Account</Myaccount>
           </NavLink>
         ) : (
           <LoginLink to="/login">Login/Create Account</LoginLink>
