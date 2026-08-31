@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Bar = styled.nav`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
