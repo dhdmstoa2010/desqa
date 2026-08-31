@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <Bar>
-      <Brand to="/">desqa</Brand>
+      <Brand to="/">desqa.</Brand>
       <Links>
         {isAuthenticated ? (
           <NavLink to="/mypage" aria-label="마이페이지">

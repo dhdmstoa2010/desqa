@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
 export const Bar = styled.nav`
+  position: relative;
   width: 100%;
   height: 64px;
   display: flex;
@@ -10,16 +11,28 @@ export const Bar = styled.nav`
   padding-top: 0;
   padding-bottom: 0;
   padding-left: 32px;
-  padding-right: 16px;
+  padding-right: 32px;
   background: #0a0a0b;
-  border-bottom: 1px solid #1c1c1f;
   box-sizing: border-box;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    bottom: 0;
+    height: 2px;
+    background: #393939;
+  }
 `;
 
 export const Brand = styled(Link)`
   color: #f5f5f5;
-  font-size: 18px;
-  font-weight: 700;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.3px;
   text-decoration: none;
 `;
 
@@ -42,8 +55,9 @@ export const NavLink = styled(Link)`
   justify-content: center;
   padding: 6px;
   border-radius: 999px;
-  color: #f5f5f5;
-  font-size: 14px;
+  margin-right: -4px;
+  color: #ffffff;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   transition:
@@ -51,7 +65,7 @@ export const NavLink = styled(Link)`
     opacity 0.15s ease;
 
   &:hover {
-    background: #1c1c1f;
+    color: #b6b6b2;
     opacity: 0.85;
   }
 `;
