@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 export const Wrapper = styled.section`
   position: relative;
   width: 100%;
-  flex: 1;
+  flex: 1 0 auto;
+  min-height: calc(100svh - 70px);
   overflow: hidden;
   background: #0a0a0b;
   display: flex;
@@ -11,6 +12,114 @@ export const Wrapper = styled.section`
   align-items: center;
   padding: 80px clamp(16px, 2.5vw, 44px);
   box-sizing: border-box;
+`;
+
+/* 히어로 아래 — URL 처리 과정 애니메이션이 들어올 스크롤 영역 */
+export const ScrollArea = styled.section`
+  position: relative;
+  width: 100%;
+  min-height: 200vh;
+  background: #0a0a0b;
+  border-top: 1px solid #1c1c1f;
+`;
+
+export const ScrollStage = styled.div`
+  position: sticky;
+  top: 70px;
+  height: calc(100svh - 70px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  color: #4c4c55;
+  font-family: "Unbounded", system-ui, sans-serif;
+  font-size: clamp(13px, 1.6vw, 20px);
+  letter-spacing: 0.04em;
+  text-align: center;
+
+  & > span {
+    padding: 14px 22px;
+    border: 1px dashed #2c2c33;
+    border-radius: 12px;
+  }
+`;
+
+export const ScrollCue = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+  color: #6a6a70;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(#6a6a70, transparent);
+    animation: scrollCue 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scrollCue {
+    0%,
+    100% {
+      transform: scaleY(0.4);
+      transform-origin: top;
+      opacity: 0.4;
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+      opacity: 1;
+    }
+  }
+`;
+
+/* 커서를 따라다니는 컬러 밴드 (specia1ne 스타일 reveal) */
+export const RevealLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 80px clamp(16px, 2.5vw, 44px);
+  box-sizing: border-box;
+  background: #bfff6b;
+  overflow: hidden;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+
+  /* 밴드 안에서는 글자를 어둡게 반전 */
+  h1,
+  h1 * {
+    color: #0a0a0b !important;
+  }
+
+  input {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.28);
+    color: #0a0a0b;
+  }
+
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  button {
+    background: #0a0a0b;
+    color: #bfff6b;
+  }
 `;
 
 export const GlowAnchor = styled.div`
