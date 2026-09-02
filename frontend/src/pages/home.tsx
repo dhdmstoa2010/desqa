@@ -5,7 +5,8 @@ import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import {
   Wrapper,
-  RevealLayer,
+  RevealFill,
+  RevealText,
   GlowAnchor,
   Glow,
   Content,
@@ -18,31 +19,30 @@ import {
   Form,
   Input,
   Button,
-  ScrollCue,
-  ScrollArea,
+  ProcessAnimation,
   ScrollStage,
+  Example,
 } from "./styles/home.style";
 
 /* 커서 밴드 */
 const BAND_W = 128; // 밴드 폭(px)
-const EASE = 0.16; // lerp 계수
-const IDLE_MS = 650; // 커서가 멈춘 뒤 밴드가 접히기까지
+const EASE = 0.16; // 커서 밴드 lerp 계수 (빠르게)
+const SCROLL_EASE = 0.06; // 스크롤 채움 lerp 계수 (느리게)
+const IDLE_MS = 650; // 커서가 멈춘 뒤 밴드가 접히기까지 대기
 
 gsap.registerPlugin(useGSAP, SplitText);
 
 function Home() {
   const container = useRef<HTMLDivElement>(null);
-  const glowAnchor = useRef<HTMLDivElement>(null);
-  const glow = useRef<HTMLDivElement>(null);
-  const glowFloat = useRef<gsap.core.Tween | null>(null);
   const line1 = useRef<HTMLSpanElement>(null);
   const line2 = useRef<HTMLSpanElement>(null);
-  const revealRef = useRef<HTMLDivElement>(null);
   const reveal = useRef({
     curX: 0,
     tgtX: 0,
     curW: 0,
     tgtW: 0,
+    curScroll: 0,
+    tgtScroll: 0,
     raf: 0,
     idle: 0,
     init: false,
@@ -50,28 +50,39 @@ function Home() {
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
 
-  const paintReveal = () => {
-    const el = revealRef.current;
+  /*
+     커서 밴드 + 스크롤 채움을 하나의 clip-path( --reveal-clip )로 적용
+     RevealFill 이랑 RevealText 변수 공유
+   */
+  const applyReveal = () => {
     const s = reveal.current;
-    if (!el) {
-      s.raf = 0;
-      return;
-    }
+    const vw = window.innerWidth;
+    const half = s.curW / 2;
+    const fill = 1 - s.curScroll;
+    const left = Math.max(0, (s.curX - half) * fill);
+    const right = Math.max(0, (vw - s.curX - half) * fill);
+    document.documentElement.style.setProperty(
+      "--reveal-clip",
+      `inset(0px ${right}px 0px ${left}px)`,
+    );
+  };
+
+  const paintReveal = () => {
+    const s = reveal.current;
     s.curX += (s.tgtX - s.curX) * EASE;
     s.curW += (s.tgtW - s.curW) * EASE;
+    s.curScroll += (s.tgtScroll - s.curScroll) * SCROLL_EASE;
 
-    const vw = window.innerWidth;
     const settled =
-      Math.abs(s.tgtX - s.curX) < 0.4 && Math.abs(s.tgtW - s.curW) < 0.4;
+      Math.abs(s.tgtX - s.curX) < 0.4 &&
+      Math.abs(s.tgtW - s.curW) < 0.4 &&
+      Math.abs(s.tgtScroll - s.curScroll) < 0.001;
     if (settled) {
       s.curX = s.tgtX;
       s.curW = s.tgtW;
+      s.curScroll = s.tgtScroll;
     }
-    const half = s.curW / 2;
-    const left = Math.max(0, s.curX - half);
-    const right = Math.max(0, vw - s.curX - half);
-    el.style.clipPath = `inset(0px ${right}px 0px ${left}px)`;
-
+    applyReveal();
     s.raf = settled ? 0 : requestAnimationFrame(paintReveal);
   };
 
@@ -85,8 +96,36 @@ function Home() {
     const s = reveal.current;
     return () => {
       if (s.raf) cancelAnimationFrame(s.raf);
+      s.raf = 0; // StrictMode 재마운트 시 kickReveal 이 다시 돌 수 있게 초기화
       window.clearTimeout(s.idle);
     };
+  }, []);
+
+  // 스크롤 진행도(0→1)를 tgtScroll로 정함
+  useEffect(() => {
+    const s = reveal.current;
+    const onScroll = () => {
+      // 커서를 아직 안 움직였으면 화면 중앙에서 대칭
+      if (!s.init) s.curX = window.innerWidth / 2;
+      const hero = container.current;
+      const heroExit = hero
+        ? (hero.offsetTop + hero.offsetHeight) * 0.9
+        : window.innerHeight;
+      s.tgtScroll =
+        heroExit > 0 ? Math.min(1, Math.max(0, window.scrollY / heroExit)) : 0;
+      // 스크롤 이벤트에서도 조금씩 전진(약간 느리게) — rAF 가 죽어도 스크롤은 동작한다.
+      s.curScroll += (s.tgtScroll - s.curScroll) * 0.2;
+      applyReveal();
+      kickReveal(); // 스크롤이 멈춘 뒤 남은 이징은 rAF 가 마무리
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+    // applyReveal / kickReveal 은 ref 만 참조하므로 재구독 불필요
   }, []);
 
   useGSAP(
@@ -109,17 +148,9 @@ function Home() {
       tl.from(".hero-glow", { scale: 0.6, opacity: 0, duration: 1.7 })
 
         // 1줄 — 왼쪽에서 한 글자씩 슬라이드 인
-        .from(
-          line1Chars,
-          { x: -70, opacity: 0, stagger: 0.05 },
-          0.5,
-        )
+        .from(line1Chars, { x: -70, opacity: 0, stagger: 0.05 }, 0.5)
         // 2줄 — 같은 방향으로 이어서 슬라이드 인
-        .from(
-          line2Chars,
-          { x: -70, opacity: 0, stagger: 0.05 },
-          "<0.35",
-        )
+        .from(line2Chars, { x: -70, opacity: 0, stagger: 0.05 }, "<0.35")
 
         // 입력창 — 중앙에서 양옆으로 퍼지며 등장
         .from(
@@ -127,14 +158,6 @@ function Home() {
           { clipPath: "inset(0px 50% 0px 50%)", duration: 1.1 },
           ">-0.4",
         );
-
-      glowFloat.current = gsap.to(".hero-glow", {
-        y: 24,
-        repeat: -1,
-        yoyo: true,
-        duration: 4,
-        ease: "sine.inOut",
-      });
 
       return () => {
         splits.forEach((s) => s.revert());
@@ -144,18 +167,6 @@ function Home() {
   );
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const anchor = glowAnchor.current;
-    if (!anchor) return;
-    if (glowFloat.current) {
-      glowFloat.current.kill();
-      glowFloat.current = null;
-      if (glow.current) gsap.set(glow.current, { y: 0 });
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    anchor.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-    anchor.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-
-    // 커서를 따라 컬러 밴드가 좌우로 퍼짐
     const s = reveal.current;
     if (!s.init) {
       s.init = true;
@@ -172,11 +183,6 @@ function Home() {
   };
 
   const handleMouseLeave = () => {
-    const anchor = glowAnchor.current;
-    if (anchor) {
-      anchor.style.removeProperty("--glow-x");
-      anchor.style.removeProperty("--glow-y");
-    }
     const s = reveal.current;
     window.clearTimeout(s.idle);
     s.tgtW = 0;
@@ -197,8 +203,8 @@ function Home() {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <GlowAnchor ref={glowAnchor}>
-          <Glow className="hero-glow" ref={glow} />
+        <GlowAnchor>
+          <Glow className="hero-glow" />
         </GlowAnchor>
 
         <Content>
@@ -226,8 +232,7 @@ function Home() {
           </FormWrap>
         </Content>
 
-        {/* 커서를 따라다니는 컬러 밴드 — 아래 콘텐츠의 반전 버전 */}
-        <RevealLayer ref={revealRef} aria-hidden="true">
+        <RevealText aria-hidden="true">
           <Content>
             <Title>
               <Line>
@@ -235,7 +240,7 @@ function Home() {
               </Line>
               <Line>
                 <SecDesc>
-                  See the <Accent>design flaws</Accent>
+                  See the <Accent className="accent">design flaws</Accent>
                 </SecDesc>
               </Line>
             </Title>
@@ -252,16 +257,16 @@ function Home() {
               </Form>
             </FormWrap>
           </Content>
-        </RevealLayer>
-
-        <ScrollCue>Scroll</ScrollCue>
+        </RevealText>
       </Wrapper>
 
-      <ScrollArea>
+      <RevealFill aria-hidden="true" />
+
+      <ProcessAnimation>
         <ScrollStage>
-          <span>URL 처리 과정 애니메이션 영역</span>
+          <Example>example</Example>
         </ScrollStage>
-      </ScrollArea>
+      </ProcessAnimation>
     </>
   );
 }

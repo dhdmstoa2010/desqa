@@ -14,34 +14,26 @@ export const Wrapper = styled.section`
   box-sizing: border-box;
 `;
 
-/* 히어로 아래 — URL 처리 과정 애니메이션이 들어올 스크롤 영역 */
-export const ScrollArea = styled.section`
+export const ProcessAnimation = styled.section`
   position: relative;
   width: 100%;
   min-height: 200vh;
   background: #0a0a0b;
-  border-top: 1px solid #1c1c1f;
 `;
 
 export const ScrollStage = styled.div`
   position: sticky;
   top: 70px;
+  z-index: 5;
   height: calc(100svh - 70px);
   display: grid;
   place-items: center;
   padding: 24px;
   box-sizing: border-box;
-  color: #4c4c55;
   font-family: "Unbounded", system-ui, sans-serif;
   font-size: clamp(13px, 1.6vw, 20px);
   letter-spacing: 0.04em;
   text-align: center;
-
-  & > span {
-    padding: 14px 22px;
-    border: 1px dashed #2c2c33;
-    border-radius: 12px;
-  }
 `;
 
 export const ScrollCue = styled.div`
@@ -84,26 +76,35 @@ export const ScrollCue = styled.div`
   }
 `;
 
-/* 커서를 따라다니는 컬러 밴드 (specia1ne 스타일 reveal) */
-export const RevealLayer = styled.div`
-  position: absolute;
+export const RevealFill = styled.div`
+  position: fixed;
   inset: 0;
   z-index: 3;
+  background: #bfff6b;
+  pointer-events: none;
+  clip-path: var(--reveal-clip, inset(0 100% 0 0));
+  will-change: clip-path;
+`;
+
+export const RevealText = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: 80px clamp(16px, 2.5vw, 44px);
   box-sizing: border-box;
-  background: #bfff6b;
-  overflow: hidden;
   pointer-events: none;
-  clip-path: inset(0 100% 0 0);
+  clip-path: var(--reveal-clip, inset(0 100% 0 0));
   will-change: clip-path;
 
-  /* 밴드 안에서는 글자를 어둡게 반전 */
   h1,
   h1 * {
     color: #0a0a0b !important;
+  }
+  h1 .accent {
+    color: #ffffff !important;
   }
 
   input {
@@ -111,11 +112,9 @@ export const RevealLayer = styled.div`
     border-color: rgba(0, 0, 0, 0.28);
     color: #0a0a0b;
   }
-
   input::placeholder {
     color: rgba(0, 0, 0, 0.4);
   }
-
   button {
     background: #0a0a0b;
     color: #bfff6b;
@@ -124,13 +123,10 @@ export const RevealLayer = styled.div`
 
 export const GlowAnchor = styled.div`
   position: absolute;
-  left: var(--glow-x, calc(6% + 340px));
-  top: var(--glow-y, calc(-25% + 340px));
+  left: calc(6% + 340px);
+  top: calc(-25% + 340px);
   transform: translate(-50%, -50%);
   pointer-events: none;
-  transition:
-    left 0.25s ease-out,
-    top 0.25s ease-out;
 `;
 
 export const Glow = styled.div`
@@ -155,7 +151,7 @@ export const Content = styled.div`
   align-items: flex-start;
   text-align: left;
   gap: 12px;
-  margin-bottom: 14vh;
+  margin-bottom: 3vh;
 
   @media (max-width: 1024px) {
     gap: 28px;
@@ -204,7 +200,7 @@ export const Desc = styled.span`
   display: block;
   margin-top: -0.25em;
   text-align: left;
-  font-size: clamp(24px, 19.5vw, 200px);
+  font-size: clamp(24px, 14.5vw, 184px);
   line-height: 1.4;
   letter-spacing: -0.03em;
   word-spacing: 0.04em;
@@ -215,7 +211,7 @@ export const SecDesc = styled.span`
   margin-top: -0.06em;
   margin-left: 8px;
   text-align: left;
-  font-size: clamp(38px, 9.4vw, 160px);
+  font-size: clamp(32px, 7.1vw, 126px);
   line-height: 0.98;
   letter-spacing: -0.03em;
 `;
@@ -261,6 +257,10 @@ export const Input = styled.input`
     outline: 2px solid #bfff6b;
     outline-offset: 0;
   }
+`;
+
+export const Example = styled.span`
+  color: #0a0a0b;
 `;
 
 export const Button = styled.button`
