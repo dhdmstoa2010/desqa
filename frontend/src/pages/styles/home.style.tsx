@@ -17,7 +17,8 @@ export const Wrapper = styled.section`
 export const ProcessAnimation = styled.section`
   position: relative;
   width: 100%;
-  min-height: 200vh;
+  /* 고정 RevealFill(라임 밴드)이 스크롤에 따라 이 영역까지 확장돼 배경을 만든다.
+     밴드가 아직 안 덮은 구간은 이 다크 배경이 그대로 보여 히어로와 이어진다. */
   background: #0a0a0b;
 `;
 
@@ -224,7 +225,7 @@ export const FormWrap = styled.div`
   width: 100%;
   max-width: 620px;
   align-self: center;
-  margin-top: clamp(20px, 3.5vh, 48px);
+  margin-top: clamp(70px, 3.5vh, 48px);
 `;
 
 export const Form = styled.form`
@@ -257,10 +258,6 @@ export const Input = styled.input`
     outline: 2px solid #bfff6b;
     outline-offset: 0;
   }
-`;
-
-export const Example = styled.span`
-  color: #0a0a0b;
 `;
 
 export const Button = styled.button`
