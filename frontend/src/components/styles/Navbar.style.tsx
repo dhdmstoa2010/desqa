@@ -37,6 +37,31 @@ export const Brand = styled(Link)`
   text-decoration: none;
 `;
 
+/* 로고 글자를 1초 간격으로 하나씩 라임(#bfff6b)으로 물들였다가 되돌린다 */
+export const BrandChar = styled.span`
+  display: inline-block;
+  white-space: pre;
+  animation: brandGlow 7s ease-in-out infinite;
+
+  @keyframes brandGlow {
+    0%,
+    100% {
+      color: #f5f5f5;
+    }
+    6%,
+    13% {
+      color: #bfff6b;
+    }
+    20% {
+      color: #f5f5f5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
 export const Links = styled.div`
   display: flex;
   align-items: center;

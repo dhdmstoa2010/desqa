@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
+import Cards from "../components/Cards";
 import {
   Wrapper,
   RevealFill,
@@ -20,8 +21,6 @@ import {
   Input,
   Button,
   ProcessAnimation,
-  ScrollStage,
-  Example,
 } from "./styles/home.style";
 
 /* 커서 밴드 */
@@ -108,8 +107,10 @@ function Home() {
       // 커서를 아직 안 움직였으면 화면 중앙에서 대칭
       if (!s.init) s.curX = window.innerWidth / 2;
       const hero = container.current;
+      // 히어로를 지나 하단(카드) 섹션 초입까지 라임 밴드가 계속 확장되도록
+      // 종료 지점을 히어로 높이보다 살짝 뒤로 잡는다.
       const heroExit = hero
-        ? (hero.offsetTop + hero.offsetHeight) * 0.9
+        ? (hero.offsetTop + hero.offsetHeight) * 1.15
         : window.innerHeight;
       s.tgtScroll =
         heroExit > 0 ? Math.min(1, Math.max(0, window.scrollY / heroExit)) : 0;
@@ -263,9 +264,7 @@ function Home() {
       <RevealFill aria-hidden="true" />
 
       <ProcessAnimation>
-        <ScrollStage>
-          <Example>example</Example>
-        </ScrollStage>
+        <Cards />
       </ProcessAnimation>
     </>
   );
