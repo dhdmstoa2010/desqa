@@ -49,10 +49,6 @@ function Home() {
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
 
-  /*
-     커서 밴드 + 스크롤 채움을 하나의 clip-path( --reveal-clip )로 적용
-     RevealFill 이랑 RevealText 변수 공유
-   */
   const applyReveal = () => {
     const s = reveal.current;
     const vw = window.innerWidth;
