@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
-import Cards from "../components/Cards";
+import ServiceFlow from "../components/ServiceFlow";
 import {
   Wrapper,
   RevealFill,
@@ -47,7 +47,15 @@ function Home() {
     init: false,
   });
   const [url, setUrl] = useState("");
+  const urlInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const handleStart = () => {
+    // 포커스를 먼저(스크롤 없이) 잡아둔 뒤 최상단으로 부드럽게 이동.
+    // focus() 가 자체적으로 스크롤을 유발해 부드러운 스크롤을 중간에 끊는 걸 막는다.
+    urlInput.current?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const applyReveal = () => {
     const s = reveal.current;
@@ -103,10 +111,10 @@ function Home() {
       // 커서를 아직 안 움직였으면 화면 중앙에서 대칭
       if (!s.init) s.curX = window.innerWidth / 2;
       const hero = container.current;
-      // 히어로를 지나 하단(카드) 섹션 초입까지 라임 밴드가 계속 확장되도록
-      // 종료 지점을 히어로 높이보다 살짝 뒤로 잡는다.
+      // 히어로를 지나 하단(플로우) 섹션 초입까지 라임 밴드가 계속 확장되도록
+      // 종료 지점을 히어로 높이보다 넉넉히 뒤로 잡는다 (섹션에 들어와서도 넓어지는 게 보임).
       const heroExit = hero
-        ? (hero.offsetTop + hero.offsetHeight) * 1.15
+        ? (hero.offsetTop + hero.offsetHeight) * 1.4
         : window.innerHeight;
       s.tgtScroll =
         heroExit > 0 ? Math.min(1, Math.max(0, window.scrollY / heroExit)) : 0;
@@ -218,6 +226,7 @@ function Home() {
           <FormWrap>
             <Form className="hero-form" onSubmit={handleSubmit}>
               <Input
+                ref={urlInput}
                 type="url"
                 inputMode="url"
                 placeholder="https://example.com"
@@ -261,7 +270,7 @@ function Home() {
       <RevealFill aria-hidden="true" />
 
       <ProcessAnimation>
-        <Cards />
+        <ServiceFlow onStart={handleStart} />
       </ProcessAnimation>
     </>
   );
