@@ -7,9 +7,22 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  loginId   String   @unique
+  id        Int            @id @default(autoincrement())
+  loginId   String         @unique
   name      String
   password  String
+  createdAt DateTime       @default(now())
+  reviews   DesignReview[]
+}
+
+model DesignReview {
+  id        Int      @id @default(autoincrement())
+  url       String
+  score     Int
+  result    String
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }

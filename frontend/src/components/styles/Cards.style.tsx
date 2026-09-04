@@ -40,14 +40,14 @@ export const Track = styled.div`
   width: 100%;
   max-width: 1160px;
   margin: 0 auto;
-  aspect-ratio: 1160 / 1280;
+  aspect-ratio: 1160 / 1650;
 
   @media (max-width: 900px) {
     aspect-ratio: auto;
     max-width: 520px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 32px;
   }
 `;
 
@@ -75,15 +75,15 @@ export const Trail = styled.svg`
 
 const POS = {
   1: css`
-    top: 2%;
+    top: 0;
     left: 0;
   `,
   2: css`
-    top: 36%;
+    top: 44%;
     right: 0;
   `,
   3: css`
-    top: 70%;
+    top: 85%;
     left: 0;
   `,
 } as const;
@@ -164,7 +164,7 @@ export const Step = styled.span`
 export const CardTitle = styled.h3`
   margin: 6px 0 0;
   color: #f7f7f8;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", "Unbounded", system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(18px, 1.8vw, 24px);
   letter-spacing: -0.02em;
@@ -173,6 +173,8 @@ export const CardTitle = styled.h3`
 export const CardText = styled.p`
   margin: 0;
   color: #9a9aa2;
+  font-family: "Aggravo", system-ui, sans-serif;
+  font-weight: 300;
   font-size: clamp(14px, 1.15vw, 16px);
   line-height: 1.65;
 `;

@@ -225,7 +225,7 @@ export const FormWrap = styled.div`
   width: 100%;
   max-width: 620px;
   align-self: center;
-  margin-top: clamp(70px, 3.5vh, 48px);
+  margin-top: clamp(65px, 3.5vh, 48px);
 `;
 
 export const Form = styled.form`
