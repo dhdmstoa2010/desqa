@@ -247,6 +247,7 @@ function Home() {
                   readOnly
                   tabIndex={-1}
                   placeholder="https://example.com"
+                  value={url}
                 />
                 <Button type="button" tabIndex={-1}>
                   Evaluate
