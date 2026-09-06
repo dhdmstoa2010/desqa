@@ -536,8 +536,19 @@ export const Cta = styled.button`
   overflow: hidden;
   display: inline-flex;
   border-radius: 12px;
-  background: var(--flow-ink);
+  /* 채움이 다 덮였을 때 라운드 모서리에 다크가 비치지 않도록
+     버튼 자체 배경도 라임, 대신 라벨 뒤 다크 판을 따로 깐다. */
+  background: var(--flow-lime);
   isolation: isolate;
+
+  /* 평소 상태의 다크 배경 (채움이 없을 때 보이는 판) */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--flow-ink);
+  }
 
   .cta-fill {
     position: absolute;
