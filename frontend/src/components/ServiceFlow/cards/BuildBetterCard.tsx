@@ -64,8 +64,15 @@ function SweepCta({
     gsap.killTweensOf([fill.current, label.current]);
     gsap.fromTo(
       fill.current,
-      { xPercent: d.x, yPercent: d.y },
-      { xPercent: 0, yPercent: 0, duration: 0.45, ease: "power3.out" },
+      { x: 0, y: 0, xPercent: d.x, yPercent: d.y },
+      {
+        x: 0,
+        y: 0,
+        xPercent: 0,
+        yPercent: 0,
+        duration: 0.45,
+        ease: "power3.out",
+      },
     );
     gsap.to(label.current, { color: INK, duration: 0.35, ease: "power2.out" });
   };
@@ -75,6 +82,8 @@ function SweepCta({
     const d = edge(e);
     gsap.killTweensOf([fill.current, label.current]);
     gsap.to(fill.current, {
+      x: 0,
+      y: 0,
       xPercent: d.x,
       yPercent: d.y,
       duration: 0.4,
