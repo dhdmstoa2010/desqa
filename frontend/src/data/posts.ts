@@ -26,6 +26,8 @@ export interface Comment {
   text: string;
 }
 
+export type Tone = "high" | "mid" | "low";
+
 export interface Post {
   id: number;
   category: PostCategory;
@@ -35,11 +37,14 @@ export interface Post {
   authorColor: string;
   date: string;
   views: number;
-  score: number;
+  /** 아직 평가받지 않은 게시물은 점수가 없다 */
+  score?: number;
   badge?: string;
-  detail: string;
+  detail?: string;
   deltas: Delta[];
-  tags: string[];
+  tags?: string[];
+  /** 업로드한 캡처 이미지 (data URL). 없으면 그라데이션 썸네일로 대체 */
+  image?: string;
   from: string;
   to: string;
   lead: string;
@@ -49,10 +54,31 @@ export interface Post {
   commentList: Comment[];
 }
 
-export function toneOf(score: number): "high" | "mid" | "low" {
+export function toneOf(score?: number): Tone {
+  if (score == null) return "mid";
   if (score >= 80) return "high";
   if (score >= 65) return "mid";
   return "low";
+}
+
+const GRADIENTS: readonly [string, string][] = [
+  ["#3a2d5c", "#1b1b2e"],
+  ["#1f4d3a", "#12261f"],
+  ["#243a5c", "#101a2a"],
+  ["#5c4a1f", "#2a2210"],
+  ["#4a1f5c", "#26102a"],
+  ["#5c2d1f", "#2a1510"],
+  ["#1f3a5c", "#10202e"],
+  ["#2d1f5c", "#15102a"],
+];
+
+export function gradientFor(seed: string): { from: string; to: string } {
+  let h = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    h = (Math.imul(h, 31) + seed.charCodeAt(i)) >>> 0;
+  }
+  const [from, to] = GRADIENTS[h % GRADIENTS.length];
+  return { from, to };
 }
 
 export const POSTS: Post[] = [

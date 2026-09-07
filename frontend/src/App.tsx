@@ -7,6 +7,7 @@ import Signup from "./pages/signup.tsx";
 import MyPage from "./pages/mypage.tsx";
 import Result from "./pages/result.tsx";
 import Board from "./pages/board.tsx";
+import BoardNew from "./pages/boardNew.tsx";
 import BoardDetail from "./pages/boardDetail.tsx";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/result" element={<Result />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/board/new" element={<BoardNew />} />
         <Route path="/board/:id" element={<BoardDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

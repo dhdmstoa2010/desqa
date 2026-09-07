@@ -55,12 +55,12 @@ export const HeaderSide = styled.div`
 
 export const HeaderDesc = styled.p`
   margin: 0;
-  color: #9a9aa2;
+  color: #dedee1;
   font-size: 14px;
   line-height: 1.7;
 `;
 
-export const ShareButton = styled.button`
+export const ShareButton = styled(Link)`
   align-self: flex-start;
   background: #bfff6b;
   color: #0a0a0b;
@@ -70,6 +70,7 @@ export const ShareButton = styled.button`
   padding: 12px 22px;
   border-radius: 999px;
   cursor: pointer;
+  text-decoration: none;
   transition:
     background 0.2s,
     transform 0.2s;
@@ -102,7 +103,7 @@ export const FilterChip = styled.button<{ $active?: boolean }>`
   border: 1px solid
     ${({ $active }) => ($active ? "transparent" : "rgba(255, 255, 255, 0.14)")};
   background: ${({ $active }) => ($active ? "#f7f7f8" : "transparent")};
-  color: ${({ $active }) => ($active ? "#0a0a0b" : "#b9b9c0")};
+  color: ${({ $active }) => ($active ? "#0a0a0b" : "#e2e2e5")};
   font-size: 13px;
   font-weight: 600;
   padding: 8px 16px;
@@ -123,7 +124,7 @@ export const FilterChip = styled.button<{ $active?: boolean }>`
 export const Sort = styled.button`
   background: none;
   border: none;
-  color: #7a7a7f;
+  color: #e2e2e5;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -147,7 +148,7 @@ export const Empty = styled.p`
   margin: 0;
   padding: 64px 0;
   text-align: center;
-  color: #6a6a70;
+  color: #cfcfd4;
   font-size: 14px;
 `;
 
@@ -172,7 +173,7 @@ export const DetailInner = styled.div`
 
 export const DetailText = styled.p`
   margin: 0;
-  color: #c2c2c9;
+  color: #ffffff;
   font-size: 13px;
   line-height: 1.65;
   display: -webkit-box;
@@ -193,7 +194,7 @@ export const DeltaChip = styled.span`
   gap: 5px;
   font-size: 11px;
   font-weight: 600;
-  color: #b9b9c0;
+  color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 6px;
   padding: 3px 8px;
@@ -269,14 +270,22 @@ export const Thumb = styled.div<{ $from: string; $to: string }>`
   align-items: center;
   justify-content: center;
   gap: 2px;
-  color: #8b8b92;
+  color: #d0d0d5;
   font-size: 11px;
   line-height: 1.3;
   text-align: center;
   flex-shrink: 0;
+  overflow: hidden;
   transition:
     border-color 0.25s,
     color 0.25s;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
   span:first-of-type {
     font-weight: 700;
@@ -284,7 +293,7 @@ export const Thumb = styled.div<{ $from: string; $to: string }>`
   }
   span:last-of-type {
     text-decoration: underline;
-    opacity: 0.75;
+    opacity: 0.9;
   }
 
   @media (max-width: 640px) {
@@ -301,7 +310,7 @@ export const Main = styled.div`
 export const Domain = styled.span`
   display: block;
   font-size: 11px;
-  color: #6f6f77;
+  color: #d0d0d5;
   letter-spacing: 0.03em;
   margin-bottom: 6px;
 `;
@@ -335,16 +344,16 @@ export const Badge = styled.span`
 export const Meta = styled.div`
   margin-top: 8px;
   font-size: 12px;
-  color: #7a7a7f;
+  color: #dedee1;
 
   b {
-    color: #a9a9b0;
+    color: #ffffff;
     font-weight: 600;
   }
 
   .dot {
     margin: 0 7px;
-    opacity: 0.4;
+    opacity: 0.5;
   }
 `;
 
@@ -369,7 +378,14 @@ export const Score = styled.div<{ $tone: "high" | "mid" | "low" }>`
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 0.18em;
-    color: #6a6a70;
+    color: #c9c9cf;
+  }
+
+  .pending {
+    margin-top: 0;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #c9c9cf;
   }
 
   @media (max-width: 640px) {

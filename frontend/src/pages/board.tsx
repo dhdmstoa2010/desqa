@@ -6,7 +6,6 @@ import {
   Title,
   TitleAccent,
   HeaderSide,
-  HeaderDesc,
   ShareButton,
   Toolbar,
   Filters,
@@ -31,14 +30,16 @@ import {
   Score,
 } from "./styles/board.style";
 import { CATEGORIES, POSTS, toneOf, type Category } from "../data/posts";
+import { useBoardStore } from "../store/boardStore";
 
 function Board() {
   const [active, setActive] = useState<Category>("전체");
+  const userPosts = useBoardStore((s) => s.posts);
 
+  const all = useMemo(() => [...userPosts, ...POSTS], [userPosts]);
   const visible = useMemo(
-    () =>
-      active === "전체" ? POSTS : POSTS.filter((p) => p.category === active),
-    [active],
+    () => (active === "전체" ? all : all.filter((p) => p.category === active)),
+    [active, all],
   );
 
   return (
@@ -46,15 +47,11 @@ function Board() {
       <Inner>
         <Header>
           <Title>
-            디자인을
-            <TitleAccent>함께 살펴봅니다</TitleAccent>
+            Design
+            <TitleAccent>Board</TitleAccent>
           </Title>
           <HeaderSide>
-            <HeaderDesc>
-              타이포그래피, 여백, 컬러, 정보 위계. 화면을 공유해 주시면 어떤
-              점이 아쉬운지 함께 살펴봅니다.
-            </HeaderDesc>
-            <ShareButton onClick={() => {}}>게시물 올리기 →</ShareButton>
+            <ShareButton to="/board/new">New Post →</ShareButton>
           </HeaderSide>
         </Header>
 
@@ -78,12 +75,20 @@ function Board() {
             <RowLink key={post.id} to={`/board/${post.id}`}>
               <Row className="board-row">
                 <Thumb className="thumb" $from={post.from} $to={post.to}>
-                  <span>캡처</span>
-                  <span>or browse files</span>
+                  {post.image ? (
+                    <img src={post.image} alt="" loading="lazy" />
+                  ) : (
+                    <>
+                      <span>캡처</span>
+                      <span>or browse files</span>
+                    </>
+                  )}
                 </Thumb>
 
                 <Main>
-                  <Domain>{post.domain}</Domain>
+                  {post.domain && post.domain !== "—" && (
+                    <Domain>{post.domain}</Domain>
+                  )}
                   <RowTitle>
                     {post.badge && <Badge>{post.badge}</Badge>}
                     {post.title}
@@ -92,14 +97,16 @@ function Board() {
                   <Detail className="board-detail">
                     <DetailClip>
                       <DetailInner>
-                        <DetailText>{post.detail}</DetailText>
-                        <DeltaRow>
-                          {post.deltas.map((d) => (
-                            <DeltaChip key={d.label}>
-                              {d.label} <b>+{d.delta}</b>
-                            </DeltaChip>
-                          ))}
-                        </DeltaRow>
+                        <DetailText>{post.detail ?? post.lead}</DetailText>
+                        {post.deltas.length > 0 && (
+                          <DeltaRow>
+                            {post.deltas.map((d) => (
+                              <DeltaChip key={d.label}>
+                                {d.label} <b>+{d.delta}</b>
+                              </DeltaChip>
+                            ))}
+                          </DeltaRow>
+                        )}
                       </DetailInner>
                     </DetailClip>
                   </Detail>
@@ -116,8 +123,14 @@ function Board() {
                 </Main>
 
                 <Score $tone={toneOf(post.score)}>
-                  <strong>{post.score}</strong>
-                  <span>SCORE</span>
+                  {post.score != null ? (
+                    <>
+                      <strong>{post.score}</strong>
+                      <span>SCORE</span>
+                    </>
+                  ) : (
+                    <span className="pending">평가 전</span>
+                  )}
                 </Score>
               </Row>
             </RowLink>

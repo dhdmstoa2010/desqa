@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
 import { getPost, toneOf, type Comment } from "../data/posts";
+import { useBoardStore } from "../store/boardStore";
+import { bodyToHtml } from "../utils/html";
 import {
   Wrapper,
   Hero,
   HeroInner,
   DropZone,
+  HeroShot,
   HeroMeta,
   HeroScore,
   HeroTitle,
@@ -39,6 +42,8 @@ import {
   MetricHead,
   Bar,
   BarFill,
+  ScoreEmpty,
+  EvalLink,
   BackLink,
   NotFound,
 } from "./styles/boardDetail.style";
@@ -80,8 +85,8 @@ function CommentRow({
   return (
     <CommentItem>
       <CommentAvatar
-        $bg={isAuthor ? authorColor : "#2a2a2e"}
-        $fg={isAuthor ? "#0a0a0b" : "#a9a9b0"}
+        $bg={isAuthor ? authorColor : "#33333a"}
+        $fg={isAuthor ? "#0a0a0b" : "#e2e2e5"}
       >
         {comment.author[0]}
       </CommentAvatar>
@@ -98,7 +103,11 @@ function CommentRow({
 
 function BoardDetail() {
   const { id } = useParams<{ id: string }>();
-  const post = getPost(Number(id));
+  const numericId = Number(id);
+  const userPost = useBoardStore((s) =>
+    s.posts.find((p) => p.id === numericId),
+  );
+  const post = userPost ?? getPost(numericId);
 
   if (!post) {
     return (
@@ -112,25 +121,41 @@ function BoardDetail() {
   }
 
   const tone = toneOf(post.score);
+  const hasScore = post.score != null;
+  const hasDomain = Boolean(post.domain && post.domain !== "—");
   const commentCount = String(post.commentList.length).padStart(2, "0");
+  const evalHref =
+    post.domain && post.domain !== "—"
+      ? `/result?url=${encodeURIComponent(post.domain)}`
+      : "/";
 
   return (
     <Wrapper>
       <Hero>
         <HeroInner>
-          <DropZone>
-            <ImageIcon />
-            <span>
-              <b>{post.domain}</b> 캡처
-            </span>
-            <u>or browse files</u>
-          </DropZone>
+          {post.image ? (
+            <HeroShot>
+              <img src={post.image} alt={`${post.title} 화면 캡처`} />
+            </HeroShot>
+          ) : (
+            <DropZone>
+              <ImageIcon />
+              <span>{hasDomain ? <b>{post.domain}</b> : <b>화면</b>} 캡처</span>
+              <u>or browse files</u>
+            </DropZone>
+          )}
 
-          <HeroMeta>
-            <span className="domain">{post.domain}</span>
-            <span className="sep">·</span>
-            SCORE <HeroScore $tone={tone}>{post.score}</HeroScore>
-          </HeroMeta>
+          {(hasDomain || hasScore) && (
+            <HeroMeta>
+              {hasDomain && <span className="domain">{post.domain}</span>}
+              {hasScore && (
+                <>
+                  {hasDomain && <span className="sep">·</span>}
+                  SCORE <HeroScore $tone={tone}>{post.score}</HeroScore>
+                </>
+              )}
+            </HeroMeta>
+          )}
           <HeroTitle>{post.title}</HeroTitle>
         </HeroInner>
       </Hero>
@@ -152,8 +177,10 @@ function BoardDetail() {
               </Actions>
             </AuthorRow>
 
-            <Lead>{post.lead}</Lead>
-            <BodyText>{post.body}</BodyText>
+            {post.lead && <Lead>{post.lead}</Lead>}
+            <BodyText
+              dangerouslySetInnerHTML={{ __html: bodyToHtml(post.body) }}
+            />
 
             <Reactions>
               <ReactButton type="button">도움됐어요 · {post.helpful}</ReactButton>
@@ -187,23 +214,37 @@ function BoardDetail() {
           <Aside>
             <ScoreCard>
               <Overall>OVERALL</Overall>
-              <ScoreBig $tone={tone}>
-                <strong>{post.score}</strong>
-                <span>/100</span>
-              </ScoreBig>
-              <Metrics>
-                {post.metrics.map((m) => (
-                  <Metric key={m.label}>
-                    <MetricHead>
-                      <span>{m.label}</span>
-                      <b>{m.value}</b>
-                    </MetricHead>
-                    <Bar>
-                      <BarFill $pct={m.fill} />
-                    </Bar>
-                  </Metric>
-                ))}
-              </Metrics>
+              {hasScore ? (
+                <>
+                  <ScoreBig $tone={tone}>
+                    <strong>{post.score}</strong>
+                    <span>/100</span>
+                  </ScoreBig>
+                  {post.metrics.length > 0 && (
+                    <Metrics>
+                      {post.metrics.map((m) => (
+                        <Metric key={m.label}>
+                          <MetricHead>
+                            <span>{m.label}</span>
+                            <b>{m.value}</b>
+                          </MetricHead>
+                          <Bar>
+                            <BarFill $pct={m.fill} />
+                          </Bar>
+                        </Metric>
+                      ))}
+                    </Metrics>
+                  )}
+                </>
+              ) : (
+                <>
+                  <ScoreEmpty>
+                    아직 이 화면을 평가하지 않았어요. 평가를 받으면 점수와 항목별
+                    분석이 여기에 표시됩니다.
+                  </ScoreEmpty>
+                  <EvalLink to={evalHref}>지금 평가 받기 →</EvalLink>
+                </>
+              )}
             </ScoreCard>
 
             <BackLink to="/board">목록으로 돌아가기 →</BackLink>

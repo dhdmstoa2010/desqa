@@ -42,7 +42,7 @@ export const DropZone = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: #7c7c84;
+  color: #c9c9cf;
   font-size: 12px;
   line-height: 1.4;
   text-align: center;
@@ -50,17 +50,34 @@ export const DropZone = styled.div`
   svg {
     width: 30px;
     height: 30px;
-    opacity: 0.7;
+    opacity: 0.85;
   }
 
   b {
-    color: #9a9aa2;
+    color: #ededf0;
     font-weight: 600;
   }
 
   u {
-    color: #9a9aa2;
+    color: #ededf0;
     text-underline-offset: 2px;
+  }
+`;
+
+export const HeroShot = styled.div`
+  max-width: 720px;
+  margin: 0 auto clamp(28px, 4vw, 44px);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0a0a0b;
+  line-height: 0;
+
+  img {
+    width: 100%;
+    max-height: 460px;
+    object-fit: contain;
+    display: block;
   }
 `;
 
@@ -69,7 +86,7 @@ export const HeroMeta = styled.p`
   font-family: "Unbounded", ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.04em;
-  color: #6f6f77;
+  color: #d0d0d5;
 
   .domain {
     color: #bfff6b;
@@ -153,7 +170,7 @@ export const AuthorMeta = styled.span`
   display: block;
   margin-top: 2px;
   font-size: 12px;
-  color: #7a7a7f;
+  color: #d0d0d5;
 `;
 
 export const Actions = styled.div`
@@ -165,7 +182,7 @@ export const Actions = styled.div`
 export const ActionButton = styled.button`
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #b9b9c0;
+  color: #dedee1;
   font-size: 12px;
   font-weight: 600;
   padding: 7px 14px;
@@ -189,12 +206,79 @@ export const Lead = styled.p`
   color: #f2f2f4;
 `;
 
-export const BodyText = styled.p`
+export const BodyText = styled.div`
   margin: 18px 0 0;
   font-size: 15px;
   line-height: 1.85;
-  color: #a7a7ae;
-  white-space: pre-wrap;
+  color: #d6d6da;
+
+  > *:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0 0 0.9em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 1.4em 0 0.5em;
+    line-height: 1.3;
+    color: #ffffff;
+    font-weight: 800;
+  }
+  h1 {
+    font-size: 1.5em;
+  }
+  h2 {
+    font-size: 1.3em;
+  }
+  h3 {
+    font-size: 1.13em;
+  }
+  h4 {
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #cfcfd4;
+  }
+
+  a {
+    color: #bfff6b;
+    text-underline-offset: 2px;
+  }
+
+  s {
+    color: #9a9aa2;
+  }
+
+  blockquote {
+    margin: 1em 0;
+    padding: 6px 0 6px 16px;
+    border-left: 3px solid rgba(191, 255, 107, 0.5);
+    color: #cfcfd4;
+  }
+
+  pre {
+    margin: 1em 0;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #111113;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 13.5px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 12px 0;
+    display: block;
+  }
 `;
 
 export const Reactions = styled.div`
@@ -268,11 +352,11 @@ export const CommentAvatar = styled.span<{ $bg: string; $fg: string }>`
 
 export const CommentHead = styled.div`
   font-size: 12px;
-  color: #7a7a7f;
+  color: #d0d0d5;
   margin-bottom: 5px;
 
   b {
-    color: #c7c7cd;
+    color: #ffffff;
     font-weight: 700;
     margin-right: 8px;
   }
@@ -282,7 +366,7 @@ export const CommentText = styled.p`
   margin: 0;
   font-size: 13.5px;
   line-height: 1.7;
-  color: #a7a7ae;
+  color: #d6d6da;
 `;
 
 export const CommentForm = styled.form`
@@ -305,7 +389,7 @@ export const CommentInput = styled.input`
   font-size: 13px;
 
   &::placeholder {
-    color: #6f6f77;
+    color: #9a9aa2;
   }
 `;
 
@@ -356,7 +440,7 @@ export const Overall = styled.span`
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.22em;
-  color: #6a6a70;
+  color: #c9c9cf;
 `;
 
 export const ScoreBig = styled.div<{ $tone: Tone }>`
@@ -376,7 +460,28 @@ export const ScoreBig = styled.div<{ $tone: Tone }>`
   span {
     font-size: 14px;
     font-weight: 600;
-    color: #6a6a70;
+    color: #c9c9cf;
+  }
+`;
+
+export const ScoreEmpty = styled.p`
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d0d0d5;
+`;
+
+export const EvalLink = styled(Link)`
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #bfff6b;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 `;
 
@@ -397,11 +502,11 @@ export const MetricHead = styled.div`
   font-size: 12.5px;
 
   span {
-    color: #b1b1b8;
+    color: #dedee1;
   }
 
   b {
-    color: #f2f2f4;
+    color: #ffffff;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
@@ -423,20 +528,22 @@ export const BarFill = styled.div<{ $pct: number }>`
 
 export const BackLink = styled(Link)`
   display: block;
-  padding: 15px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 17px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
-  color: #d0d0d6;
-  font-size: 13px;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
   text-decoration: none;
   transition:
     border-color 0.15s,
-    color 0.15s;
+    background 0.15s;
 
   &:hover {
     color: #bfff6b;
-    border-color: rgba(191, 255, 107, 0.45);
+    border-color: rgba(191, 255, 107, 0.55);
+    background: rgba(191, 255, 107, 0.08);
   }
 `;
 
@@ -449,7 +556,7 @@ export const NotFound = styled.div`
 
   p {
     margin: 0 0 20px;
-    color: #9a9aa2;
+    color: #dedee1;
     font-size: 15px;
   }
 `;
