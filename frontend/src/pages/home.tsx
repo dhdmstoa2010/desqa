@@ -21,6 +21,11 @@ import {
   Input,
   Button,
   ProcessAnimation,
+  Outro,
+  OutroTitle,
+  OutroActions,
+  OutroPrimary,
+  OutroSecondary,
 } from "./styles/home.style";
 
 /* 커서 밴드 */
@@ -272,6 +277,16 @@ function Home() {
       <ProcessAnimation>
         <ServiceFlow onStart={handleStart} />
       </ProcessAnimation>
+
+      <Outro>
+        <OutroTitle>
+          지금 만들고 있는 화면, <span>어디가 아쉬운지</span> 확인해 보세요
+        </OutroTitle>
+        <OutroActions>
+          <OutroPrimary to="/evaluate">평가 시작하기 →</OutroPrimary>
+          <OutroSecondary to="/board">게시판 둘러보기</OutroSecondary>
+        </OutroActions>
+      </Outro>
     </>
   );
 }
