@@ -1,13 +1,5 @@
 import styled from "@emotion/styled";
 
-/*
-  카드 내부 mockup 공통 프리미티브.
-  모든 등장 효과는 부모 CardStage 의 motion system(--flow-ease / --flow-dur)을 따른다.
-  연속 애니메이션(스캔 라인 등)은 prefers-reduced-motion 에서 모두 정지한다.
-*/
-
-/* active 상태일 때 아래에서 살짝 올라오며 나타나는 요소.
-   data-in / style={{ transitionDelay }} 로 stagger 를 준다. */
 export const Rise = styled.div<{ delay?: number }>`
   opacity: 0;
   transform: translateY(10px);
@@ -339,7 +331,9 @@ export const Finding = styled.div<{ tone: "warn" | "ok" }>`
     font-size: 12px;
     font-weight: 700;
     background: ${({ tone }) =>
-      tone === "warn" ? "rgba(240, 170, 40, 0.16)" : "rgba(123, 178, 65, 0.16)"};
+      tone === "warn"
+        ? "rgba(240, 170, 40, 0.16)"
+        : "rgba(123, 178, 65, 0.16)"};
     color: ${({ tone }) => (tone === "warn" ? "#b7791f" : "#5a8a2c")};
   }
 
@@ -490,9 +484,9 @@ export const ScoreText = styled.div`
 
 export const Metric = styled.div`
   display: grid;
-  grid-template-columns: 74px 1fr;
+  grid-template-columns: 88px 1fr;
   align-items: center;
-  gap: 12px;
+  gap: 18px;
   font-size: 11px;
   font-weight: 600;
   color: var(--flow-body);
