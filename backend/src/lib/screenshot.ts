@@ -1,6 +1,6 @@
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
-import { chromium, type Browser } from "playwright";
+import { chromium, type Browser, type Page } from "playwright";
 
 export class ScreenshotError extends Error {}
 
@@ -76,6 +76,88 @@ export type Screenshot = {
   title: string;
 };
 
+/**
+ * Known cookie-consent / GDPR / newsletter overlay containers (by id/class/attribute
+ * substring). Removed outright before the screenshot so they don't dominate the review.
+ */
+const OVERLAY_SELECTORS = [
+  "#onetrust-consent-sdk",
+  "#onetrust-banner-sdk",
+  ".onetrust-pc-dark-filter",
+  "#CybotCookiebotDialog",
+  "#CybotCookiebotDialogBodyUnderlay",
+  "#usercentrics-root",
+  "#cookiescript_injected",
+  "[id*='sp_message_container']",
+  "iframe[id*='sp_message_iframe']",
+  "iframe[title*='consent' i]",
+  "iframe[title*='cookie' i]",
+  ".cc-window",
+  ".cookie-consent",
+  ".cookie-banner",
+  ".cookie-notice",
+  "[class*='CookieBanner']",
+  "[class*='cookie-consent']",
+  "[class*='gdpr']",
+  "[aria-label*='cookie' i]",
+  "[class*='newsletter-modal']",
+  "[class*='NewsletterModal']",
+  ".modal-backdrop",
+  ".ReactModal__Overlay",
+];
+
+/**
+ * Best-effort dismissal of modals, cookie walls and full-screen popups so the
+ * screenshot reflects the actual page. Never throws.
+ */
+async function dismissOverlays(page: Page): Promise<void> {
+  try {
+    // ESC closes most accessible dialogs / lightboxes / consent sheets.
+    await page.keyboard.press("Escape").catch(() => {});
+    await page.keyboard.press("Escape").catch(() => {});
+
+    await page.evaluate((selectors: string[]) => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // 1. Known consent / modal containers.
+      for (const sel of selectors) {
+        document.querySelectorAll(sel).forEach((el) => el.remove());
+      }
+
+      // 2. Generic full-screen overlays: fixed/sticky, high z-index, covering
+      //    most of the viewport. Short full-width bars hugging the top edge are
+      //    kept — those are normal sticky headers, not blockers.
+      for (const el of Array.from(document.body.querySelectorAll<HTMLElement>("*"))) {
+        const s = getComputedStyle(el);
+        if (s.position !== "fixed" && s.position !== "sticky") continue;
+        if (s.display === "none" || s.visibility === "hidden" || s.opacity === "0") continue;
+
+        const r = el.getBoundingClientRect();
+        const z = parseInt(s.zIndex, 10) || 0;
+        const coversWidth = r.width >= vw * 0.9;
+        const coversHeight = r.height >= vh * 0.5;
+        const bigArea = r.width * r.height >= vw * vh * 0.4;
+        const isStickyHeader = coversWidth && r.height < vh * 0.25 && r.top <= 4;
+
+        if (isStickyHeader) continue;
+        if (z >= 100 && (bigArea || (coversWidth && coversHeight))) {
+          el.remove();
+        }
+      }
+
+      // 3. Undo the scroll-lock a modal typically leaves on <html>/<body>.
+      for (const node of [document.documentElement, document.body]) {
+        node.style.overflow = "";
+        node.style.position = "";
+        node.style.paddingRight = "";
+      }
+    }, OVERLAY_SELECTORS);
+  } catch {
+    // Overlay cleanup is non-critical — capture the page regardless.
+  }
+}
+
 let browserPromise: Promise<Browser> | null = null;
 
 function getBrowser(): Promise<Browser> {
@@ -112,7 +194,10 @@ export async function captureScreenshot(url: URL): Promise<Screenshot> {
       );
     }
 
-    // Give late CSS / web fonts a moment to settle.
+    // Close cookie walls / modals / popups before capturing.
+    await dismissOverlays(page);
+
+    // Give late CSS / web fonts / overlay removal a moment to settle.
     await page.waitForTimeout(600);
 
     const buffer = await page.screenshot({ type: "png" });
