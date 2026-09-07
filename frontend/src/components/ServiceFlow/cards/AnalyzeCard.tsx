@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { StepState } from "../flow.data";
+import type { StepState } from "../../../../data/flow.data";
 import { CardStage } from "../ServiceFlow.style";
 import {
   Browser,
@@ -72,7 +72,9 @@ export default function AnalyzeCard({ state }: { state: StepState }) {
         </Viewport>
         <AnalyzeTag>
           <i />
-          {state === "completed" ? "Analysis complete" : `Scanning · ${active.label}`}
+          {state === "completed"
+            ? "Analysis complete"
+            : `Scanning · ${active.label}`}
         </AnalyzeTag>
       </Browser>
     </CardStage>

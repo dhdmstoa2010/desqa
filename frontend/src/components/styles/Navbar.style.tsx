@@ -37,7 +37,7 @@ export const Brand = styled(Link)`
   text-decoration: none;
 `;
 
-/* 로고 글자를 1초 간격으로 하나씩 라임(#bfff6b)으로 물들였다가 되돌린다 */
+/* 로고 글자를 1초 간격으로 하나씩 색깔 변환*/
 export const BrandChar = styled.span`
   display: inline-block;
   white-space: pre;
@@ -59,6 +59,52 @@ export const BrandChar = styled.span`
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
+  }
+`;
+
+export const LeftGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+`;
+
+export const NoticeBoard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-align: left;
+
+  &:hover a {
+    opacity: 1;
+  }
+`;
+
+export const Board = styled(Link)`
+  color: #f5f5f5;
+`;
+
+export const Notice = styled.div<{ $active?: boolean }>`
+  position: relative;
+  font-family: var(--mono);
+  color: ${({ $active }) => ($active ? "#ffffff" : "#f5f5f5")};
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: ${({ $active }) => ($active ? "#bfff6b" : "#bfff6b")};
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    background: #bfff6b;
+    transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
+    transform-origin: left;
+    transition: transform 0.2s ease;
   }
 `;
 

@@ -1,11 +1,7 @@
-import type { StepState } from "../flow.data";
+import type { StepState } from "../../../../data/flow.data";
 import { CardStage } from "../ServiceFlow.style";
 import { FindingList, Finding, Rise } from "./mockup.style";
 
-/*
-  CARD 03 · Discover
-  AI 분석 결과를 카드 리스트로. 항목이 하나씩 차분하게 나타난다 (shake/bounce 없음).
-*/
 const FINDINGS = [
   {
     tone: "warn" as const,

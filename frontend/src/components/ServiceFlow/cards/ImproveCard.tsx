@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import type { StepState } from "../flow.data";
+import type { StepState } from "../../../../data/flow.data";
 import { CardStage } from "../ServiceFlow.style";
 import { Compare, Pane, CompareChip, Skel, SkelRow } from "./mockup.style";
 
-/*
-  CARD 04 · Improve
-  Before → After. 카드가 활성화되면 Before 화면이 잠깐 보인 뒤
-  After 화면으로 자연스럽게 크로스페이드된다 (디자인 툴 비교 뷰처럼).
-  한 번 After 로 넘어가면 그대로 유지한다.
-*/
 export default function ImproveCard({ state }: { state: StepState }) {
   const inView = state !== "inactive";
   const [flipped, setFlipped] = useState(false);

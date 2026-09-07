@@ -1,4 +1,4 @@
-import type { StepState } from "../flow.data";
+import type { StepState } from "../../../../data/flow.data";
 import { CardStage } from "../ServiceFlow.style";
 import {
   DropZone,
@@ -9,11 +9,6 @@ import {
   Bar,
 } from "./mockup.style";
 
-/*
-  CARD 01 · Upload
-  중앙에 "+  Upload website" 드롭존.
-  다음 카드로 넘어가며(completed) 파일이 올라오고 진행바가 차는 짧은 연출.
-*/
 export default function UploadCard({ state }: { state: StepState }) {
   const inView = state !== "inactive";
   const uploading = state === "completed";

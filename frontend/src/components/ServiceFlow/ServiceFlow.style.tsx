@@ -238,18 +238,11 @@ export const MobileMeta = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
-/* ---------- Cards (파일처럼 쌓이는 스택) ---------- */
+/* 파일처럼 쌓이는 스택 */
 
-/*
-  모든 카드가 하나의 CardsWrap 안에서 sticky 로 고정된다.
-  카드 사이 StackGap 이 스크롤 길이를 만들고,
-  각 카드는 top 에 --i * --stack-step 만큼 단차를 줘서 아래 카드가 위로 살짝 삐져나온다.
-  카드는 섹션이 끝날 때까지 고정된 채 겹쳐 쌓인다 (덮이는 도중 빈틈 없음).
-*/
 export const CardsWrap = styled.div`
   position: relative;
   width: 100%;
-  /* 레일을 가리지 않는 선에서 최대한 넓게 (왼쪽 컬럼 뒤에서 시작) */
   max-width: 1080px;
   margin: 0;
 
@@ -297,7 +290,7 @@ export const Card = styled.article`
     transform var(--flow-dur) var(--flow-ease),
     filter var(--flow-dur) var(--flow-ease);
 
-  /* 위에 다른 카드가 쌓여 파묻힌 상태 — 아주 미묘하게 뒤로 */
+  /* 위에 다른 카드가 쌓여 파묻힌 상태  */
   &[data-state="completed"] {
     transform: scale(calc(1 - var(--depth, 1) * 0.014));
     filter: blur(calc(var(--depth, 0) * 0.4px));
@@ -324,10 +317,7 @@ export const Card = styled.article`
 
   @media (max-width: 960px) {
     height: clamp(440px, 64vh, 540px);
-    /* 모바일 상단 진행 바(MobileProgress) 아래로 카드를 고정 */
-    top: calc(
-      var(--flow-sticky-top) + 66px + var(--i, 0) * var(--stack-step)
-    );
+    top: calc(var(--flow-sticky-top) + 66px + var(--i, 0) * var(--stack-step));
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -383,7 +373,6 @@ export const CardDesc = styled.p`
   line-height: 1.55;
 `;
 
-/* 카드 내부 mockup 이 놓이는 무대 */
 export const CardStage = styled.div`
   position: relative;
   flex: 1;

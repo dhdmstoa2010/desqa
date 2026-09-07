@@ -1,9 +1,3 @@
-/*
-  서비스 플로우 5단계의 텍스트 데이터.
-  카드 UI(mockup)는 cards/ 아래 컴포넌트에서, 여기서는 문구만 관리한다.
-  문구 수정은 이 파일만 건드리면 된다.
-*/
-
 export type FlowStepId =
   | "upload"
   | "analyze"
@@ -13,9 +7,7 @@ export type FlowStepId =
 
 export interface FlowStep {
   id: FlowStepId;
-  /** 01, 02 … 진행 번호 */
   index: string;
-  /** 좌측 진행 레일 / 카드 상단에 쓰는 짧은 라벨 */
   label: string;
   title: string;
   description: string;

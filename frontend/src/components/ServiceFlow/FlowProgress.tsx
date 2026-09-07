@@ -1,4 +1,4 @@
-import { FLOW_STEPS, type StepState } from "./flow.data";
+import { FLOW_STEPS, type StepState } from "../../../data/flow.data";
 import {
   Rail,
   RailItem,
@@ -9,11 +9,6 @@ import {
   MobileMeta,
 } from "./ServiceFlow.style";
 
-/*
-  진행 표시.
-  - 데스크톱: 좌측 sticky 레일. 클릭하면 해당 단계로 스크롤.
-  - 모바일: 상단에 얇은 진행 바 + 현재/전체 라벨.
-*/
 function stateOf(i: number, active: number): StepState {
   if (i < active) return "completed";
   if (i === active) return "active";

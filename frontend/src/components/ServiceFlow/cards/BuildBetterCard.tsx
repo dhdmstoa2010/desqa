@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import gsap from "gsap";
-import type { StepState } from "../flow.data";
+import type { StepState } from "../../../../data/flow.data";
 import { CardStage } from "../ServiceFlow.style";
 import {
   Summary,
@@ -13,11 +13,6 @@ import {
   Rise,
 } from "./mockup.style";
 
-/*
-  CARD 05 · Build Better
-  앞 단계의 분석이 하나의 결과 화면으로 정리된다.
-  이전 카드보다 조금 더 여유 있는 stagger 로 플로우 완료감을 준다.
-*/
 const METRICS = [
   { label: "Typography", to: "58%" },
   { label: "Spacing", to: "64%" },
@@ -27,11 +22,6 @@ const METRICS = [
 const LIME = "#bfff6b";
 const INK = "#0a0a0b";
 
-/*
-  gsap.com "Get GSAP" 버튼 hover 효과.
-  커서가 들어온 모서리에서 라임 채움이 쓸려 들어오고,
-  빠져나갈 땐 커서가 나간 모서리 방향으로 쓸려 나간다. 라벨 색도 함께 전환.
-*/
 function SweepCta({
   children,
   onClick,
@@ -47,7 +37,6 @@ function SweepCta({
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // 커서 위치 → 가장 가까운 모서리에서의 시작(퍼센트) 오프셋
   const edge = (e: MouseEvent) => {
     const el = btn.current;
     if (!el) return { x: 0, y: 101 };
