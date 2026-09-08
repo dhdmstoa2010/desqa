@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 export const Wrapper = styled.section`
   position: relative;
@@ -20,6 +21,72 @@ export const ProcessAnimation = styled.section`
   /* 고정 RevealFill(라임 밴드)이 스크롤에 따라 이 영역까지 확장돼 배경을 만든다.
      밴드가 아직 안 덮은 구간은 이 다크 배경이 그대로 보여 히어로와 이어진다. */
   background: #0a0a0b;
+`;
+
+/* ── 하단 마무리 CTA ── */
+export const Outro = styled.section`
+  position: relative;
+  z-index: 1;
+  background: #0a0a0b;
+  padding: clamp(64px, 12vh, 140px) clamp(16px, 5vw, 48px) clamp(88px, 16vh, 168px);
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+`;
+
+export const OutroTitle = styled.h2`
+  margin: 0 auto;
+  max-width: 18ch;
+  font-family: "Unbounded", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(24px, 4vw, 40px);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: #f7f7f8;
+
+  span {
+    color: #bfff6b;
+  }
+`;
+
+export const OutroActions = styled.div`
+  margin-top: 32px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
+export const OutroPrimary = styled(Link)`
+  background: #bfff6b;
+  color: #0a0a0b;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 15px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #a6e34d;
+  }
+`;
+
+export const OutroSecondary = styled(Link)`
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f0f0f2;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 15px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    border-color: rgba(191, 255, 107, 0.6);
+    background: rgba(191, 255, 107, 0.06);
+  }
 `;
 
 export const ScrollStage = styled.div`
