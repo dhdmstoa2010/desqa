@@ -5,6 +5,7 @@ import Home from "./pages/home.tsx";
 import Login from "./pages/login.tsx";
 import Signup from "./pages/signup.tsx";
 import MyPage from "./pages/mypage.tsx";
+import Evaluate from "./pages/evaluate.tsx";
 import Result from "./pages/result.tsx";
 import Board from "./pages/board.tsx";
 import BoardNew from "./pages/boardNew.tsx";
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/evaluate" element={<Evaluate />} />
         <Route path="/result" element={<Result />} />
         <Route path="/board" element={<Board />} />
         <Route path="/board/new" element={<BoardNew />} />
