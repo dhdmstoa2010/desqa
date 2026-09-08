@@ -1,4 +1,39 @@
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
+
+export const ShareToBoard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(191, 255, 107, 0.22);
+  background: rgba(191, 255, 107, 0.05);
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #cfe8a6;
+  }
+`;
+
+export const ShareToBoardLink = styled(Link)`
+  flex-shrink: 0;
+  background: #bfff6b;
+  color: #0a0a0b;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 11px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #a6e34d;
+  }
+`;
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -39,17 +74,21 @@ export const TargetLink = styled.a`
 `;
 
 export const BackLink = styled.button`
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: transparent;
-  color: #d4d4d8;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 11px 20px;
   border-radius: 999px;
   cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
 
   &:hover {
-    background: #1c1c1f;
+    background: rgba(191, 255, 107, 0.08);
+    border-color: rgba(191, 255, 107, 0.6);
   }
 `;
 
