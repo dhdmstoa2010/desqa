@@ -1,85 +1,4 @@
-export const CATEGORIES = [
-  "전체",
-  "타이포",
-  "레이아웃·여백",
-  "컬러",
-  "인터랙션",
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
-export type PostCategory = Exclude<Category, "전체">;
-
-export interface Metric {
-  label: string;
-  value: string;
-  fill: number;
-}
-
-export interface Delta {
-  label: string;
-  delta: number;
-}
-
-export interface Comment {
-  author: string;
-  at: string;
-  text: string;
-}
-
-export type Tone = "high" | "mid" | "low";
-
-export interface Post {
-  id: number;
-  category: PostCategory;
-  domain: string;
-  title: string;
-  author: string;
-  authorColor: string;
-  date: string;
-  views: number;
-  /** 아직 평가받지 않은 게시물은 점수가 없다 */
-  score?: number;
-  badge?: string;
-  detail?: string;
-  deltas: Delta[];
-  tags?: string[];
-  /** 업로드한 캡처 이미지 (data URL). 없으면 그라데이션 썸네일로 대체 */
-  image?: string;
-  from: string;
-  to: string;
-  lead: string;
-  body: string;
-  helpful: number;
-  metrics: Metric[];
-  commentList: Comment[];
-}
-
-export function toneOf(score?: number): Tone {
-  if (score == null) return "mid";
-  if (score >= 80) return "high";
-  if (score >= 65) return "mid";
-  return "low";
-}
-
-const GRADIENTS: readonly [string, string][] = [
-  ["#3a2d5c", "#1b1b2e"],
-  ["#1f4d3a", "#12261f"],
-  ["#243a5c", "#101a2a"],
-  ["#5c4a1f", "#2a2210"],
-  ["#4a1f5c", "#26102a"],
-  ["#5c2d1f", "#2a1510"],
-  ["#1f3a5c", "#10202e"],
-  ["#2d1f5c", "#15102a"],
-];
-
-export function gradientFor(seed: string): { from: string; to: string } {
-  let h = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    h = (Math.imul(h, 31) + seed.charCodeAt(i)) >>> 0;
-  }
-  const [from, to] = GRADIENTS[h % GRADIENTS.length];
-  return { from, to };
-}
+import type { Post } from "../types/board";
 
 export const POSTS: Post[] = [
   {
@@ -98,9 +17,6 @@ export const POSTS: Post[] = [
       { label: "타이포 위계", delta: 28 },
       { label: "대비", delta: 6 },
     ],
-    tags: ["폰트 웨이트", "자간", "줄간격"],
-    from: "#3a2d5c",
-    to: "#1b1b2e",
     lead: "자동 평가 점수와 실제 체감이 어긋나는 지점을 정리해 봤습니다.",
     body: "처음엔 대비 경고만 보고 색을 바꿨는데 점수가 거의 안 올랐습니다. 결국 폰트 웨이트 3단계(본문 400→500, 소제목 600, 제목 700→800)로 위계를 다시 잡고 줄간격을 1.6 → 1.75로 넓혔더니 타이포 위계 점수가 61 → 89로 뛰었어요. 배경 위 텍스트는 반투명으로 두지 말고 100% 불투명 + 살짝 어두운 레이어를 까는 편이 측정에도 실사용에도 유리했습니다.",
     helpful: 12,
@@ -139,9 +55,6 @@ export const POSTS: Post[] = [
       { label: "터치 타깃", delta: 15 },
       { label: "여백 밸런스", delta: 9 },
     ],
-    tags: ["터치 타깃", "탭바", "모바일"],
-    from: "#1f4d3a",
-    to: "#12261f",
     lead: "아이콘 크기와 터치 타깃을 분리해서 잡는 방식이 맞는지 봐주세요.",
     body: "시각적으로는 24px 아이콘이지만 히트 영역은 48px 정사각형으로 두고, 탭 5개를 flex로 균등 분할했습니다. 라벨을 없애면 밀도는 좋아지지만 접근성 점수가 떨어져서 9px 라벨을 유지했어요. 지금 구조에서 여백 밸런스가 71인데 라벨을 키우면 더 낮아질 것 같아 고민입니다.",
     helpful: 5,
@@ -180,9 +93,6 @@ export const POSTS: Post[] = [
       { label: "컬러 일관성", delta: 19 },
       { label: "대비", delta: 11 },
     ],
-    tags: ["액센트", "상태 색상", "대비"],
-    from: "#243a5c",
-    to: "#101a2a",
     lead: "액센트를 하나로 통일했더니 상태 구분이 약해졌습니다.",
     body: "라임(#bfff6b) 하나로 CTA, 링크, 포커스 링, 선택 상태를 전부 처리했습니다. 통일감 덕에 컬러 점수는 높은데, 사용자 테스트에서 '삭제' 버튼과 '저장' 버튼이 같은 색이라 헷갈린다는 피드백이 나왔어요. 위험 액션에만 레드를 허용하고 나머지는 라임 유지하는 방향으로 가려고 합니다.",
     helpful: 8,
@@ -222,9 +132,6 @@ export const POSTS: Post[] = [
       { label: "여백 밸런스", delta: 14 },
       { label: "정보 밀도", delta: 8 },
     ],
-    tags: ["대시보드", "정보 밀도", "비교"],
-    from: "#4a1f5c",
-    to: "#26102a",
     lead: "그리드 정합률이 결국 여백 점수를 갈랐습니다.",
     body: "A안(93점)은 모든 간격이 8의 배수였고, B안(81점)은 6px/10px가 섞여 있었으며, C안(76점, 우리 안)은 카드 안쪽 패딩이 제각각이었습니다. 숫자 타이포는 tabular-nums 적용 여부에서 갈렸어요. 개선안은 스페이싱 토큰을 4/8/12/16/24/32로 고정하는 것부터 시작하려 합니다.",
     helpful: 21,
@@ -263,9 +170,6 @@ export const POSTS: Post[] = [
       { label: "여백 밸런스", delta: 6 },
       { label: "그리드 정합", delta: 4 },
     ],
-    tags: ["채점 기준", "여백", "그리드"],
-    from: "#5c4a1f",
-    to: "#2a2210",
     lead: "'여백 리듬 불안정' 경고의 판단 기준이 궁금합니다.",
     body: "우리 페이지는 섹션 간격이 40 / 56 / 44 / 72px로 제각각인데, 이게 표준편차로 감점되는 건지 아니면 8pt 그리드에서 벗어난 값(44px)이 문제인지 모르겠습니다. 콘텐츠 폭 대비 좌우 여백 비율도 보는지 알려주시면 우선순위를 잡겠습니다.",
     helpful: 3,
@@ -304,9 +208,6 @@ export const POSTS: Post[] = [
       { label: "모션 안정성", delta: 12 },
       { label: "반응 속도", delta: 7 },
     ],
-    tags: ["호버", "트랜지션", "모션"],
-    from: "#1f3a5c",
-    to: "#10202e",
     lead: "버튼이 많은 화면에서 호버 모션이 산만하게 느껴집니다.",
     body: "현재는 background 0.2s ease + transform: translateY(-2px)입니다. 툴바처럼 버튼이 6~7개 모이면 마우스가 지나갈 때마다 들썩여서 불안정해 보인다는 피드백이 있었어요. 이동을 제거하고 background만 0.12s로 바꾸는 안을 테스트했는데 반응이 밋밋하다는 의견도 있어서 중간값을 찾고 있습니다.",
     helpful: 7,
@@ -345,9 +246,6 @@ export const POSTS: Post[] = [
       { label: "타이포 위계", delta: 22 },
       { label: "가독성", delta: 13 },
     ],
-    tags: ["자간", "한글 타이포", "제목"],
-    from: "#5c2d1f",
-    to: "#2a1510",
     lead: "48px 이상 제목에만 -3% 자간을 적용했습니다.",
     body: "Pretendard 기준으로 제목 -3%, 소제목 -1.5%, 본문 0%입니다. 영문 혼용 구간에서 특히 정돈돼 보이는데, 받침이 많은 단어('빨랫줄' 같은)에서 약간 답답하다는 의견이 있었어요. 폰트를 바꾸면 이 값도 다시 잡아야 할 텐데, 토큰으로 관리하는 게 나을지 궁금합니다.",
     helpful: 9,
@@ -386,9 +284,6 @@ export const POSTS: Post[] = [
       { label: "체감 성능", delta: 10 },
       { label: "진입 애니메이션", delta: 8 },
     ],
-    tags: ["스크롤", "진입 애니메이션", "성능"],
-    from: "#2d1f5c",
-    to: "#15102a",
     lead: "빠르게 스크롤하면 진입 애니메이션이 밀려 빈 화면이 보입니다.",
     body: "IntersectionObserver로 뷰포트 15% 진입 시 translateY(40px)→0 + opacity 0→1을 0.6s에 재생합니다. 천천히 보면 좋은데, 스크롤을 빠르게 내리면 여러 섹션이 동시에 애니메이션 대기 상태가 되면서 아무것도 안 보이는 구간이 생겨요. 이동 거리를 12px로 줄이고 duration을 0.35s로 낮추는 방향을 보고 있습니다.",
     helpful: 4,

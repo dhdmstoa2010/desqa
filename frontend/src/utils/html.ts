@@ -1,7 +1,4 @@
-/** 리치 에디터가 만든 HTML 을 다루는 작은 헬퍼들.
- *  게시물 본문은 백엔드 없이 브라우저 안에서만 오가므로 별도 살균은 하지 않는다
- *  (같은 사용자가 자기 화면에 쓰는 내용). */
-
+/* 리치 에디터가 만든 HTML 을 다루는 작은 헬퍼들 */
 export function stripHtml(html: string): string {
   const el = document.createElement("div");
   el.innerHTML = html;

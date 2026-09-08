@@ -69,23 +69,19 @@ export const PreviewRow = styled.div`
   align-items: start;
 `;
 
-export const PreviewThumb = styled.div<{ $from: string; $to: string }>`
+export const PreviewThumb = styled.div`
   width: 116px;
   height: 84px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    135deg,
-    ${({ $from }) => $from}66,
-    ${({ $to }) => $to}66
-  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #ededf0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  color: #e2e2e5;
+  color: #6a6a72;
   font-size: 11px;
   line-height: 1.3;
   text-align: center;

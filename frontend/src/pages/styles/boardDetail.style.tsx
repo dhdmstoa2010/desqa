@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-
-type Tone = "high" | "mid" | "low";
+import type { Tone } from "../../types/board";
 
 const toneColor = (t: Tone) =>
   t === "high" ? "#bfff6b" : t === "mid" ? "#f2f2f4" : "#ff6b5c";
@@ -14,7 +13,7 @@ export const Wrapper = styled.section`
   box-sizing: border-box;
 `;
 
-/* ── 상단 히어로 ── */
+/* 상단  */
 export const Hero = styled.header`
   position: relative;
   padding: clamp(40px, 7vw, 88px) clamp(16px, 5vw, 72px) clamp(32px, 4vw, 52px);
@@ -36,32 +35,19 @@ export const HeroInner = styled.div`
 `;
 
 export const DropZone = styled.div`
-  width: 168px;
+  max-width: 720px;
   margin: 0 auto clamp(28px, 4vw, 44px);
+  aspect-ratio: 16 / 7;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #ededf0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  color: #c9c9cf;
-  font-size: 12px;
-  line-height: 1.4;
-  text-align: center;
-
-  svg {
-    width: 30px;
-    height: 30px;
-    opacity: 0.85;
-  }
-
-  b {
-    color: #ededf0;
-    font-weight: 600;
-  }
-
-  u {
-    color: #ededf0;
-    text-underline-offset: 2px;
-  }
+  justify-content: center;
+  color: #6a6a72;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 `;
 
 export const HeroShot = styled.div`
@@ -115,7 +101,7 @@ export const HeroTitle = styled.h1`
   color: #f7f7f8;
 `;
 
-/* ── 본문 영역 ── */
+/* 본문 */
 export const Body = styled.div`
   padding: clamp(36px, 5vw, 64px) clamp(16px, 5vw, 72px) 120px;
 `;
@@ -415,7 +401,7 @@ export const LoginButton = styled(Link)`
   }
 `;
 
-/* ── 사이드바 ── */
+/* 사이드 */
 export const Aside = styled.aside`
   position: sticky;
   top: 90px;
@@ -547,7 +533,7 @@ export const BackLink = styled(Link)`
   }
 `;
 
-/* ── 미존재 ── */
+/* not found*/
 export const NotFound = styled.div`
   max-width: 480px;
   margin: 0 auto;

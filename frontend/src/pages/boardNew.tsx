@@ -1,11 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  CATEGORIES,
-  gradientFor,
-  toneOf,
-  type PostCategory,
-} from "../data/posts";
+import { CATEGORIES, type PostCategory } from "../types/board";
+import { toneOf } from "../utils/board";
 import { useBoardStore } from "../store/boardStore";
 import { useAuthStore } from "../store/authStore";
 import { bodyToHtml, firstImageSrc, stripHtml } from "../utils/html";
@@ -77,10 +73,6 @@ function BoardNew() {
   }, [params]);
 
   const author = user?.name ?? "게스트";
-  const gradient = useMemo(
-    () => gradientFor(url || title || "preview"),
-    [url, title],
-  );
 
   const bodyText = stripHtml(body);
   const previewImage = firstImageSrc(body);
@@ -203,14 +195,11 @@ function BoardNew() {
             <PreviewLabel>미리보기</PreviewLabel>
             <PreviewCard>
               <PreviewRow>
-                <PreviewThumb $from={gradient.from} $to={gradient.to}>
+                <PreviewThumb>
                   {previewImage ? (
                     <img src={previewImage} alt="" />
                   ) : (
-                    <>
-                      <span>본문</span>
-                      <span>이미지 없음</span>
-                    </>
+                    <span>사진 없음</span>
                   )}
                 </PreviewThumb>
 

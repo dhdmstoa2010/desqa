@@ -29,7 +29,9 @@ import {
   DeltaChip,
   Score,
 } from "./styles/board.style";
-import { CATEGORIES, POSTS, toneOf, type Category } from "../data/posts";
+import { CATEGORIES, type Category } from "../types/board";
+import { POSTS } from "../data/posts";
+import { toneOf } from "../utils/board";
 import { useBoardStore } from "../store/boardStore";
 
 function Board() {
@@ -74,14 +76,11 @@ function Board() {
           {visible.map((post) => (
             <RowLink key={post.id} to={`/board/${post.id}`}>
               <Row className="board-row">
-                <Thumb className="thumb" $from={post.from} $to={post.to}>
+                <Thumb className="thumb">
                   {post.image ? (
                     <img src={post.image} alt="" loading="lazy" />
                   ) : (
-                    <>
-                      <span>캡처</span>
-                      <span>or browse files</span>
-                    </>
+                    <span>사진 없음</span>
                   )}
                 </Thumb>
 

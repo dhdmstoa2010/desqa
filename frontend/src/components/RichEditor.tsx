@@ -60,21 +60,16 @@ function RichEditor({ value, onChange, placeholder }: Props) {
   const [activeBlock, setActiveBlock] = useState("");
   const [empty, setEmpty] = useState(true);
 
-  // 초기값만 주입 (제어형으로 매 입력마다 innerHTML을 갈면 커서가 튄다)
+  // 초기값만 주입
   useEffect(() => {
     try {
-      // Enter 로 <div>가 아니라 <p>가 생기게 → formatBlock 이 줄 단위로 동작
       document.execCommand("defaultParagraphSeparator", false, "p");
-    } catch {
-      /* 일부 브라우저 미지원 */
-    }
+    } catch {}
     if (ref.current) {
       ref.current.innerHTML = value || "<p><br></p>";
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 에디터 루트에 <p> 없이 떠도는 텍스트/인라인 노드를 <p>로 감싼다
   const normalize = () => {
     const root = ref.current;
     if (!root) return;
@@ -105,7 +100,10 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     const root = ref.current;
     let node = window.getSelection()?.anchorNode as Node | null;
     while (node && node !== root) {
-      if (node.nodeType === 1 && BLOCK_TAGS.test((node as HTMLElement).tagName)) {
+      if (
+        node.nodeType === 1 &&
+        BLOCK_TAGS.test((node as HTMLElement).tagName)
+      ) {
         return node as HTMLElement;
       }
       node = node.parentNode;
@@ -121,7 +119,6 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     emit();
   };
 
-  // 블록 버튼은 토글: 이미 그 태그면 문단(<p>)으로 되돌린다 → "빠져나가기"
   const block = (tag: string) => {
     ref.current?.focus();
     const current = closestBlock()?.tagName ?? "";
@@ -153,7 +150,6 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     }
   };
 
-  // 캐럿이 블록의 맨 끝/맨 앞에 있는지
   const caretAtEdge = (blk: HTMLElement, edge: "start" | "end"): boolean => {
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0 || !sel.isCollapsed) return false;
@@ -165,7 +161,6 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     } else {
       probe.setEnd(r.startContainer, r.startOffset);
     }
-    // 캐럿과 블록 경계 사이에 남은 내용이 없으면(공백/줄바꿈만) 경계로 본다
     return probe.toString().replace(/\s/g, "") === "";
   };
 
@@ -203,7 +198,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     syncActive();
   };
 
-  // 코드블록 / 인용문에서 아래(위) 방향키·Enter 로 블록 밖으로 나간다
+  // 코드블록 / 인용문에서 아래(위) 방향키·Enter 로 블록 밖으로 나감
   const onKeyDown = (e: React.KeyboardEvent) => {
     const blk = closestBlock();
     if (!blk || (blk.tagName !== "PRE" && blk.tagName !== "BLOCKQUOTE")) return;
@@ -280,7 +275,12 @@ function RichEditor({ value, onChange, placeholder }: Props) {
         >
           <span aria-hidden="true">&rdquo;</span>
         </ToolButton>
-        <ToolButton type="button" title="링크" onMouseDown={noBlur} onClick={addLink}>
+        <ToolButton
+          type="button"
+          title="링크"
+          onMouseDown={noBlur}
+          onClick={addLink}
+        >
           <LinkIcon />
         </ToolButton>
         <ToolButton

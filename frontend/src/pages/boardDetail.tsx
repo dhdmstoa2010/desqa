@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
-import { getPost, toneOf, type Comment } from "../data/posts";
+import type { Comment } from "../types/board";
+import { getPost } from "../data/posts";
+import { toneOf } from "../utils/board";
 import { useBoardStore } from "../store/boardStore";
 import { bodyToHtml } from "../utils/html";
 import {
@@ -47,30 +49,6 @@ import {
   BackLink,
   NotFound,
 } from "./styles/boardDetail.style";
-
-function ImageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect
-        x="3"
-        y="4"
-        width="18"
-        height="16"
-        rx="2.5"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
-      <circle cx="8.5" cy="9.5" r="1.8" fill="currentColor" />
-      <path
-        d="M5 18l4.5-5 3 3L16 12l3.5 4"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function CommentRow({
   comment,
@@ -138,11 +116,7 @@ function BoardDetail() {
               <img src={post.image} alt={`${post.title} 화면 캡처`} />
             </HeroShot>
           ) : (
-            <DropZone>
-              <ImageIcon />
-              <span>{hasDomain ? <b>{post.domain}</b> : <b>화면</b>} 캡처</span>
-              <u>or browse files</u>
-            </DropZone>
+            <DropZone>사진 없음</DropZone>
           )}
 
           {(hasDomain || hasScore) && (

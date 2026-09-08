@@ -225,8 +225,7 @@ export const RowLink = styled(Link)`
   }
 
   &:hover .thumb {
-    border-color: rgba(191, 255, 107, 0.35);
-    color: #cfe8a6;
+    border-color: rgba(191, 255, 107, 0.4);
   }
 
   &:focus-visible {
@@ -255,30 +254,24 @@ export const Row = styled.article`
   }
 `;
 
-export const Thumb = styled.div<{ $from: string; $to: string }>`
+export const Thumb = styled.div`
   width: 108px;
   height: 78px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    135deg,
-    ${({ $from }) => $from}66,
-    ${({ $to }) => $to}66
-  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #ededf0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  color: #d0d0d5;
+  color: #6a6a72;
   font-size: 11px;
   line-height: 1.3;
   text-align: center;
   flex-shrink: 0;
   overflow: hidden;
-  transition:
-    border-color 0.25s,
-    color 0.25s;
+  transition: border-color 0.25s;
 
   img {
     width: 100%;
@@ -287,13 +280,9 @@ export const Thumb = styled.div<{ $from: string; $to: string }>`
     display: block;
   }
 
-  span:first-of-type {
-    font-weight: 700;
-    color: inherit;
-  }
-  span:last-of-type {
-    text-decoration: underline;
-    opacity: 0.9;
+  span {
+    font-weight: 600;
+    letter-spacing: 0.01em;
   }
 
   @media (max-width: 640px) {
