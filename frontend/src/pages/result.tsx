@@ -41,6 +41,8 @@ import {
   IssueRow,
   IssueRowLabel,
   IssueRowText,
+  ShareToBoard,
+  ShareToBoardLink,
 } from "./styles/result.style";
 
 const SEVERITY_LABEL: Record<"high" | "medium" | "low", string> = {
@@ -171,6 +173,15 @@ function ResultView({
           </IssueList>
         </Section>
       )}
+
+      <ShareToBoard>
+        <p>이 결과를 게시판에 공유하고 다른 사람 의견도 받아보세요.</p>
+        <ShareToBoardLink
+          to={`/board/new?url=${encodeURIComponent(url)}&score=${result.overallScore}`}
+        >
+          게시판에 글쓰기 →
+        </ShareToBoardLink>
+      </ShareToBoard>
 
       <div>
         <TargetLink href={url} target="_blank" rel="noreferrer noopener">
