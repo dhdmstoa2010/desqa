@@ -8,6 +8,8 @@ import MyPage from "./pages/mypage.tsx";
 import Evaluate from "./pages/evaluate.tsx";
 import Result from "./pages/result.tsx";
 import Board from "./pages/board.tsx";
+import BoardNew from "./pages/boardNew.tsx";
+import BoardDetail from "./pages/boardDetail.tsx";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/evaluate" element={<Evaluate />} />
         <Route path="/result" element={<Result />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/board/new" element={<BoardNew />} />
+        <Route path="/board/:id" element={<BoardDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import GlyphField from "../components/GlyphField";
 import {
   Wrapper,
   Inner,
+  Hero,
   Title,
   Form,
   Input,
@@ -24,13 +26,16 @@ function Evaluate() {
 
   return (
     <Wrapper>
-      <Inner>
+      <Hero>
+        <GlyphField />
         <Title>
           Drop a link
           <br />
           See the design flaws
         </Title>
+      </Hero>
 
+      <Inner>
         <Form onSubmit={handleSubmit}>
           <Input
             type="url"
