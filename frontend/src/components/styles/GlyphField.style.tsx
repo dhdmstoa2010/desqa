@@ -5,7 +5,7 @@ export const Field = styled.div`
   justify-self: center;
   width: max-content;
   font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  font-size: clamp(4px, 1.62vw, 26px);
+  font-size: clamp(4px, 1.4vw, 24px);
   line-height: 1;
   letter-spacing: 0.01em;
   user-select: none;

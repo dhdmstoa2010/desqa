@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -175,15 +176,7 @@ export const RevealText = styled.div`
     color: #ffffff !important;
   }
 
-  input {
-    background: rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 0, 0, 0.28);
-    color: #0a0a0b;
-  }
-  input::placeholder {
-    color: rgba(0, 0, 0, 0.4);
-  }
-  button {
+  .hero-form {
     background: #0a0a0b;
     color: #bfff6b;
   }
@@ -289,57 +282,46 @@ export const Accent = styled.span`
 `;
 
 export const FormWrap = styled.div`
-  width: 100%;
-  max-width: 620px;
-  align-self: center;
-  margin-top: clamp(65px, 3.5vh, 48px);
+  align-self: flex-start;
+  margin-top: clamp(28px, 3.5vh, 48px);
+
+  @media (max-width: 1024px) {
+    align-self: center;
+  }
 `;
 
-export const Form = styled.form`
-  display: flex;
+const heroCta = css`
+  display: inline-flex;
+  align-items: center;
   gap: 10px;
-  width: 100%;
-  clip-path: inset(0px 0px 0px 0px);
-  will-change: clip-path;
-
-  @media (max-width: 560px) {
-    flex-direction: column;
-  }
-`;
-
-export const Input = styled.input`
-  flex: 1;
-  padding: 15px 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #1c1c1f;
-  color: #f5f5f5;
-  font-size: 15px;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: #7a7a7f;
-  }
-
-  &:focus {
-    outline: 2px solid #bfff6b;
-    outline-offset: 0;
-  }
-`;
-
-export const Button = styled.button`
-  padding: 15px 24px;
+  padding: 17px 32px;
   border-radius: 14px;
   border: none;
   background: #bfff6b;
   color: #0a0a0b;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
   white-space: nowrap;
-  transition: background 0.2s;
+  cursor: pointer;
+  clip-path: inset(0px 0px 0px 0px);
+  will-change: clip-path;
+  transition:
+    background 0.2s,
+    transform 0.2s;
 
   &:hover {
-    background: #7aa641aa;
+    background: #a6e34d;
+    transform: translateY(-1px);
   }
+`;
+
+export const HeroCta = styled(Link)`
+  ${heroCta}
+`;
+
+/* RevealText 레이어용 시각 복제 (링크 동작 없음) */
+export const HeroCtaGhost = styled.span`
+  ${heroCta}
 `;
