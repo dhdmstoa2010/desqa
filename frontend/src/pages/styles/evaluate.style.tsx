@@ -31,7 +31,8 @@ export const Hero = styled.div`
   place-items: center;
   width: 100%;
   overflow: hidden;
-  margin-bottom: clamp(18px, 4vh, 44px);
+  margin-top: clamp(16px, 5vh, 56px);
+  margin-bottom: clamp(32px, 7vh, 72px);
 `;
 
 export const Title = styled.h1`

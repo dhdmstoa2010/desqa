@@ -20,10 +20,10 @@ const C_HOVER_FG = "#8f8f98";
 const pick = (s: string) => s[(Math.random() * s.length) | 0];
 
 const SHAFT_HALF = 3.4 / (ROWS - 1); // 몸통 반두께
-const ARROW_L = 0.02; // 화살표 왼쪽 끝
-const SHAFT_R = 0.66; // 몸통 오른쪽 끝
-const HEAD_BASE_X = 0.6; // 화살촉 밑변
-const HEAD_TIP_X = 0.98; // 꼭짓점
+const ARROW_L = 0.11; // 화살표 왼쪽 끝 (좌우 여백)
+const SHAFT_R = 0.63; // 몸통 오른쪽 끝
+const HEAD_BASE_X = 0.58; // 화살촉 밑변
+const HEAD_TIP_X = 0.89; // 꼭짓점 (우측 여백)
 const HEAD_HALF = 0.5; // 화살촉 밑변 반높이
 
 function inArrow(c: number, r: number): boolean {
