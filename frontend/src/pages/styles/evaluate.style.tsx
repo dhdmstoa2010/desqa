@@ -151,16 +151,24 @@ export const Button = styled.button`
 `;
 
 export const BoardLink = styled(Link)`
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 20px;
+  padding: 11px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(191, 255, 107, 0.4);
   font-size: 13.5px;
   font-weight: 700;
   color: #bfff6b;
   text-decoration: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 
   &:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    background: rgba(191, 255, 107, 0.1);
+    border-color: #bfff6b;
   }
 `;
 
