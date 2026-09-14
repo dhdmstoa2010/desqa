@@ -9,19 +9,19 @@ export const ShareToBoard = styled.div`
   flex-wrap: wrap;
   padding: 20px 22px;
   border-radius: 16px;
-  border: 1px solid rgba(191, 255, 107, 0.22);
-  background: rgba(191, 255, 107, 0.05);
+  border: 1px solid rgba(166, 227, 233, 0.22);
+  background: rgba(166, 227, 233, 0.05);
 
   p {
     margin: 0;
     font-size: 14px;
-    color: #cfe8a6;
+    color: #c3e6ea;
   }
 `;
 
 export const ShareToBoardLink = styled(Link)`
   flex-shrink: 0;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 13px;
   font-weight: 800;
@@ -31,7 +31,7 @@ export const ShareToBoardLink = styled(Link)`
   transition: background 0.2s;
 
   &:hover {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 `;
 
@@ -62,7 +62,7 @@ export const TopBar = styled.div`
 `;
 
 export const TargetLink = styled.a`
-  color: #bfff6b;
+  color: #a6e3e9;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -87,8 +87,8 @@ export const BackLink = styled.button`
     background 0.15s;
 
   &:hover {
-    background: rgba(191, 255, 107, 0.08);
-    border-color: rgba(191, 255, 107, 0.6);
+    background: rgba(166, 227, 233, 0.08);
+    border-color: rgba(166, 227, 233, 0.6);
   }
 `;
 
@@ -107,8 +107,8 @@ export const Spinner = styled.div`
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 3px solid rgba(191, 255, 107, 0.2);
-  border-top-color: #bfff6b;
+  border: 3px solid rgba(166, 227, 233, 0.2);
+  border-top-color: #a6e3e9;
   animation: spin 0.8s linear infinite;
 
   @keyframes spin {
@@ -132,7 +132,7 @@ export const ErrorText = styled.p`
 
 export const RetryButton = styled.button`
   border: none;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 14px;
   font-weight: 700;
@@ -330,7 +330,7 @@ export const StrengthItem = styled.li`
     content: "✓";
     position: absolute;
     left: 0;
-    color: #bfff6b;
+    color: #a6e3e9;
     font-weight: 700;
   }
 `;
@@ -393,7 +393,7 @@ export const IssueRowLabel = styled.span<{ $accent?: boolean }>`
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: ${({ $accent }) => ($accent ? "#bfff6b" : "#6f6f75")};
+  color: ${({ $accent }) => ($accent ? "#a6e3e9" : "#6f6f75")};
 `;
 
 export const IssueRowText = styled.p`

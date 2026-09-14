@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 /*
   서비스 플로우 섹션.
 
-  - 히어로에서 넘어온 고정 라임 오버레이(RevealFill, z-index:3) 위에 얹히도록 z-index:5,
-    배경은 투명하게 두어 위 섹션의 라임(#bfff6b)이 그대로 이어진다.
+  - 히어로에서 넘어온 고정 포인트 컬러 오버레이(RevealFill, z-index:3) 위에 얹히도록 z-index:5,
+    배경은 투명하게 두어 위 섹션의 포인트 컬러(#a6e3e9)가 그대로 이어진다.
   - 카드는 스크롤에 따라 "파일이 쌓이듯" 겹쳐 올라간다 (sticky + 단차 offset).
   - 모든 전환은 하나의 motion system(--flow-ease / --flow-dur)만 쓴다.
 */
@@ -16,7 +16,7 @@ export const Section = styled.section`
   --flow-body: rgba(10, 10, 11, 0.72);
   --flow-muted: rgba(10, 10, 11, 0.45);
   --flow-line: rgba(10, 10, 11, 0.1);
-  --flow-lime: #bfff6b;
+  --flow-lime: #a6e3e9;
   --flow-sticky-top: clamp(90px, 14vh, 150px);
   /* 쌓일 때 카드 사이 단차 */
   --stack-step: clamp(12px, 1.4vw, 20px);
@@ -24,7 +24,7 @@ export const Section = styled.section`
   position: relative;
   z-index: 5;
   width: 100%;
-  /* 배경은 투명 — 히어로의 고정 라임 오버레이(RevealFill, z-index:3)가 그대로 비쳐서
+  /* 배경은 투명 — 히어로의 고정 포인트 컬러 오버레이(RevealFill, z-index:3)가 그대로 비쳐서
      스크롤에 따라 밴드가 넓어지는 연출이 이 섹션까지 이어진다.
      밴드가 아직 안 덮은 좌우는 뒤의 다크(ProcessAnimation #0a0a0b)가 보이며 대비를 만든다. */
   background: transparent;
