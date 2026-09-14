@@ -8,8 +8,21 @@ export type CategoryKey =
   | "consistency"
   | "credibility";
 
+export type UxCategoryKey =
+  | "findability"
+  | "affordance"
+  | "clarity_of_labels"
+  | "task_guidance";
+
 export type ReviewCategory = {
   key: CategoryKey;
+  label: string;
+  score: number;
+  comment: string;
+};
+
+export type ReviewUxCategory = {
+  key: UxCategoryKey;
   label: string;
   score: number;
   comment: string;
@@ -30,6 +43,8 @@ export type DesignReviewResult = {
   categories: ReviewCategory[];
   strengths: string[];
   issues: ReviewIssue[];
+  uxCategories: ReviewUxCategory[];
+  uxIssues: ReviewIssue[];
 };
 
 export type StoredReview = {

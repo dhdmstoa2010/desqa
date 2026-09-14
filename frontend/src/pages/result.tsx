@@ -73,6 +73,7 @@ const LOADING_STEPS = [
   "화면을 캡처하는 중…",
   "레이아웃과 타이포그래피를 분석하는 중…",
   "색 대비와 여백을 살펴보는 중…",
+  "핵심 기능을 찾기 쉬운지 살펴보는 중…",
   "리포트를 정리하는 중…",
 ];
 
@@ -130,7 +131,7 @@ function ResultView({
       </Hero>
 
       <Section>
-        <SectionTitle>카테고리별 점수</SectionTitle>
+        <SectionTitle>화면 디자인 (UI) 점수</SectionTitle>
         <CategoryGrid>
           {result.categories.map((c) => (
             <CategoryCard key={c.key}>
@@ -146,6 +147,26 @@ function ResultView({
           ))}
         </CategoryGrid>
       </Section>
+
+      {result.uxCategories?.length > 0 && (
+        <Section>
+          <SectionTitle>사용성 (UX) 점수</SectionTitle>
+          <CategoryGrid>
+            {result.uxCategories.map((c) => (
+              <CategoryCard key={c.key}>
+                <CategoryHead>
+                  <CategoryName>{c.label}</CategoryName>
+                  <CategoryScore>{c.score}</CategoryScore>
+                </CategoryHead>
+                <Meter>
+                  <MeterFill value={c.score} />
+                </Meter>
+                <CategoryComment>{c.comment}</CategoryComment>
+              </CategoryCard>
+            ))}
+          </CategoryGrid>
+        </Section>
+      )}
 
       {result.strengths.length > 0 && (
         <Section>
@@ -163,6 +184,36 @@ function ResultView({
           <SectionTitle>improvement point</SectionTitle>
           <IssueList>
             {result.issues.map((issue, i) => (
+              <IssueCard key={i}>
+                <IssueHead>
+                  <SeverityTag level={issue.severity}>
+                    {SEVERITY_LABEL[issue.severity]}
+                  </SeverityTag>
+                  <IssueTitle>{issue.title}</IssueTitle>
+                </IssueHead>
+                <IssueRow>
+                  <IssueRowLabel>위치</IssueRowLabel>
+                  <IssueRowText>{issue.where}</IssueRowText>
+                </IssueRow>
+                <IssueRow>
+                  <IssueRowLabel>문제</IssueRowLabel>
+                  <IssueRowText>{issue.problem}</IssueRowText>
+                </IssueRow>
+                <IssueRow>
+                  <IssueRowLabel $accent>이렇게</IssueRowLabel>
+                  <IssueRowText>{issue.fix}</IssueRowText>
+                </IssueRow>
+              </IssueCard>
+            ))}
+          </IssueList>
+        </Section>
+      )}
+
+      {result.uxIssues?.length > 0 && (
+        <Section>
+          <SectionTitle>사용자가 헤맬 수 있는 점</SectionTitle>
+          <IssueList>
+            {result.uxIssues.map((issue, i) => (
               <IssueCard key={i}>
                 <IssueHead>
                   <SeverityTag level={issue.severity}>
