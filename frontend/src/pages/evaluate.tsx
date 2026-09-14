@@ -48,7 +48,11 @@ function relTime(iso: string) {
   if (diff < d) return `${Math.round(diff / h)}시간 전`;
   if (diff < 7 * d) return `${Math.round(diff / d)}일 전`;
   return new Date(iso)
-    .toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" })
+    .toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
     .replace(/\.$/, "");
 }
 
@@ -188,7 +192,6 @@ function Evaluate() {
         <Left>
           <Title>
             <span className="en">Paste a URL</span>
-            <span className="kr">디자인 점수 받기</span>
           </Title>
 
           <Form onSubmit={handleSubmit}>
