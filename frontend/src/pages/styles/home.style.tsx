@@ -19,7 +19,7 @@ export const Wrapper = styled.section`
 export const ProcessAnimation = styled.section`
   position: relative;
   width: 100%;
-  /* 고정 RevealFill(라임 밴드)이 스크롤에 따라 이 영역까지 확장돼 배경을 만든다.
+  /* 고정 RevealFill(포인트 컬러 밴드)이 스크롤에 따라 이 영역까지 확장돼 배경을 만든다.
      밴드가 아직 안 덮은 구간은 이 다크 배경이 그대로 보여 히어로와 이어진다. */
   background: #0a0a0b;
 `;
@@ -45,7 +45,7 @@ export const OutroTitle = styled.h2`
   color: #f7f7f8;
 
   span {
-    color: #bfff6b;
+    color: #a6e3e9;
   }
 `;
 
@@ -58,7 +58,7 @@ export const OutroActions = styled.div`
 `;
 
 export const OutroPrimary = styled(Link)`
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 15px;
   font-weight: 800;
@@ -68,7 +68,7 @@ export const OutroPrimary = styled(Link)`
   transition: background 0.2s;
 
   &:hover {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 `;
 
@@ -85,8 +85,8 @@ export const OutroSecondary = styled(Link)`
     background 0.15s;
 
   &:hover {
-    border-color: rgba(191, 255, 107, 0.6);
-    background: rgba(191, 255, 107, 0.06);
+    border-color: rgba(166, 227, 233, 0.6);
+    background: rgba(166, 227, 233, 0.06);
   }
 `;
 
@@ -149,7 +149,7 @@ export const RevealFill = styled.div`
   position: fixed;
   inset: 0;
   z-index: 3;
-  background: #bfff6b;
+  background: #a6e3e9;
   pointer-events: none;
   clip-path: var(--reveal-clip, inset(0 100% 0 0));
   will-change: clip-path;
@@ -178,7 +178,7 @@ export const RevealText = styled.div`
 
   .hero-form {
     background: #0a0a0b;
-    color: #bfff6b;
+    color: #a6e3e9;
   }
 `;
 
@@ -278,15 +278,16 @@ export const SecDesc = styled.span`
 `;
 
 export const Accent = styled.span`
-  color: #bfff6b;
+  color: #a6e3e9;
 `;
 
 export const FormWrap = styled.div`
   align-self: flex-start;
   margin-top: clamp(28px, 3.5vh, 48px);
 
-  @media (max-width: 1024px) {
-    align-self: center;
+  &:focus {
+    outline: 2px solid #a6e3e9;
+    outline-offset: 0;
   }
 `;
 
@@ -297,7 +298,7 @@ const heroCta = css`
   padding: 17px 32px;
   border-radius: 14px;
   border: none;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 16px;
   font-weight: 800;

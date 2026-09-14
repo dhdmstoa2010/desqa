@@ -37,8 +37,8 @@ export const Title = styled.h1`
 
 export const TitleAccent = styled.span`
   display: block;
-  color: #bfff6b;
-  text-shadow: 0 0 32px rgba(191, 255, 107, 0.35);
+  color: #a6e3e9;
+  text-shadow: 0 0 32px rgba(166, 227, 233, 0.35);
 `;
 
 export const HeaderSide = styled.div`
@@ -62,7 +62,7 @@ export const HeaderDesc = styled.p`
 
 export const ShareButton = styled(Link)`
   align-self: flex-start;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   border: none;
   font-size: 14px;
@@ -76,7 +76,7 @@ export const ShareButton = styled(Link)`
     transform 0.2s;
 
   &:hover {
-    background: #a6e34d;
+    background: #8dc7cb;
     transform: translateY(-1px);
   }
 `;
@@ -204,7 +204,7 @@ export const DeltaChip = styled.span`
   padding: 3px 8px;
 
   b {
-    color: #bfff6b;
+    color: #a6e3e9;
     font-weight: 700;
   }
 `;
@@ -229,11 +229,11 @@ export const RowLink = styled(Link)`
   }
 
   &:hover .thumb {
-    border-color: rgba(191, 255, 107, 0.4);
+    border-color: rgba(166, 227, 233, 0.4);
   }
 
   &:focus-visible {
-    outline: 2px solid #bfff6b;
+    outline: 2px solid #a6e3e9;
     outline-offset: -2px;
     border-radius: 12px;
   }
@@ -328,7 +328,7 @@ export const Badge = styled.span`
   font-size: 10px;
   font-weight: 700;
   color: #0a0a0b;
-  background: #bfff6b;
+  background: #a6e3e9;
   border-radius: 999px;
   padding: 3px 8px;
   letter-spacing: 0.02em;
@@ -356,7 +356,7 @@ export const Score = styled.div<{ $tone: "high" | "mid" | "low" }>`
   line-height: 1;
   font-family: "Unbounded", system-ui, sans-serif;
   color: ${({ $tone }) =>
-    $tone === "high" ? "#bfff6b" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
+    $tone === "high" ? "#a6e3e9" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
 
   strong {
     display: block;
