@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { meRequest } from "../api/auth";
 import { listReviewsRequest, type StoredReview } from "../api/review";
+import { fetchPostsRequest } from "../api/board";
 import { useAuthStore, type AuthUser } from "../store/authStore";
-import { useBoardStore } from "../store/boardStore";
 import { profileColors } from "../utils/gradient";
-import { toneOf } from "../utils/board";
+import { toneOf, toPost } from "../utils/board";
+import type { Post } from "../types/board";
 
 import {
   Wrapper,
@@ -53,9 +54,10 @@ function MyPage() {
 
   const [reviews, setReviews] = useState<StoredReview[] | null>(null);
   const [reviewsError, setReviewsError] = useState<string | null>(null);
-  const posts = useBoardStore((s) => s.posts);
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [postsError, setPostsError] = useState<string | null>(null);
   const myPosts = useMemo(
-    () => (user ? posts.filter((p) => p.author === user.name) : []),
+    () => (user && posts ? posts.filter((p) => p.author === user.name) : []),
     [posts, user],
   );
 
@@ -106,6 +108,23 @@ function MyPage() {
       cancelled = true;
     };
   }, [activeTab, user, reviews]);
+
+  useEffect(() => {
+    if (activeTab !== "activity" || !user || posts !== null) return;
+    let cancelled = false;
+
+    fetchPostsRequest()
+      .then((rows) => {
+        if (!cancelled) setPosts(rows.map(toPost));
+      })
+      .catch(() => {
+        if (!cancelled) setPostsError("게시물을 불러오지 못했습니다");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab, user, posts]);
 
   return (
     <Wrapper>
@@ -189,28 +208,34 @@ function MyPage() {
                     <SectionCount>{myPosts.length}건</SectionCount>
                   </SectionHead>
 
-                  <ItemList>
-                    {myPosts.length === 0 && (
-                      <EmptyRow>아직 작성한 게시물이 없어요.</EmptyRow>
-                    )}
-                    {myPosts.map((post) => (
-                      <ItemRow key={post.id} to={`/board/${post.id}`}>
-                        <ItemMain>
-                          <ItemTitle>{post.title}</ItemTitle>
-                          <ItemMeta>
-                            {post.category}
-                            <span className="dot">·</span>
-                            {post.date}
-                          </ItemMeta>
-                        </ItemMain>
-                        {post.score != null && (
-                          <ScoreTag $tone={toneOf(post.score)}>
-                            {post.score}
-                          </ScoreTag>
-                        )}
-                      </ItemRow>
-                    ))}
-                  </ItemList>
+                  {postsError && <ErrorText>{postsError}</ErrorText>}
+                  {!postsError && posts === null && (
+                    <StatusText>불러오는 중...</StatusText>
+                  )}
+                  {posts && (
+                    <ItemList>
+                      {myPosts.length === 0 && (
+                        <EmptyRow>아직 작성한 게시물이 없어요.</EmptyRow>
+                      )}
+                      {myPosts.map((post) => (
+                        <ItemRow key={post.id} to={`/board/${post.id}`}>
+                          <ItemMain>
+                            <ItemTitle>{post.title}</ItemTitle>
+                            <ItemMeta>
+                              {post.category}
+                              <span className="dot">·</span>
+                              {post.date}
+                            </ItemMeta>
+                          </ItemMain>
+                          {post.score != null && (
+                            <ScoreTag $tone={toneOf(post.score)}>
+                              {post.score}
+                            </ScoreTag>
+                          )}
+                        </ItemRow>
+                      ))}
+                    </ItemList>
+                  )}
                 </ActivitySection>
               </ActivityPanel>
             )}
