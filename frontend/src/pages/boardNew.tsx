@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import { CATEGORIES, type PostCategory } from "../types/board";
 import { toneOf } from "../utils/board";
-import { useBoardStore } from "../store/boardStore";
+import { createPostRequest } from "../api/board";
 import { useAuthStore } from "../store/authStore";
 import { bodyToHtml, firstImageSrc, stripHtml } from "../utils/html";
 import RichEditor from "../components/RichEditor";
@@ -42,6 +43,7 @@ import {
   Tips,
   TipsTitle,
   TipList,
+  ErrorText,
 } from "./styles/boardNew.style";
 
 const POST_CATEGORIES = CATEGORIES.filter(
@@ -57,7 +59,6 @@ function todayLabel(): string {
 function BoardNew() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const addPost = useBoardStore((s) => s.addPost);
   const user = useAuthStore((s) => s.user);
 
   const [url, setUrl] = useState(params.get("url")?.trim() ?? "");
@@ -65,6 +66,8 @@ function BoardNew() {
   const [title, setTitle] = useState("");
   const [lead, setLead] = useState("");
   const [body, setBody] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const score = useMemo(() => {
     const raw = params.get("score");
@@ -79,20 +82,29 @@ function BoardNew() {
   const canSubmit =
     title.trim().length > 0 && (bodyText.length > 0 || Boolean(previewImage));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
-    const id = addPost({
-      url,
-      category,
-      title,
-      lead,
-      body,
-      author,
-      authorColor: "#bfff6b",
-      score,
-    });
-    navigate(`/board/${id}`);
+    if (!canSubmit || submitting) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const created = await createPostRequest({
+        category,
+        title,
+        lead: lead.trim() || undefined,
+        body,
+        url: url.trim() || undefined,
+        score,
+        authorColor: "#bfff6b",
+      });
+      navigate(`/board/${created.id}`);
+    } catch (err) {
+      const message = axios.isAxiosError(err)
+        ? (err.response?.data?.message ?? "게시물 등록에 실패했습니다")
+        : "게시물 등록에 실패했습니다";
+      setError(message);
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -179,9 +191,11 @@ function BoardNew() {
               <RichEditor value={body} onChange={setBody} placeholder="내용" />
             </Field>
 
+            {error && <ErrorText>{error}</ErrorText>}
+
             <Actions>
-              <Submit type="submit" disabled={!canSubmit}>
-                게시물 올리기 →
+              <Submit type="submit" disabled={!canSubmit || submitting}>
+                {submitting ? "올리는 중..." : "게시물 올리기 →"}
               </Submit>
               <CancelLink to="/board">취소</CancelLink>
             </Actions>
