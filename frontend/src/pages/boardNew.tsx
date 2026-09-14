@@ -154,10 +154,10 @@ function BoardNew() {
               <FieldLabel>제목</FieldLabel>
               <Input
                 type="text"
-                placeholder="예: 히어로 섹션 좌우 여백, 이 정도면 답답하지 않나요"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 maxLength={80}
+                placeholder="제목"
               />
             </Field>
 
@@ -167,20 +167,16 @@ function BoardNew() {
               </FieldLabel>
               <Input
                 type="text"
-                placeholder="어떤 점을 봐줬으면 하는지 한 문장으로"
                 value={lead}
                 onChange={(e) => setLead(e.target.value)}
                 maxLength={120}
+                placeholder="요약"
               />
             </Field>
 
             <Field as="div">
               <FieldLabel>내용</FieldLabel>
-              <RichEditor
-                value={body}
-                onChange={setBody}
-                placeholder="시도한 것, 고민 중인 선택지, 받고 싶은 피드백을 적어 주세요. 툴바의 이미지 버튼으로 캡처도 넣을 수 있어요."
-              />
+              <RichEditor value={body} onChange={setBody} placeholder="내용" />
             </Field>
 
             <Actions>
