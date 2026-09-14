@@ -490,6 +490,12 @@ export const Submit = styled.button`
   }
 `;
 
+export const ErrorText = styled.p`
+  margin: 0;
+  color: #ff6b6b;
+  font-size: 13.5px;
+`;
+
 export const CancelLink = styled(Link)`
   font-size: 15px;
   font-weight: 600;

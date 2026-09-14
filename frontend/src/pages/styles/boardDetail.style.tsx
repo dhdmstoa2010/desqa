@@ -401,6 +401,40 @@ export const LoginButton = styled(Link)`
   }
 `;
 
+export const CommentSubmit = styled.button`
+  flex-shrink: 0;
+  padding: 0 22px;
+  border: none;
+  border-radius: 12px;
+  background: #bfff6b;
+  color: #0a0a0b;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #a6e34d;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 520px) {
+    padding: 12px 22px;
+  }
+`;
+
+export const ErrorText = styled.p`
+  margin: 8px 0 0;
+  color: #ff6b6b;
+  font-size: 12.5px;
+`;
+
 /* 사이드 */
 export const Aside = styled.aside`
   position: sticky;
