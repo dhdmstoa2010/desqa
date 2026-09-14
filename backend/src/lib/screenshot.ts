@@ -160,13 +160,40 @@ async function dismissOverlays(page: Page): Promise<void> {
 
 let browserPromise: Promise<Browser> | null = null;
 
-function getBrowser(): Promise<Browser> {
-  if (!browserPromise) {
-    browserPromise = chromium.launch({ headless: true }).catch((err) => {
-      browserPromise = null;
-      throw err;
-    });
+async function launchWithRetry(): Promise<Browser> {
+  // A fresh launch can fail transiently under machine load (antivirus/file
+  // scanning contention, many concurrent Chrome processes competing for
+  // launch handles). Retry a few times with backoff instead of surfacing a
+  // hard failure to the user on the first hiccup.
+  const delaysMs = [500, 1500, 3000];
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= delaysMs.length; attempt++) {
+    try {
+      return await chromium.launch({ headless: true });
+    } catch (err) {
+      lastErr = err;
+      if (attempt < delaysMs.length) {
+        await new Promise((r) => setTimeout(r, delaysMs[attempt]));
+      }
+    }
   }
+  throw lastErr;
+}
+
+async function getBrowser(): Promise<Browser> {
+  if (browserPromise) {
+    const browser = await browserPromise;
+    // A long-lived dev/prod process can outlive the browser (crash, OOM-kill,
+    // manual close). Reusing a disconnected instance would fail every request
+    // until restart, so relaunch instead of trusting the cached promise blindly.
+    if (browser.isConnected()) return browser;
+    browserPromise = null;
+  }
+
+  browserPromise = launchWithRetry().catch((err) => {
+    browserPromise = null;
+    throw err;
+  });
   return browserPromise;
 }
 
