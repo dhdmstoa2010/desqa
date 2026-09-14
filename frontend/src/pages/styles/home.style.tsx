@@ -295,7 +295,7 @@ const heroCta = css`
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 17px 32px;
+  padding: 15px 30px;
   border-radius: 14px;
   border: none;
   background: #a6e3e9;
