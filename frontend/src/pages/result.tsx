@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { createReviewRequest, type DesignReviewResult } from "../api/review";
+import {
+  createReviewRequest,
+  getReviewRequest,
+  type DesignReviewResult,
+} from "../api/review";
 import {
   Wrapper,
   Content,
@@ -72,15 +76,25 @@ const LOADING_STEPS = [
   "리포트를 정리하는 중…",
 ];
 
-function LoadingView() {
+function LoadingView({ instant = false }: { instant?: boolean }) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
+    if (instant) return;
     const id = window.setInterval(() => {
       setStep((s) => Math.min(s + 1, LOADING_STEPS.length - 1));
     }, 4000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [instant]);
+
+  if (instant) {
+    return (
+      <Status>
+        <Spinner />
+        <StatusText>기록을 불러오는 중…</StatusText>
+      </Status>
+    );
+  }
 
   return (
     <Status>
@@ -196,24 +210,30 @@ function ResultPage() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const url = params.get("url")?.trim() ?? "";
+  const idParam = params.get("id")?.trim() ?? "";
+  const id = /^\d+$/.test(idParam) ? idParam : "";
 
   const [result, setResult] = useState<DesignReviewResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [attempt, setAttempt] = useState(0);
-  const finalUrlRef = useRef(url);
+  const [finalUrl, setFinalUrl] = useState(url);
 
   useEffect(() => {
-    if (!url) return;
+    if (!id && !url) return;
     let active = true;
     setLoading(true);
     setError(null);
     setResult(null);
 
-    runReview(url, `${url}::${attempt}`)
+    const task = id
+      ? getReviewRequest(id)
+      : runReview(url, `${url}::${attempt}`);
+
+    task
       .then((review) => {
         if (!active) return;
-        finalUrlRef.current = review.url;
+        setFinalUrl(review.url);
         setResult(review.result);
       })
       .catch((err) => {
@@ -221,9 +241,11 @@ function ResultPage() {
         if (axios.isAxiosError(err)) {
           setError(
             err.response?.data?.message ??
-              (err.code === "ECONNABORTED"
-                ? "평가 시간이 초과되었습니다"
-                : "평가 요청에 실패했습니다"),
+              (err.response?.status === 404
+                ? "평가 기록을 찾을 수 없습니다"
+                : err.code === "ECONNABORTED"
+                  ? "평가 시간이 초과되었습니다"
+                  : "평가 요청에 실패했습니다"),
           );
         } else {
           setError("알 수 없는 오류가 발생했습니다");
@@ -236,9 +258,11 @@ function ResultPage() {
     return () => {
       active = false;
     };
-  }, [url, attempt]);
+  }, [id, url, attempt]);
 
-  if (!url) return <Navigate to="/" replace />;
+  if (!id && !url) return <Navigate to="/" replace />;
+
+  const targetUrl = finalUrl || url;
 
   return (
     <Wrapper>
@@ -247,14 +271,18 @@ function ResultPage() {
           <BackLink type="button" onClick={() => navigate("/")}>
             ← 새 평가
           </BackLink>
-          {!loading && (
-            <TargetLink href={url} target="_blank" rel="noreferrer noopener">
-              {url}
+          {!loading && targetUrl && (
+            <TargetLink
+              href={targetUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {targetUrl}
             </TargetLink>
           )}
         </TopBar>
 
-        {loading && <LoadingView />}
+        {loading && (id ? <LoadingView instant /> : <LoadingView />)}
 
         {!loading && error && (
           <Status>
@@ -266,7 +294,7 @@ function ResultPage() {
         )}
 
         {!loading && !error && result && (
-          <ResultView result={result} url={finalUrlRef.current} />
+          <ResultView result={result} url={targetUrl} />
         )}
       </Content>
     </Wrapper>

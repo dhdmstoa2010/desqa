@@ -2,7 +2,7 @@ import { Type, type Schema } from "@google/genai";
 import { genai } from "./gemini.js";
 import type { Screenshot } from "./screenshot.js";
 
-const MODEL = process.env.GEMINI_REVIEW_MODEL ?? "gemini-3.5-flash";
+const MODEL = process.env.GEMINI_REVIEW_MODEL ?? "gemini-3.5-flash-lite";
 
 export const CATEGORY_KEYS = [
   "hierarchy",
@@ -160,7 +160,7 @@ export async function reviewDesign(shot: Screenshot): Promise<DesignReviewResult
         config: {
           systemInstruction: SYSTEM_PROMPT,
           temperature: 0.2,
-          maxOutputTokens: 4000,
+          maxOutputTokens: 12000,
           responseMimeType: "application/json",
           responseSchema: RESPONSE_SCHEMA,
         },

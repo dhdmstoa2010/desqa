@@ -18,7 +18,9 @@ const BRAND = "desqa.";
 function Navbar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { pathname } = useLocation();
-  const isBoardActive = pathname.toLowerCase().startsWith("/board");
+  const path = pathname.toLowerCase();
+  const isEvaluateActive = path.startsWith("/evaluate") || path.startsWith("/result");
+  const isBoardActive = path.startsWith("/board");
 
   return (
     <Bar>
@@ -35,6 +37,9 @@ function Navbar() {
           ))}
         </Brand>
         <NoticeBoard>
+          <NavLink to="/evaluate" aria-label="Evaluate">
+            <Notice $active={isEvaluateActive}>/evaluate</Notice>
+          </NavLink>
           <NavLink to="/board" aria-label="Board">
             <Notice $active={isBoardActive}>/board</Notice>
           </NavLink>

@@ -21,12 +21,17 @@ import {
   Input,
   Button,
   ProcessAnimation,
+  Outro,
+  OutroTitle,
+  OutroActions,
+  OutroPrimary,
+  OutroSecondary,
 } from "./styles/home.style";
 
 /* 커서 밴드 */
 const BAND_W = 128; // 밴드 폭(px)
 const EASE = 0.16; // 커서 밴드 lerp 계수 (빠르게)
-const SCROLL_EASE = 0.06; // 스크롤 채움 lerp 계수 (느리게)
+const SCROLL_EASE = 0.06; // 스크롤 채움 (느리게)
 const IDLE_MS = 650; // 커서가 멈춘 뒤 밴드가 접히기까지 대기
 
 gsap.registerPlugin(useGSAP, SplitText);
@@ -111,14 +116,12 @@ function Home() {
       // 커서를 아직 안 움직였으면 화면 중앙에서 대칭
       if (!s.init) s.curX = window.innerWidth / 2;
       const hero = container.current;
-      // 히어로를 지나 하단(플로우) 섹션 초입까지 라임 밴드가 계속 확장되도록
-      // 종료 지점을 히어로 높이보다 넉넉히 뒤로 잡는다 (섹션에 들어와서도 넓어지는 게 보임).
       const heroExit = hero
         ? (hero.offsetTop + hero.offsetHeight) * 1.4
         : window.innerHeight;
       s.tgtScroll =
         heroExit > 0 ? Math.min(1, Math.max(0, window.scrollY / heroExit)) : 0;
-      // 스크롤 이벤트에서도 조금씩 전진(약간 느리게) — rAF 가 죽어도 스크롤은 동작한다.
+      // 스크롤 이벤트에서도 조금씩 전진
       s.curScroll += (s.tgtScroll - s.curScroll) * 0.2;
       applyReveal();
       kickReveal(); // 스크롤이 멈춘 뒤 남은 이징은 rAF 가 마무리
@@ -152,12 +155,12 @@ function Home() {
 
       tl.from(".hero-glow", { scale: 0.6, opacity: 0, duration: 1.7 })
 
-        // 1줄 — 왼쪽에서 한 글자씩 슬라이드 인
+        // 1줄  왼쪽에서 한 글자씩 슬라이드 인
         .from(line1Chars, { x: -70, opacity: 0, stagger: 0.05 }, 0.5)
-        // 2줄 — 같은 방향으로 이어서 슬라이드 인
+        // 2줄  같은 방향으로 이어서 슬라이드 인
         .from(line2Chars, { x: -70, opacity: 0, stagger: 0.05 }, "<0.35")
 
-        // 입력창 — 중앙에서 양옆으로 퍼지며 등장
+        // 입력창  중앙에서 양옆으로 퍼지며 등장
         .from(
           ".hero-form",
           { clipPath: "inset(0px 50% 0px 50%)", duration: 1.1 },
@@ -272,6 +275,16 @@ function Home() {
       <ProcessAnimation>
         <ServiceFlow onStart={handleStart} />
       </ProcessAnimation>
+
+      <Outro>
+        <OutroTitle>
+          지금 만들고 있는 화면, <span>어디가 아쉬운지</span> 확인해 보세요
+        </OutroTitle>
+        <OutroActions>
+          <OutroPrimary to="/evaluate">평가 시작하기 →</OutroPrimary>
+          <OutroSecondary to="/board">게시판 둘러보기</OutroSecondary>
+        </OutroActions>
+      </Outro>
     </>
   );
 }
