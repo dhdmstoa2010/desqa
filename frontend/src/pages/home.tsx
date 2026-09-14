@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -17,9 +17,8 @@ import {
   Desc,
   SecDesc,
   FormWrap,
-  Form,
-  Input,
-  Button,
+  HeroCta,
+  HeroCtaGhost,
   ProcessAnimation,
   Outro,
   OutroTitle,
@@ -51,15 +50,10 @@ function Home() {
     idle: 0,
     init: false,
   });
-  const [url, setUrl] = useState("");
-  const urlInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleStart = () => {
-    // 포커스를 먼저(스크롤 없이) 잡아둔 뒤 최상단으로 부드럽게 이동.
-    // focus() 가 자체적으로 스크롤을 유발해 부드러운 스크롤을 중간에 끊는 걸 막는다.
-    urlInput.current?.focus({ preventScroll: true });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate("/evaluate");
   };
 
   const applyReveal = () => {
@@ -197,13 +191,6 @@ function Home() {
     kickReveal();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = url.trim();
-    if (!trimmed) return;
-    navigate(`/result?url=${encodeURIComponent(trimmed)}`);
-  };
-
   return (
     <>
       <Wrapper
@@ -227,17 +214,9 @@ function Home() {
             </Line>
           </Title>
           <FormWrap>
-            <Form className="hero-form" onSubmit={handleSubmit}>
-              <Input
-                ref={urlInput}
-                type="url"
-                inputMode="url"
-                placeholder="https://example.com"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-              />
-              <Button type="submit">Evaluate</Button>
-            </Form>
+            <HeroCta className="hero-form" to="/evaluate">
+              링크 평가하러 가기 →
+            </HeroCta>
           </FormWrap>
         </Content>
 
@@ -254,17 +233,9 @@ function Home() {
               </Line>
             </Title>
             <FormWrap>
-              <Form as="div">
-                <Input
-                  readOnly
-                  tabIndex={-1}
-                  placeholder="https://example.com"
-                  value={url}
-                />
-                <Button type="button" tabIndex={-1}>
-                  Evaluate
-                </Button>
-              </Form>
+              <HeroCtaGhost className="hero-form">
+                링크 평가하러 가기 →
+              </HeroCtaGhost>
             </FormWrap>
           </Content>
         </RevealText>
