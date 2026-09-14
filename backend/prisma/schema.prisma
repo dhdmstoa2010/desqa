@@ -13,6 +13,8 @@ model User {
   password  String
   createdAt DateTime       @default(now())
   reviews   DesignReview[]
+  posts     Post[]
+  comments  Comment[]
 }
 
 model DesignReview {
@@ -25,4 +27,38 @@ model DesignReview {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  category    String
+  url         String?
+  title       String
+  lead        String?
+  body        String
+  authorName  String
+  authorColor String    @default("#bfff6b")
+  score       Int?
+  views       Int       @default(0)
+  helpful     Int       @default(0)
+  userId      Int?
+  user        User?     @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  comments    Comment[]
+
+  @@index([category, createdAt])
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  text       String
+  authorName String
+  postId     Int
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@index([postId, createdAt])
 }
