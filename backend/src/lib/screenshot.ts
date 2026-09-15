@@ -181,19 +181,24 @@ async function launchWithRetry(): Promise<Browser> {
 }
 
 async function getBrowser(): Promise<Browser> {
-  if (browserPromise) {
-    const browser = await browserPromise;
+  const current = browserPromise;
+  if (current) {
+    const browser = await current;
     // A long-lived dev/prod process can outlive the browser (crash, OOM-kill,
     // manual close). Reusing a disconnected instance would fail every request
     // until restart, so relaunch instead of trusting the cached promise blindly.
     if (browser.isConnected()) return browser;
-    browserPromise = null;
+    // Only clear if nobody else has already relaunched while we awaited —
+    // otherwise concurrent callers each launch their own orphaned browser.
+    if (browserPromise === current) browserPromise = null;
   }
 
-  browserPromise = launchWithRetry().catch((err) => {
-    browserPromise = null;
-    throw err;
-  });
+  if (!browserPromise) {
+    browserPromise = launchWithRetry().catch((err) => {
+      browserPromise = null;
+      throw err;
+    });
+  }
   return browserPromise;
 }
 
