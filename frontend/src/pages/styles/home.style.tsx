@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -76,95 +76,15 @@ export const BoardPromoScrollPin = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(28px, 4vh, 44px);
-  }
-`;
-
-/* 지금 몇 번째 카드인지 보여주는 가로 스텝 인디케이터 */
-export const BoardPromoSteps = styled.div`
-  display: none;
-
-  @media (min-width: 900px) {
-    display: flex;
-    align-items: center;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 clamp(16px, 5vw, 48px);
-  }
-`;
-
-export const BoardPromoStep = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-
-  &:not(:last-of-type)::after {
-    content: "";
-    flex: 1;
-    height: 2px;
-    margin: 0 10px;
-    background: rgba(10, 10, 11, 0.15);
-    transition: background 0.35s ease;
-  }
-  &[data-done="true"]:not(:last-of-type)::after {
-    background: rgba(10, 10, 11, 0.55);
-  }
-`;
-
-export const BoardPromoStepDot = styled.span`
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-family: "Unbounded", system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(10, 10, 11, 0.5);
-  background: rgba(10, 10, 11, 0.06);
-  border: 1px solid rgba(10, 10, 11, 0.2);
-  transition: all 0.35s ease;
-
-  [data-active="true"] & {
-    color: #a6e3e9;
-    background: #0a0a0b;
-    border-color: #0a0a0b;
-    transform: scale(1.15);
-  }
-  [data-done="true"] & {
-    color: #0a0a0b;
-    border-color: rgba(10, 10, 11, 0.45);
-  }
-`;
-
-export const BoardPromoStepLabel = styled.span`
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(10, 10, 11, 0.4);
-  white-space: nowrap;
-  transition: color 0.35s ease;
-
-  @media (max-width: 1100px) {
-    display: none;
-  }
-
-  [data-active="true"] & {
-    color: #0a0a0b;
-  }
-  [data-done="true"] & {
-    color: rgba(10, 10, 11, 0.65);
   }
 `;
 
 export const BoardPromoFeatures = styled.div`
   display: flex;
   align-items: stretch;
-  gap: clamp(20px, 3vw, 36px);
+  gap: clamp(16px, 2.2vw, 28px);
   width: max-content;
-  padding: 8px clamp(16px, 10vw, 22vw) 8px clamp(16px, 6vw, 12vw);
+  padding: 8px clamp(16px, 8vw, 16vw) 8px clamp(16px, 6vw, 12vw);
   text-align: left;
   will-change: transform;
 
@@ -178,10 +98,10 @@ export const BoardPromoFeatures = styled.div`
 const boardPromoCardBase = css`
   position: relative;
   flex: 0 0 auto;
-  width: min(640px, 76vw);
-  min-height: clamp(400px, 56vh, 580px);
-  padding: clamp(32px, 4vw, 48px);
-  border-radius: 28px;
+  width: min(400px, 80vw);
+  min-height: clamp(300px, 40vh, 380px);
+  padding: clamp(20px, 2.2vw, 26px);
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -195,128 +115,241 @@ const boardPromoCardBase = css`
 
 export const BoardPromoFeature = styled.div`
   ${boardPromoCardBase}
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0a0a0b;
-  box-shadow: 0 24px 48px -28px rgba(10, 10, 11, 0.5);
+  border: 1px solid rgba(10, 10, 11, 0.06);
+  background: #f7f7f8;
+  box-shadow: 0 28px 56px -28px rgba(10, 10, 11, 0.55);
 `;
 
-export const BoardPromoFeatureIcon = styled.span`
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  margin-bottom: clamp(28px, 4vh, 40px);
-  background: rgba(166, 227, 233, 0.12);
-  color: #a6e3e9;
+/* 실제 화면 캡처를 하늘색 패널 위에 떠 있는 창처럼 보여준다 */
+export const BoardPromoFeatureShot = styled.div`
+  width: 100%;
+  height: clamp(130px, 19vh, 170px);
+  padding: 14px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin-bottom: clamp(16px, 2.2vh, 22px);
+  background: rgba(166, 227, 233, 0.45);
 
-  svg {
-    width: 26px;
-    height: 26px;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px -14px rgba(10, 10, 11, 0.6);
   }
 `;
 
-export const BoardPromoFeatureTag = styled.span`
-  position: absolute;
-  right: clamp(20px, 2.4vw, 32px);
-  bottom: clamp(12px, 1.6vw, 20px);
-  font-family: "Unbounded", system-ui, sans-serif;
-  font-weight: 800;
-  font-size: clamp(56px, 7vw, 96px);
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.06);
-  pointer-events: none;
-  user-select: none;
-
-  @media (max-width: 899px) {
-    display: none;
-  }
-`;
-
-/* 트랙의 마지막 카드 — CTA 버튼 두 개를 담는, 다른 카드와 같은 검정 카드 */
+/* 트랙의 마지막 카드 — 다른 카드(검정)와 반대로 밝은 카드에, 게시물 작성 화면을 미니 목업으로 보여준다 */
 export const BoardPromoFinalCard = styled.div`
   ${boardPromoCardBase}
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0a0a0b;
-  box-shadow: 0 24px 48px -28px rgba(10, 10, 11, 0.5);
+  border: 1px solid rgba(10, 10, 11, 0.06);
+  background: #f7f7f8;
+  box-shadow: 0 28px 56px -28px rgba(10, 10, 11, 0.55);
+
+  @media (min-width: 900px) {
+    width: min(460px, 80vw);
+  }
+`;
+
+const caretBlink = keyframes`
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+`;
+
+/* 게시물 작성 화면 미니 목업 */
+export const Composer = styled.div`
+  width: 100%;
+  margin-top: clamp(14px, 2vh, 20px);
+  padding: 16px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  border: 1px solid rgba(10, 10, 11, 0.1);
+  background: #ffffff;
+  box-shadow: 0 10px 24px -16px rgba(10, 10, 11, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const ComposerTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+`;
+
+export const ComposerChips = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  span {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 10, 11, 0.14);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #55555c;
+  }
+
+  span[data-active="true"] {
+    border-color: transparent;
+    background: #a6e3e9;
+    color: #0a0a0b;
+    font-weight: 700;
+  }
+`;
+
+export const ComposerScore = styled.span`
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-family: "Unbounded", system-ui, sans-serif;
+  color: #0a0a0b;
+
+  b {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  small {
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: #77777f;
+  }
+`;
+
+export const ComposerHeadline = styled.p`
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #0a0a0b;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    margin-left: 3px;
+    vertical-align: -2px;
+    background: #0a0a0b;
+    animation: ${caretBlink} 1.1s steps(1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+`;
+
+export const ComposerLines = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  i {
+    display: block;
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(10, 10, 11, 0.08);
+  }
+
+  i:nth-of-type(1) {
+    width: 100%;
+  }
+  i:nth-of-type(2) {
+    width: 82%;
+  }
+  i:nth-of-type(3) {
+    width: 56%;
+  }
 `;
 
 export const BoardPromoFinalActions = styled.div`
   margin-top: auto;
-  padding-top: clamp(24px, 4vh, 40px);
+  padding-top: clamp(16px, 2.6vh, 24px);
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
   width: 100%;
-
-  a {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    box-sizing: border-box;
-  }
 `;
 
 export const BoardPromoFeatureNum = styled.span`
   display: inline-block;
-  margin-bottom: 14px;
-  padding: 5px 12px;
+  margin-bottom: 10px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(166, 227, 233, 0.12);
+  background: #0a0a0b;
   font-family: "Unbounded", system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: #a6e3e9;
 `;
 
 export const BoardPromoFeatureTitle = styled.h3`
-  margin: 0 0 12px;
-  color: #f7f7f8;
+  margin: 0 0 8px;
+  color: #0a0a0b;
   font-family: "Unbounded", system-ui, sans-serif;
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-size: clamp(17px, 1.6vw, 20px);
   font-weight: 700;
   letter-spacing: -0.02em;
 `;
 
 export const BoardPromoFeatureDesc = styled.p`
   margin: 0;
-  max-width: 34ch;
-  color: #b0b0b8;
-  font-size: clamp(14.5px, 1.3vw, 16.5px);
-  line-height: 1.75;
+  max-width: 32ch;
+  color: #55555c;
+  font-size: clamp(13.5px, 1.1vw, 14.5px);
+  line-height: 1.6;
 `;
 
 export const OutroPrimary = styled(Link)`
-  background: #a6e3e9;
-  color: #0a0a0b;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+  background: #0a0a0b;
+  color: #a6e3e9;
   font-size: 15px;
   font-weight: 800;
   padding: 15px 30px;
   border-radius: 999px;
   text-decoration: none;
-  transition: background 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
 
   &:hover {
-    background: #8dc7cb;
+    background: #1c1c20;
+    transform: translateY(-1px);
   }
 `;
 
 export const OutroSecondary = styled(Link)`
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #f0f0f2;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
-  padding: 15px 26px;
-  border-radius: 999px;
-  text-decoration: none;
+  color: #55555c;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(10, 10, 11, 0.25);
   transition:
-    border-color 0.15s,
-    background 0.15s;
+    color 0.15s,
+    text-decoration-color 0.15s;
 
   &:hover {
-    border-color: rgba(166, 227, 233, 0.6);
-    background: rgba(166, 227, 233, 0.06);
+    color: #0a0a0b;
+    text-decoration-color: #0a0a0b;
   }
 `;
 

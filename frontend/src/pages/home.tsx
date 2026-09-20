@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ServiceFlow from "../components/ServiceFlow";
+import scoreShot from "../assets/board-promo/score-shot.png";
+import writeShot from "../assets/board-promo/write-shot.png";
+import feedbackShot from "../assets/board-promo/feedback-shot.png";
 import {
   Wrapper,
   RevealFill,
@@ -25,16 +28,17 @@ import {
   BoardPromoInner,
   BoardPromoTitle,
   BoardPromoScrollPin,
-  BoardPromoSteps,
-  BoardPromoStep,
-  BoardPromoStepDot,
-  BoardPromoStepLabel,
   BoardPromoFeatures,
   BoardPromoFeature,
-  BoardPromoFeatureIcon,
-  BoardPromoFeatureTag,
+  BoardPromoFeatureShot,
   BoardPromoFinalCard,
   BoardPromoFinalActions,
+  Composer,
+  ComposerTop,
+  ComposerChips,
+  ComposerScore,
+  ComposerHeadline,
+  ComposerLines,
   BoardPromoFeatureNum,
   BoardPromoFeatureTitle,
   BoardPromoFeatureDesc,
@@ -42,98 +46,26 @@ import {
   OutroSecondary,
 } from "./styles/home.style";
 
-function ScoreIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 15a8 8 0 1 1 16 0" />
-      <path d="M12 15l4.2-4.6" />
-      <circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function ScreenshotIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="5" width="18" height="14" rx="2.5" />
-      <circle cx="9" cy="10.5" r="1.8" />
-      <path d="M21 16l-5.5-5-4 4-2-1.6L3 17" />
-    </svg>
-  );
-}
-
-function FeedbackIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 5.5h16v10.5H9l-4 4V5.5z" />
-      <path d="M8 10h8M8 13h5" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
-
 const BOARD_PROMO_FEATURES = [
   {
     num: "01",
     title: "자동 평가 점수",
     desc: "사이트 주소만 넣으면 평가 점수가 게시물에 함께 붙어요.",
-    icon: ScoreIcon,
+    shot: scoreShot,
   },
   {
     num: "02",
     title: "스크린샷 & 설명",
     desc: "고민되는 화면을 캡처하고 시도해 본 것들을 함께 적어보세요.",
-    icon: ScreenshotIcon,
+    shot: writeShot,
   },
   {
     num: "03",
     title: "커뮤니티 피드백",
     desc: "다른 사람들의 댓글과 시선으로 놓친 부분을 발견해요.",
-    icon: FeedbackIcon,
+    shot: feedbackShot,
   },
 ] as const;
-
-const BOARD_PROMO_STEP_LABELS = [
-  "자동 평가 점수",
-  "스크린샷 & 설명",
-  "커뮤니티 피드백",
-  "게시물 올리기",
-];
 
 /* 커서 밴드 */
 const BAND_W = 128; // 밴드 폭(px)
@@ -149,7 +81,6 @@ function Home() {
   const line2 = useRef<HTMLSpanElement>(null);
   const scrollPin = useRef<HTMLDivElement>(null);
   const scrollTrack = useRef<HTMLDivElement>(null);
-  const [activeCard, setActiveCard] = useState(0);
   const reveal = useRef({
     curX: 0,
     tgtX: 0,
@@ -287,7 +218,6 @@ function Home() {
       if (!pin || !track) return;
 
       const mm = gsap.matchMedia();
-      const lastIndex = BOARD_PROMO_STEP_LABELS.length - 1;
 
       mm.add("(min-width: 900px)", () => {
         const distance = () =>
@@ -302,9 +232,6 @@ function Home() {
           scrub: 1,
           invalidateOnRefresh: true,
           animation: tween,
-          onUpdate: (self) => {
-            setActiveCard(Math.round(self.progress * lastIndex));
-          },
         });
 
         return () => {
@@ -410,44 +337,43 @@ function Home() {
         </BoardPromoInner>
 
         <BoardPromoScrollPin ref={scrollPin}>
-          <BoardPromoSteps>
-            {BOARD_PROMO_STEP_LABELS.map((label, i) => (
-              <BoardPromoStep
-                key={label}
-                data-active={i === activeCard}
-                data-done={i < activeCard}
-              >
-                <BoardPromoStepDot>
-                  {String(i + 1).padStart(2, "0")}
-                </BoardPromoStepDot>
-                <BoardPromoStepLabel>{label}</BoardPromoStepLabel>
-              </BoardPromoStep>
-            ))}
-          </BoardPromoSteps>
-
           <BoardPromoFeatures ref={scrollTrack}>
             {BOARD_PROMO_FEATURES.map((f) => (
               <BoardPromoFeature key={f.num}>
-                <BoardPromoFeatureIcon>
-                  <f.icon />
-                </BoardPromoFeatureIcon>
+                <BoardPromoFeatureShot>
+                  <img src={f.shot} alt="" />
+                </BoardPromoFeatureShot>
                 <BoardPromoFeatureNum>STEP {f.num}</BoardPromoFeatureNum>
                 <BoardPromoFeatureTitle>{f.title}</BoardPromoFeatureTitle>
                 <BoardPromoFeatureDesc>{f.desc}</BoardPromoFeatureDesc>
-                <BoardPromoFeatureTag>{f.num}</BoardPromoFeatureTag>
               </BoardPromoFeature>
             ))}
             <BoardPromoFinalCard>
-              <BoardPromoFeatureIcon>
-                <ArrowIcon />
-              </BoardPromoFeatureIcon>
               <BoardPromoFeatureNum>STEP 04</BoardPromoFeatureNum>
               <BoardPromoFeatureTitle>
-                지금 바로 시작해보세요
+                지금 바로 올려보세요
               </BoardPromoFeatureTitle>
-              <BoardPromoFeatureDesc>
-                화면을 올리고 다른 사람들의 피드백을 받아보세요.
-              </BoardPromoFeatureDesc>
+              <Composer aria-hidden="true">
+                <ComposerTop>
+                  <ComposerChips>
+                    <span data-active="true">타이포</span>
+                    <span>레이아웃·여백</span>
+                    <span>컬러</span>
+                  </ComposerChips>
+                  <ComposerScore>
+                    <b>82</b>
+                    <small>SCORE</small>
+                  </ComposerScore>
+                </ComposerTop>
+                <ComposerHeadline>
+                  첫 화면 위계, 이 정도면 괜찮을까요?
+                </ComposerHeadline>
+                <ComposerLines>
+                  <i />
+                  <i />
+                  <i />
+                </ComposerLines>
+              </Composer>
               <BoardPromoFinalActions>
                 <OutroPrimary to="/board/new">
                   게시물 올리러 가기 →
