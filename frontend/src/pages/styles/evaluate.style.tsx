@@ -48,7 +48,7 @@ export const Grid = styled.div`
   }
 `;
 
-/* ───────────── 왼쪽: 입력 ───────────── */
+/* 왼쪽: 입력 */
 export const Left = styled.div`
   min-width: 0;
 `;
@@ -173,7 +173,7 @@ export const BoardLink = styled(Link)`
   }
 `;
 
-/* ───────────── 오른쪽: 최근 평가 ───────────── */
+/* 오른쪽: 최근 평가 */
 export const Right = styled.div`
   min-width: 0;
 

@@ -19,12 +19,16 @@ export const Wrapper = styled.section`
 export const ProcessAnimation = styled.section`
   position: relative;
   width: 100%;
+  /* 다크 배경 */
   background: #0a0a0b;
 `;
 
+/* 게시판 홍보 섹션 */
 export const BoardPromo = styled.section`
   position: relative;
+  /* 리빌 오버레이 위로 */
   z-index: 5;
+  /* 히어로 밴드와 같은 색 */
   background: #a6e3e9;
   font-family: "Aggravo", system-ui, "Segoe UI", Roboto, sans-serif;
   padding: clamp(72px, 13vh, 150px) clamp(16px, 4vw, 48px);
@@ -444,6 +448,7 @@ export const Line = styled.span`
   display: block;
   white-space: nowrap;
 
+  /* SplitText 조각 */
   .word,
   .char {
     display: inline-block;
@@ -541,6 +546,7 @@ export const HeroCta = styled(Link)`
   ${heroCta}
 `;
 
+/* RevealText 레이어용 복제 */
 export const HeroCtaGhost = styled.span`
   ${heroCta}
 `;

@@ -13,7 +13,7 @@ export const Wrapper = styled.section`
   box-sizing: border-box;
 `;
 
-/* 상단  */
+/* 상단 */
 export const Hero = styled.header`
   position: relative;
   padding: clamp(40px, 7vw, 88px) clamp(16px, 5vw, 72px) clamp(32px, 4vw, 52px);
@@ -292,7 +292,7 @@ export const ReactButton = styled.button`
   }
 `;
 
-/* ── 댓글 ── */
+/* 댓글 */
 export const Comments = styled.section`
   margin-top: 44px;
   padding-top: 28px;
@@ -567,7 +567,7 @@ export const BackLink = styled(Link)`
   }
 `;
 
-/* not found*/
+/* not found */
 export const NotFound = styled.div`
   max-width: 480px;
   margin: 0 auto;

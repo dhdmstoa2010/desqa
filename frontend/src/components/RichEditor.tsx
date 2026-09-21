@@ -60,7 +60,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
   const [activeBlock, setActiveBlock] = useState("");
   const [empty, setEmpty] = useState(true);
 
-  // 초기값만 주입
+  // 초기값 주입
   useEffect(() => {
     try {
       document.execCommand("defaultParagraphSeparator", false, "p");
@@ -144,7 +144,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
       document.execCommand("insertHTML", false, `<img src="${src}" alt="" />`);
       emit();
     } catch {
-      /* 잘못된 파일 무시 */
+      // 잘못된 파일 무시
     } finally {
       if (fileRef.current) fileRef.current.value = "";
     }
@@ -189,7 +189,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
       else blk.before(target);
     }
     placeCaret(target, dir === "down" ? "start" : "end");
-    // 블록 끝에 Enter로 생겼던 빈 줄 정리
+    // 끝의 빈 줄 정리
     if (blk.lastChild?.nodeType === 3) {
       blk.lastChild.textContent =
         blk.lastChild.textContent?.replace(/\n+$/, "") ?? "";
@@ -198,7 +198,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
     syncActive();
   };
 
-  // 코드블록 / 인용문에서 아래(위) 방향키·Enter 로 블록 밖으로 나감
+  // 블록 밖으로 나가기
   const onKeyDown = (e: React.KeyboardEvent) => {
     const blk = closestBlock();
     if (!blk || (blk.tagName !== "PRE" && blk.tagName !== "BLOCKQUOTE")) return;
@@ -210,7 +210,7 @@ function RichEditor({ value, onChange, placeholder }: Props) {
       e.preventDefault();
       escapeBlock(blk, "up");
     } else if (e.key === "Enter" && !e.shiftKey && caretAtEdge(blk, "end")) {
-      // 마지막 줄이 비어 있을 때만 (내용이 있으면 그냥 줄바꿈)
+      // 마지막 줄이 비었을 때만
       const text = blk.textContent ?? "";
       if (text === "" || /\n\s*$/.test(text)) {
         e.preventDefault();

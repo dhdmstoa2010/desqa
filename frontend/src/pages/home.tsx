@@ -117,6 +117,7 @@ function Home() {
     };
   }, []);
 
+  // 스크롤 진행도로 채움 계산
   useEffect(() => {
     const s = reveal.current;
     const onScroll = () => {
@@ -159,9 +160,12 @@ function Home() {
 
       tl.from(".hero-glow", { scale: 0.6, opacity: 0, duration: 1.7 })
 
+        // 1줄 슬라이드 인
         .from(line1Chars, { x: -70, opacity: 0, stagger: 0.05 }, 0.5)
+        // 2줄 슬라이드 인
         .from(line2Chars, { x: -70, opacity: 0, stagger: 0.05 }, "<0.35")
 
+        // 입력창 등장
         .from(
           ".hero-form",
           { clipPath: "inset(0px 50% 0px 50%)", duration: 1.1 },

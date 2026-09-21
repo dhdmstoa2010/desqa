@@ -34,7 +34,7 @@ function serialize(row: {
   };
 }
 
-// POST /api/review  — run a new evaluation (works signed-out; saved to history if signed in)
+// 평가 실행
 reviewRouter.post("/", optionalAuth, async (req: AuthedRequest, res) => {
   const { url } = req.body as { url?: unknown };
 
@@ -76,7 +76,7 @@ reviewRouter.post("/", optionalAuth, async (req: AuthedRequest, res) => {
   }
 });
 
-// GET /api/review  — current user's evaluation history
+// 내 평가 기록
 reviewRouter.get("/", requireAuth, async (req: AuthedRequest, res) => {
   const rows = await prisma.designReview.findMany({
     where: { userId: req.userId! },
@@ -86,7 +86,7 @@ reviewRouter.get("/", requireAuth, async (req: AuthedRequest, res) => {
   res.json(rows.map(serialize));
 });
 
-// GET /api/review/:id  — a single evaluation (own, or anonymous)
+// 평가 상세
 reviewRouter.get("/:id", optionalAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {

@@ -11,7 +11,7 @@ const PRIVATE_V4 = [
   /^169\.254\./,
   /^172\.(1[6-9]|2\d|3[01])\./,
   /^192\.168\./,
-  /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./, // CGNAT 100.64.0.0/10
+  /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./,
 ];
 
 function isPrivateAddress(addr: string): boolean {
@@ -20,16 +20,16 @@ function isPrivateAddress(addr: string): boolean {
     return (
       v6 === "::1" ||
       v6 === "::" ||
-      v6.startsWith("fe80:") || // link-local
+      v6.startsWith("fe80:") ||
       v6.startsWith("fc") ||
-      v6.startsWith("fd") || // unique local
-      v6.startsWith("::ffff:") // IPv4-mapped — resolve the embedded v4 separately
+      v6.startsWith("fd") ||
+      v6.startsWith("::ffff:")
     );
   }
   return PRIVATE_V4.some((re) => re.test(addr));
 }
 
-/** Parse + SSRF-guard a user-supplied URL. Throws ScreenshotError on rejection. */
+// 공개 URL 검증
 export async function assertPublicUrl(raw: string): Promise<URL> {
   let url: URL;
   try {
@@ -47,7 +47,7 @@ export async function assertPublicUrl(raw: string): Promise<URL> {
     throw new ScreenshotError("내부 주소는 평가할 수 없습니다");
   }
 
-  // Resolve every A/AAAA record and reject if any points inside a private range.
+  // 내부망 주소 차단
   let addrs: string[];
   if (isIP(host)) {
     addrs = [host];
@@ -68,18 +68,15 @@ export async function assertPublicUrl(raw: string): Promise<URL> {
 }
 
 export type Screenshot = {
-  /** PNG bytes, base64-encoded (no data: prefix). */
+  // PNG base64
   base64: string;
-  /** Final URL after redirects. */
+  // 최종 URL
   finalUrl: string;
-  /** <title> of the loaded page, if any. */
+  // 페이지 제목
   title: string;
 };
 
-/**
- * Known cookie-consent / GDPR / newsletter overlay containers (by id/class/attribute
- * substring). Removed outright before the screenshot so they don't dominate the review.
- */
+// 쿠키·팝업 셀렉터
 const OVERLAY_SELECTORS = [
   "#onetrust-consent-sdk",
   "#onetrust-banner-sdk",
@@ -106,13 +103,10 @@ const OVERLAY_SELECTORS = [
   ".ReactModal__Overlay",
 ];
 
-/**
- * Best-effort dismissal of modals, cookie walls and full-screen popups so the
- * screenshot reflects the actual page. Never throws.
- */
+// 팝업 닫기
 async function dismissOverlays(page: Page): Promise<void> {
   try {
-    // ESC closes most accessible dialogs / lightboxes / consent sheets.
+    // ESC 로 닫기
     await page.keyboard.press("Escape").catch(() => {});
     await page.keyboard.press("Escape").catch(() => {});
 
@@ -120,14 +114,12 @@ async function dismissOverlays(page: Page): Promise<void> {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      // 1. Known consent / modal containers.
+      // 알려진 팝업 제거
       for (const sel of selectors) {
         document.querySelectorAll(sel).forEach((el) => el.remove());
       }
 
-      // 2. Generic full-screen overlays: fixed/sticky, high z-index, covering
-      //    most of the viewport. Short full-width bars hugging the top edge are
-      //    kept — those are normal sticky headers, not blockers.
+      // 전체 화면 오버레이 제거
       for (const el of Array.from(document.body.querySelectorAll<HTMLElement>("*"))) {
         const s = getComputedStyle(el);
         if (s.position !== "fixed" && s.position !== "sticky") continue;
@@ -146,7 +138,7 @@ async function dismissOverlays(page: Page): Promise<void> {
         }
       }
 
-      // 3. Undo the scroll-lock a modal typically leaves on <html>/<body>.
+      // 스크롤 잠금 해제
       for (const node of [document.documentElement, document.body]) {
         node.style.overflow = "";
         node.style.position = "";
@@ -154,17 +146,14 @@ async function dismissOverlays(page: Page): Promise<void> {
       }
     }, OVERLAY_SELECTORS);
   } catch {
-    // Overlay cleanup is non-critical — capture the page regardless.
+    // 실패해도 캡처는 진행
   }
 }
 
 let browserPromise: Promise<Browser> | null = null;
 
 async function launchWithRetry(): Promise<Browser> {
-  // A fresh launch can fail transiently under machine load (antivirus/file
-  // scanning contention, many concurrent Chrome processes competing for
-  // launch handles). Retry a few times with backoff instead of surfacing a
-  // hard failure to the user on the first hiccup.
+  // 재시도 간격
   const delaysMs = [500, 1500, 3000];
   let lastErr: unknown;
   for (let attempt = 0; attempt <= delaysMs.length; attempt++) {
@@ -184,12 +173,9 @@ async function getBrowser(): Promise<Browser> {
   const current = browserPromise;
   if (current) {
     const browser = await current;
-    // A long-lived dev/prod process can outlive the browser (crash, OOM-kill,
-    // manual close). Reusing a disconnected instance would fail every request
-    // until restart, so relaunch instead of trusting the cached promise blindly.
+    // 끊긴 브라우저 재실행
     if (browser.isConnected()) return browser;
-    // Only clear if nobody else has already relaunched while we awaited —
-    // otherwise concurrent callers each launch their own orphaned browser.
+    // 중복 실행 방지
     if (browserPromise === current) browserPromise = null;
   }
 
@@ -202,7 +188,7 @@ async function getBrowser(): Promise<Browser> {
   return browserPromise;
 }
 
-/** Load `url` in a headless browser and return an above-the-fold PNG screenshot. */
+// 스크린샷 캡처
 export async function captureScreenshot(url: URL): Promise<Screenshot> {
   const browser = await getBrowser();
   const context = await browser.newContext({
@@ -229,9 +215,10 @@ export async function captureScreenshot(url: URL): Promise<Screenshot> {
     await page.waitForLoadState("load", { timeout: 10_000 }).catch(() => {});
     await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => {});
 
+    // 팝업 닫기
     await dismissOverlays(page);
 
-    // Give late CSS / web fonts / overlay removal a moment to settle.
+    // 렌더링 안정화 대기
     await page.waitForTimeout(600);
 
     const buffer = await page.screenshot({ type: "png", animations: "disabled" });

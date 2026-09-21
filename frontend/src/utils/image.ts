@@ -32,7 +32,7 @@ export async function fileToCompressedDataUrl(
   if (!ctx) throw new Error("이미지를 처리하지 못했어요.");
   ctx.drawImage(img, 0, 0, w, h);
 
-  // PNG 원본이 이미 작으면 그대로 아니면 JPEG 재인코딩
+  // 작으면 원본 PNG, 아니면 JPEG
   const jpeg = canvas.toDataURL("image/jpeg", quality);
   return jpeg.length < dataUrl.length ? jpeg : dataUrl;
 }

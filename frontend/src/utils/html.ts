@@ -1,4 +1,4 @@
-/* 리치 에디터가 만든 HTML 을 다루는 작은 헬퍼들 */
+// 리치 에디터 HTML 헬퍼
 export function stripHtml(html: string): string {
   const el = document.createElement("div");
   el.innerHTML = html;
@@ -17,7 +17,7 @@ export function escapeHtml(text: string): string {
     .replace(/>/g, "&gt;");
 }
 
-/** 본문을 detail 페이지에 넣을 HTML 로. 예전 게시물(순수 텍스트)은 <p> 로 감싼다. */
+// 본문을 HTML 로 (예전 글은 <p> 로 감쌈)
 export function bodyToHtml(body: string): string {
   return /<\w+[\s>]/.test(body)
     ? body

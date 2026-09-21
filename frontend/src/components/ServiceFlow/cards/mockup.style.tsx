@@ -27,8 +27,7 @@ export const Pad = styled.div`
   box-sizing: border-box;
 `;
 
-/* ---------- 브라우저 창 mockup ---------- */
-
+/* 브라우저 창 */
 export const Browser = styled.div`
   position: absolute;
   inset: clamp(16px, 4%, 30px);
@@ -77,7 +76,7 @@ export const Viewport = styled.div`
   overflow: hidden;
 `;
 
-/* 웹사이트 스켈레톤 조각들 */
+/* 스켈레톤 */
 export const Skel = styled.div<{ h?: number; w?: string; accent?: boolean }>`
   border-radius: 6px;
   height: ${({ h = 12 }) => h}px;
@@ -97,8 +96,7 @@ export const SkelRow = styled.div`
   }
 `;
 
-/* ---------- CARD 01 · Upload ---------- */
-
+/* CARD 01 · Upload */
 export const DropZone = styled.div`
   position: absolute;
   inset: clamp(18px, 5%, 34px);
@@ -218,8 +216,7 @@ export const Bar = styled.div`
   }
 `;
 
-/* ---------- CARD 02 · Analyze ---------- */
-
+/* CARD 02 · Analyze */
 export const ScanLine = styled.div`
   position: absolute;
   left: 0;
@@ -298,8 +295,7 @@ export const AnalyzeTag = styled.div`
   }
 `;
 
-/* ---------- CARD 03 · Discover ---------- */
-
+/* CARD 03 · Discover */
 export const FindingList = styled.div`
   position: absolute;
   inset: 0;
@@ -352,8 +348,7 @@ export const Finding = styled.div<{ tone: "warn" | "ok" }>`
   }
 `;
 
-/* ---------- CARD 04 · Improve ---------- */
-
+/* CARD 04 · Improve */
 export const Compare = styled.div`
   position: absolute;
   inset: clamp(16px, 4%, 30px);
@@ -415,8 +410,7 @@ export const CompareChip = styled.div`
   }
 `;
 
-/* ---------- CARD 05 · Build Better ---------- */
-
+/* CARD 05 · Build Better */
 export const Summary = styled.div`
   position: absolute;
   inset: 0;
@@ -516,10 +510,7 @@ export const Metric = styled.div`
   }
 `;
 
-/*
-  CTA — gsap.com "Get GSAP" 버튼처럼, 커서가 들어온 방향에서 포인트 컬러 채움이
-  쓸어 들어오고 나갈 땐 커서가 빠져나간 방향으로 쓸려 나간다. (GSAP 로 구동)
-*/
+/* CTA 버튼 */
 export const Cta = styled.button`
   position: relative;
   align-self: flex-start;
@@ -530,12 +521,11 @@ export const Cta = styled.button`
   overflow: hidden;
   display: inline-flex;
   border-radius: 12px;
-  /* 채움이 다 덮였을 때 라운드 모서리에 다크가 비치지 않도록
-     버튼 자체 배경도 포인트 컬러, 대신 라벨 뒤 다크 판을 따로 깐다. */
+  /* 버튼 배경 */
   background: var(--flow-lime);
   isolation: isolate;
 
-  /* 평소 상태의 다크 배경 (채움이 없을 때 보이는 판) */
+  /* 기본 다크 배경 */
   &::before {
     content: "";
     position: absolute;
@@ -574,7 +564,7 @@ export const Cta = styled.button`
     transform: translateX(4px);
   }
 
-  /* 모션 최소화: 방향 스윕 없이 단순 페이드 채움 */
+  /* 모션 최소화 */
   @media (prefers-reduced-motion: reduce) {
     .cta-fill {
       transform: none;

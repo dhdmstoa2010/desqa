@@ -1,15 +1,10 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-/*
-  히어로의 리빌이 끝나면 화면이 포인트 컬러(#a6e3e9)로 덮인다.
-  이 섹션은 그 포인트 컬러 위에 지그재그로 놓인 다크 카드 3장 +
-  스크롤에 따라 손으로 그린 듯 이어지는 다크 경로선으로 구성된다.
-*/
-
+/* 카드 섹션 */
 export const Section = styled.section`
   position: relative;
-  z-index: 5; /* 히어로의 고정 RevealFill(z-index:3) 위로 올린다 */
+  z-index: 5;
   width: 100%;
   padding: clamp(48px, 8vh, 100px) clamp(16px, 5vw, 64px)
     clamp(56px, 10vh, 132px);
@@ -103,7 +98,7 @@ export const Card = styled.article<{ pos: 1 | 2 | 3 }>`
   overflow: hidden;
   box-shadow: 0 24px 50px -24px rgba(10, 10, 11, 0.6);
 
-  /* 스크롤로 화면에 들어올 때 등장 (JS가 .in 클래스를 토글) */
+  /* 스크롤 등장 */
   opacity: 0;
   transform: translateY(40px);
   transition:

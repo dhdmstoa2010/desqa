@@ -92,8 +92,7 @@ export const BackLink = styled.button`
   }
 `;
 
-/* ---------- status states ---------- */
-
+/* 상태 화면 */
 export const Status = styled.div`
   display: flex;
   flex-direction: column;
@@ -141,8 +140,7 @@ export const RetryButton = styled.button`
   cursor: pointer;
 `;
 
-/* ---------- overview ---------- */
-
+/* 요약 */
 export const Hero = styled.section`
   display: flex;
   gap: clamp(20px, 5vw, 48px);
@@ -231,8 +229,7 @@ export const Summary = styled.p`
   line-height: 1.6;
 `;
 
-/* ---------- sections ---------- */
-
+/* 섹션 */
 export const SectionTitle = styled.h2`
   margin: 0 0 4px;
   color: #f7f7f8;

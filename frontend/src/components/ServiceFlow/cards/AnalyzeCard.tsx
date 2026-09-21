@@ -12,11 +12,7 @@ import {
   AnalyzeTag,
 } from "./mockup.style";
 
-/*
-  CARD 02 · Analyze
-  웹사이트 미리보기 위로 스캔 라인이 흐르고,
-  분석 포인터가 Typography → Color → Layout → Spacing 영역을 순서대로 훑는다.
-*/
+// 스캔 애니메이션
 const SPOTS = [
   { label: "Typography", left: "12%", top: "12%" },
   { label: "Color", left: "58%", top: "30%" },
