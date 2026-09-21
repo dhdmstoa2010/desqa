@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginRequest } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
@@ -30,6 +30,7 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const login = useAuthStore((state) => state.login);
   const {
     register,
@@ -45,7 +46,11 @@ function LoginPage() {
         password: data.password,
       });
       login(user, token);
-      navigate("/");
+      const from = (location.state as { from?: unknown } | null)?.from;
+      navigate(
+        typeof from === "string" && /^\/(?!\/)/.test(from) ? from : "/",
+        { replace: true },
+      );
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setServerError(err.response.data.message);

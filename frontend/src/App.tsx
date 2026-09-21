@@ -20,7 +20,14 @@ function App() {
         <Route path="/evaluate" element={<Evaluate />} />
         <Route path="/result" element={<Result />} />
         <Route path="/board" element={<Board />} />
-        <Route path="/board/new" element={<BoardNew />} />
+        <Route
+          path="/board/new"
+          element={
+            <RequireAuth>
+              <BoardNew />
+            </RequireAuth>
+          }
+        />
         <Route path="/board/:id" element={<BoardDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

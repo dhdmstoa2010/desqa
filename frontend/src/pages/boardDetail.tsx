@@ -157,7 +157,11 @@ function BoardDetail() {
       setCommentText("");
       void created;
     } catch (err) {
-      setCommentError(errorMessage(err, "댓글 등록에 실패했습니다"));
+      setCommentError(
+        axios.isAxiosError(err) && err.response?.status === 401
+          ? "로그인이 만료됐어요. 다시 로그인해 주세요."
+          : errorMessage(err, "댓글 등록에 실패했습니다"),
+      );
     } finally {
       setPosting(false);
     }

@@ -100,7 +100,9 @@ function BoardNew() {
       navigate(`/board/${created.id}`);
     } catch (err) {
       const message = axios.isAxiosError(err)
-        ? (err.response?.data?.message ?? "게시물 등록에 실패했습니다")
+        ? err.response?.status === 401
+          ? "로그인이 만료됐어요. 다시 로그인해 주세요."
+          : (err.response?.data?.message ?? "게시물 등록에 실패했습니다")
         : "게시물 등록에 실패했습니다";
       setError(message);
       setSubmitting(false);
