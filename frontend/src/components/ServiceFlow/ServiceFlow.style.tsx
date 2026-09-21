@@ -60,7 +60,7 @@ export const Kicker = styled.p`
 export const HeaderTitle = styled.h2`
   margin: 0 0 16px;
   color: var(--flow-ink);
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(28px, 4.6vw, 54px);
   line-height: 1.1;
@@ -344,7 +344,7 @@ export const CardHead = styled.div`
 `;
 
 export const CardIndex = styled.span`
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -360,7 +360,7 @@ export const CardHeadText = styled.div`
 export const CardTitle = styled.h3`
   margin: 0;
   color: var(--flow-ink);
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(19px, 2.1vw, 26px);
   letter-spacing: -0.02em;
