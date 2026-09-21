@@ -91,8 +91,7 @@ boardRouter.get("/", async (req, res) => {
   );
 });
 
-// POST /api/board — create a new post (works signed-out as a guest post)
-boardRouter.post("/", optionalAuth, async (req: AuthedRequest, res) => {
+boardRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
   const { category, title, lead, body, url, score, authorColor } = req.body as {
     category?: unknown;
     title?: unknown;
@@ -120,10 +119,10 @@ boardRouter.post("/", optionalAuth, async (req: AuthedRequest, res) => {
     return;
   }
 
-  let authorName = "게스트";
-  if (req.userId) {
-    const user = await prisma.user.findUnique({ where: { id: req.userId } });
-    authorName = user?.name ?? authorName;
+  const user = await prisma.user.findUnique({ where: { id: req.userId! } });
+  if (!user) {
+    res.status(401).json({ message: "로그인이 필요합니다" });
+    return;
   }
 
   const post = await prisma.post.create({
@@ -134,7 +133,7 @@ boardRouter.post("/", optionalAuth, async (req: AuthedRequest, res) => {
       body,
       url: typeof url === "string" && url.trim() !== "" ? url.trim() : null,
       score: score ?? null,
-      authorName,
+      authorName: user.name,
       authorColor: typeof authorColor === "string" && authorColor.trim() !== "" ? authorColor : "#bfff6b",
       userId: req.userId ?? null,
     },
