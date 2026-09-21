@@ -496,6 +496,12 @@ export const ErrorText = styled.p`
   font-size: 13.5px;
 `;
 
+export const LeadWarning = styled.p`
+  margin: 0;
+  color: #ffb84d;
+  font-size: 13.5px;
+`;
+
 export const CancelLink = styled(Link)`
   font-size: 15px;
   font-weight: 600;

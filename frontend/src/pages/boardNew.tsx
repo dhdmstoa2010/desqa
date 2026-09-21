@@ -1,4 +1,11 @@
-import { useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { CATEGORIES, type PostCategory } from "../types/board";
@@ -44,6 +51,7 @@ import {
   TipsTitle,
   TipList,
   ErrorText,
+  LeadWarning,
 } from "./styles/boardNew.style";
 
 const POST_CATEGORIES = CATEGORIES.filter(
@@ -68,6 +76,20 @@ function BoardNew() {
   const [body, setBody] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [leadOverflow, setLeadOverflow] = useState(false);
+  const leadRef = useRef<HTMLInputElement>(null);
+
+  const checkLeadOverflow = useCallback(() => {
+    const el = leadRef.current;
+    if (el) setLeadOverflow(el.scrollWidth > el.clientWidth);
+  }, []);
+
+  useLayoutEffect(checkLeadOverflow, [lead, checkLeadOverflow]);
+
+  useEffect(() => {
+    window.addEventListener("resize", checkLeadOverflow);
+    return () => window.removeEventListener("resize", checkLeadOverflow);
+  }, [checkLeadOverflow]);
 
   const score = useMemo(() => {
     const raw = params.get("score");
@@ -180,12 +202,19 @@ function BoardNew() {
                 한 줄 요약 <em>선택</em>
               </FieldLabel>
               <Input
+                ref={leadRef}
                 type="text"
                 value={lead}
                 onChange={(e) => setLead(e.target.value)}
                 maxLength={120}
                 placeholder="요약"
               />
+              {leadOverflow && (
+                <LeadWarning role="alert">
+                  한 줄 요약은 한 줄을 넘겨서 적을 수 없어요. 더 짧게
+                  줄여 주세요.
+                </LeadWarning>
+              )}
             </Field>
 
             <Field as="div">
