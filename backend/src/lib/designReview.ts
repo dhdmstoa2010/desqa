@@ -243,10 +243,22 @@ const SYSTEM_PROMPT = `너는 20년 경력의 시니어 프로덕트 디자이�
   "입력창이 일반 텍스트처럼 보여서 여기에 뭘 입력해야 하는지 모른다".
 - issues는 임팩트가 큰 순서로 3~6개, uxIssues는 2~5개. 사소한 건 빼고 정말 고쳐야 할 것만.
   화면이 실제로 찾기 쉽고 헷갈리지 않으면 uxIssues를 억지로 채우지 말고 적게 적어도 된다.
-- overallScore는 UI·UX를 모두 고려한 종합 판단(단순 평균 아님).
+- overallScore는 UI·UX 카테고리 점수를 종합한 값이다(서버가 평균으로 다시 계산하니 대략만 적는다).
 - 모든 문자열은 한국어.`;
 
 const RETRYABLE = new Set([429, 500, 503]);
+
+const REVIEW_SEED = 42;
+
+function withComputedOverallScore(result: DesignReviewResult): DesignReviewResult {
+  const scores = [...result.categories, ...result.uxCategories]
+    .map((c) => c.score)
+    .filter((n) => Number.isFinite(n));
+  if (scores.length === 0) return result;
+
+  const mean = scores.reduce((sum, n) => sum + n, 0) / scores.length;
+  return { ...result, overallScore: Math.round(mean) };
+}
 
 export async function reviewDesign(shot: Screenshot): Promise<DesignReviewResult> {
   const maxAttempts = 3;
@@ -267,7 +279,8 @@ export async function reviewDesign(shot: Screenshot): Promise<DesignReviewResult
         ],
         config: {
           systemInstruction: SYSTEM_PROMPT,
-          temperature: 0.2,
+          temperature: 0,
+          seed: REVIEW_SEED,
           maxOutputTokens: 12000,
           responseMimeType: "application/json",
           responseSchema: RESPONSE_SCHEMA,
@@ -279,7 +292,7 @@ export async function reviewDesign(shot: Screenshot): Promise<DesignReviewResult
         throw new Error("Gemini 응답이 비어 있습니다");
       }
 
-      return JSON.parse(raw) as DesignReviewResult;
+      return withComputedOverallScore(JSON.parse(raw) as DesignReviewResult);
     } catch (err) {
       lastErr = err;
       const status = (err as { status?: number }).status;
