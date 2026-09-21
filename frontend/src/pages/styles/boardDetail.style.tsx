@@ -69,7 +69,7 @@ export const HeroShot = styled.div`
 
 export const HeroMeta = styled.p`
   margin: 0 0 14px;
-  font-family: "Unbounded", ui-monospace, monospace;
+  font-family: "Aggravo", ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.04em;
   color: #d0d0d5;
@@ -93,7 +93,7 @@ export const HeroScore = styled.span<{ $tone: Tone }>`
 export const HeroTitle = styled.h1`
   margin: 0;
   max-width: 15ch;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(30px, 5.4vw, 60px);
   line-height: 1.12;
@@ -468,7 +468,7 @@ export const ScoreBig = styled.div<{ $tone: Tone }>`
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
 
   strong {
     font-size: 46px;

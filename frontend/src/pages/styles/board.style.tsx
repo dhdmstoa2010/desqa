@@ -27,7 +27,7 @@ export const Header = styled.header`
 
 export const Title = styled.h1`
   margin: 0;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(34px, 6vw, 76px);
   line-height: 1.04;
@@ -137,6 +137,7 @@ export const Sort = styled.button`
     color: #f7f7f8;
   }
 `;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
 
 /* ── 게시물 리스트 ── */
 export const List = styled.div`
@@ -354,7 +355,6 @@ export const Score = styled.div<{ $tone: "high" | "mid" | "low" }>`
   flex-shrink: 0;
   text-align: right;
   line-height: 1;
-  font-family: "Unbounded", system-ui, sans-serif;
   color: ${({ $tone }) =>
     $tone === "high" ? "#a6e3e9" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
 

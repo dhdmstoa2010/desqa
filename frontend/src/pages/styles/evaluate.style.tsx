@@ -7,6 +7,7 @@ export const Wrapper = styled.section`
   min-height: calc(100svh - 70px);
   background: #0a0a0b;
   color: #f7f7f8;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   box-sizing: border-box;
   padding: clamp(32px, 7vh, 88px) clamp(16px, 5vw, 56px) clamp(48px, 9vh, 96px);
@@ -310,7 +311,6 @@ export const ReportMeta = styled.div`
 
 export const ScoreBig = styled.div`
   flex-shrink: 0;
-  font-family: "Unbounded", system-ui, sans-serif;
   font-weight: 800;
   font-size: 44px;
   line-height: 1;

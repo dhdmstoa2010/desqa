@@ -127,7 +127,7 @@ export const PreviewScore = styled.div<{ $tone: "high" | "mid" | "low" }>`
   flex-shrink: 0;
   text-align: right;
   line-height: 1;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   color: ${({ $tone }) =>
     $tone === "high" ? "#a6e3e9" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
 
@@ -334,7 +334,7 @@ export const BackTop = styled(Link)`
 
 export const Title = styled.h1`
   margin: 0;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(30px, 5vw, 46px);
   letter-spacing: -0.03em;
