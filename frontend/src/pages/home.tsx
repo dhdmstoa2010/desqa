@@ -1,13 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ServiceFlow from "../components/ServiceFlow";
-import scoreShot from "../assets/board-promo/score-shot.png";
-import writeShot from "../assets/board-promo/write-shot.png";
-import feedbackShot from "../assets/board-promo/feedback-shot.png";
+import { fetchPostsRequest } from "../api/board";
+import { toneOf, toPost } from "../utils/board";
+import type { Post } from "../types/board";
 import {
   Wrapper,
   RevealFill,
@@ -27,71 +26,56 @@ import {
   BoardPromo,
   BoardPromoInner,
   BoardPromoTitle,
-  BoardPromoScrollPin,
-  BoardPromoFeatures,
-  BoardPromoFeature,
-  BoardPromoFeatureShot,
-  BoardPromoFinalCard,
-  BoardPromoFinalActions,
-  Composer,
-  ComposerTop,
-  ComposerChips,
-  ComposerScore,
-  ComposerHeadline,
-  ComposerLines,
-  BoardPromoFeatureNum,
-  BoardPromoFeatureTitle,
-  BoardPromoFeatureDesc,
+  PromoGrid,
+  PromoCard,
+  PromoPanel,
+  PromoThumb,
+  PromoPills,
+  PromoBody,
+  PromoTitle,
+  PromoArrow,
+  PromoMeta,
+  PromoSkeleton,
+  PromoEmpty,
+  BoardPromoActions,
   OutroPrimary,
   OutroSecondary,
 } from "./styles/home.style";
 
-const BOARD_PROMO_FEATURES = [
-  {
-    num: "01",
-    title: "자동 평가 점수",
-    desc: "사이트 주소만 넣으면 평가 점수가 게시물에 함께 붙어요.",
-    shot: scoreShot,
-  },
-  {
-    num: "02",
-    title: "스크린샷 & 설명",
-    desc: "고민되는 화면을 캡처하고 시도해 본 것들을 함께 적어보세요.",
-    shot: writeShot,
-  },
-  {
-    num: "03",
-    title: "커뮤니티 피드백",
-    desc: "다른 사람들의 댓글과 시선으로 놓친 부분을 발견해요.",
-    shot: feedbackShot,
-  },
-] as const;
+const PROMO_POST_COUNT = 4;
 
-/* 커서 밴드 */
-const BAND_W = 128; // 밴드 폭(px)
-const EASE = 0.16; // 커서 밴드 lerp 계수 (빠르게)
-const SCROLL_EASE = 0.06; // 스크롤 채움 (느리게)
-const IDLE_MS = 650; // 커서가 멈춘 뒤 밴드가 접히기까지 대기
+function ArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
 
-gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
+const SCROLL_EASE = 0.12;
+const FILL_DONE_AT = 0.35;
+
+gsap.registerPlugin(useGSAP, SplitText);
 
 function Home() {
   const container = useRef<HTMLDivElement>(null);
+  const flowRef = useRef<HTMLElement>(null);
   const line1 = useRef<HTMLSpanElement>(null);
   const line2 = useRef<HTMLSpanElement>(null);
-  const scrollPin = useRef<HTMLDivElement>(null);
-  const scrollTrack = useRef<HTMLDivElement>(null);
   const reveal = useRef({
-    curX: 0,
-    tgtX: 0,
-    curW: 0,
-    tgtW: 0,
     curScroll: 0,
     tgtScroll: 0,
     raf: 0,
-    idle: 0,
-    init: false,
   });
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
   const navigate = useNavigate();
 
   const handleStart = () => {
@@ -100,30 +84,19 @@ function Home() {
 
   const applyReveal = () => {
     const s = reveal.current;
-    const vw = window.innerWidth;
-    const half = s.curW / 2;
-    const fill = 1 - s.curScroll;
-    const left = Math.max(0, (s.curX - half) * fill);
-    const right = Math.max(0, (vw - s.curX - half) * fill);
+    const side = (window.innerWidth / 2) * (1 - s.curScroll);
     document.documentElement.style.setProperty(
       "--reveal-clip",
-      `inset(0px ${right}px 0px ${left}px)`,
+      `inset(0px ${side}px 0px ${side}px)`,
     );
   };
 
   const paintReveal = () => {
     const s = reveal.current;
-    s.curX += (s.tgtX - s.curX) * EASE;
-    s.curW += (s.tgtW - s.curW) * EASE;
     s.curScroll += (s.tgtScroll - s.curScroll) * SCROLL_EASE;
 
-    const settled =
-      Math.abs(s.tgtX - s.curX) < 0.4 &&
-      Math.abs(s.tgtW - s.curW) < 0.4 &&
-      Math.abs(s.tgtScroll - s.curScroll) < 0.001;
+    const settled = Math.abs(s.tgtScroll - s.curScroll) < 0.001;
     if (settled) {
-      s.curX = s.tgtX;
-      s.curW = s.tgtW;
       s.curScroll = s.tgtScroll;
     }
     applyReveal();
@@ -140,27 +113,23 @@ function Home() {
     const s = reveal.current;
     return () => {
       if (s.raf) cancelAnimationFrame(s.raf);
-      s.raf = 0; // StrictMode 재마운트 시 kickReveal 이 다시 돌 수 있게 초기화
-      window.clearTimeout(s.idle);
+      s.raf = 0;
     };
   }, []);
 
-  // 스크롤 진행도(0→1)를 tgtScroll로 정함
   useEffect(() => {
     const s = reveal.current;
     const onScroll = () => {
-      // 커서를 아직 안 움직였으면 화면 중앙에서 대칭
-      if (!s.init) s.curX = window.innerWidth / 2;
-      const hero = container.current;
-      const heroExit = hero
-        ? (hero.offsetTop + hero.offsetHeight) * 1.4
+      const flow = flowRef.current;
+      const anchor = flow?.querySelector("header") ?? flow;
+      const anchorTop = anchor
+        ? anchor.getBoundingClientRect().top + window.scrollY
         : window.innerHeight;
-      s.tgtScroll =
-        heroExit > 0 ? Math.min(1, Math.max(0, window.scrollY / heroExit)) : 0;
-      // 스크롤 이벤트에서도 조금씩 전진
+      const fillEnd = Math.max(1, anchorTop - window.innerHeight * FILL_DONE_AT);
+      s.tgtScroll = Math.min(1, Math.max(0, window.scrollY / fillEnd));
       s.curScroll += (s.tgtScroll - s.curScroll) * 0.2;
       applyReveal();
-      kickReveal(); // 스크롤이 멈춘 뒤 남은 이징은 rAF 가 마무리
+      kickReveal();
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -169,7 +138,6 @@ function Home() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-    // applyReveal / kickReveal 은 ref 만 참조하므로 재구독 불필요
   }, []);
 
   useGSAP(
@@ -191,12 +159,9 @@ function Home() {
 
       tl.from(".hero-glow", { scale: 0.6, opacity: 0, duration: 1.7 })
 
-        // 1줄  왼쪽에서 한 글자씩 슬라이드 인
         .from(line1Chars, { x: -70, opacity: 0, stagger: 0.05 }, 0.5)
-        // 2줄  같은 방향으로 이어서 슬라이드 인
         .from(line2Chars, { x: -70, opacity: 0, stagger: 0.05 }, "<0.35")
 
-        // 입력창  중앙에서 양옆으로 퍼지며 등장
         .from(
           ".hero-form",
           { clipPath: "inset(0px 50% 0px 50%)", duration: 1.1 },
@@ -210,75 +175,26 @@ function Home() {
     { scope: container },
   );
 
-  // 게시판 홍보 카드: 데스크톱에서 섹션을 화면에 고정하고 가로로 스크럽 (gsap.com 홈 참고)
-  useGSAP(
-    () => {
-      const pin = scrollPin.current;
-      const track = scrollTrack.current;
-      if (!pin || !track) return;
-
-      const mm = gsap.matchMedia();
-
-      mm.add("(min-width: 900px)", () => {
-        const distance = () =>
-          Math.max(0, track.scrollWidth - window.innerWidth);
-
-        const tween = gsap.to(track, { x: () => -distance(), ease: "none" });
-        const trigger = ScrollTrigger.create({
-          trigger: pin,
-          start: "top top",
-          end: () => `+=${distance()}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          animation: tween,
-        });
-
-        return () => {
-          trigger.kill();
-          tween.kill();
-        };
+  useEffect(() => {
+    let cancelled = false;
+    fetchPostsRequest()
+      .then((rows) => {
+        if (cancelled) return;
+        setPosts(rows.slice(0, PROMO_POST_COUNT).map(toPost));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPosts([]);
+        setLoadFailed(true);
       });
-
-      // 커스텀 웹폰트(Unbounded 등)가 늦게 로드되며 문서 높이가 바뀌면
-      // 이미 계산된 트리거 시작/끝 지점이 어긋나므로, 폰트 로드 완료 후 다시 계산한다.
-      document.fonts?.ready.then(() => ScrollTrigger.refresh());
-
-      return () => mm.revert();
-    },
-    { scope: scrollPin },
-  );
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const s = reveal.current;
-    if (!s.init) {
-      s.init = true;
-      s.curX = e.clientX;
-    }
-    s.tgtX = e.clientX;
-    s.tgtW = BAND_W;
-    window.clearTimeout(s.idle);
-    s.idle = window.setTimeout(() => {
-      s.tgtW = 0;
-      kickReveal();
-    }, IDLE_MS);
-    kickReveal();
-  };
-
-  const handleMouseLeave = () => {
-    const s = reveal.current;
-    window.clearTimeout(s.idle);
-    s.tgtW = 0;
-    kickReveal();
-  };
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <>
-      <Wrapper
-        ref={container}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
+      <Wrapper ref={container}>
         <GlowAnchor>
           <Glow className="hero-glow" />
         </GlowAnchor>
@@ -324,65 +240,71 @@ function Home() {
 
       <RevealFill aria-hidden="true" />
 
-      <ProcessAnimation>
+      <ProcessAnimation ref={flowRef}>
         <ServiceFlow onStart={handleStart} />
       </ProcessAnimation>
 
       <BoardPromo>
         <BoardPromoInner>
-          <BoardPromoTitle>
-            만든 화면을 <span>커뮤니티</span>에 올려보세요
-            <br />
-          </BoardPromoTitle>
-        </BoardPromoInner>
+          <BoardPromoTitle>디자인 게시판</BoardPromoTitle>
 
-        <BoardPromoScrollPin ref={scrollPin}>
-          <BoardPromoFeatures ref={scrollTrack}>
-            {BOARD_PROMO_FEATURES.map((f) => (
-              <BoardPromoFeature key={f.num}>
-                <BoardPromoFeatureShot>
-                  <img src={f.shot} alt="" />
-                </BoardPromoFeatureShot>
-                <BoardPromoFeatureNum>STEP {f.num}</BoardPromoFeatureNum>
-                <BoardPromoFeatureTitle>{f.title}</BoardPromoFeatureTitle>
-                <BoardPromoFeatureDesc>{f.desc}</BoardPromoFeatureDesc>
-              </BoardPromoFeature>
+          <PromoGrid>
+            {posts === null &&
+              Array.from({ length: PROMO_POST_COUNT }, (_, i) => (
+                <PromoSkeleton key={i} aria-hidden="true" />
+              ))}
+
+            {posts?.length === 0 && (
+              <PromoEmpty>
+                {loadFailed
+                  ? "게시물을 불러오지 못했어요."
+                  : "아직 올라온 게시물이 없어요. 첫 게시물의 주인공이 되어보세요."}
+              </PromoEmpty>
+            )}
+
+            {posts?.map((post) => (
+              <PromoCard key={post.id} to={`/board/${post.id}`}>
+                <PromoPanel>
+                  <PromoThumb>
+                    {post.image ? (
+                      <img src={post.image} alt="" loading="lazy" />
+                    ) : (
+                      <span>사진 없음</span>
+                    )}
+                  </PromoThumb>
+                  <PromoPills>
+                    <span>{post.category}</span>
+                    <span data-tone={toneOf(post.score)}>
+                      {post.score != null ? `${post.score} SCORE` : "평가 전"}
+                    </span>
+                  </PromoPills>
+                </PromoPanel>
+
+                <PromoBody>
+                  <PromoTitle>{post.title}</PromoTitle>
+                  <PromoArrow className="promo-arrow" aria-hidden="true">
+                    <ArrowIcon />
+                  </PromoArrow>
+                </PromoBody>
+
+                <PromoMeta>
+                  <b>{post.author}</b>
+                  <span className="dot">·</span>
+                  {post.date}
+                  <span className="dot">·</span>
+                  조회 {post.views}
+                  <span className="dot">·</span>
+                  댓글 {post.commentCount}
+                </PromoMeta>
+              </PromoCard>
             ))}
-            <BoardPromoFinalCard>
-              <BoardPromoFeatureNum>STEP 04</BoardPromoFeatureNum>
-              <BoardPromoFeatureTitle>
-                지금 바로 올려보세요
-              </BoardPromoFeatureTitle>
-              <Composer aria-hidden="true">
-                <ComposerTop>
-                  <ComposerChips>
-                    <span data-active="true">타이포</span>
-                    <span>레이아웃·여백</span>
-                    <span>컬러</span>
-                  </ComposerChips>
-                  <ComposerScore>
-                    <b>82</b>
-                    <small>SCORE</small>
-                  </ComposerScore>
-                </ComposerTop>
-                <ComposerHeadline>
-                  첫 화면 위계, 이 정도면 괜찮을까요?
-                </ComposerHeadline>
-                <ComposerLines>
-                  <i />
-                  <i />
-                  <i />
-                </ComposerLines>
-              </Composer>
-              <BoardPromoFinalActions>
-                <OutroPrimary to="/board/new">
-                  게시물 올리러 가기 →
-                </OutroPrimary>
-                <OutroSecondary to="/board">게시판 둘러보기</OutroSecondary>
-              </BoardPromoFinalActions>
-            </BoardPromoFinalCard>
-          </BoardPromoFeatures>
-        </BoardPromoScrollPin>
+          </PromoGrid>
+
+          <BoardPromoActions>
+            <OutroPrimary to="/board/new">게시물 올리러 가기 →</OutroPrimary>
+            <OutroSecondary to="/board">게시판 둘러보기</OutroSecondary>
+          </BoardPromoActions>
+        </BoardPromoInner>
       </BoardPromo>
     </>
   );

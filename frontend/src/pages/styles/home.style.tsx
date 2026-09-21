@@ -19,311 +19,233 @@ export const Wrapper = styled.section`
 export const ProcessAnimation = styled.section`
   position: relative;
   width: 100%;
-  /* 고정 RevealFill(포인트 컬러 밴드)이 스크롤에 따라 이 영역까지 확장돼 배경을 만든다.
-     밴드가 아직 안 덮은 구간은 이 다크 배경이 그대로 보여 히어로와 이어진다. */
   background: #0a0a0b;
 `;
 
-/* ── 게시판 홍보 섹션 ── */
 export const BoardPromo = styled.section`
   position: relative;
-  /* RevealFill(고정 포인트 컬러 오버레이, z-index:3)이 히어로 이후 화면을 영구히 덮으므로
-     ServiceFlow와 마찬가지로 그 위에 뜨도록 z-index를 올린다. */
   z-index: 5;
-  /* 히어로 리빌 밴드와 같은 하늘색 — 스크롤해 내려와도 같은 배경이 이어지는 느낌을 준다. */
   background: #a6e3e9;
-  padding: clamp(72px, 13vh, 150px) clamp(16px, 5vw, 48px);
+  font-family: "Aggravo", system-ui, "Segoe UI", Roboto, sans-serif;
+  padding: clamp(72px, 13vh, 150px) clamp(16px, 4vw, 48px);
 `;
 
 export const BoardPromoInner = styled.div`
-  max-width: 1080px;
+  max-width: 1320px;
   margin: 0 auto;
-  text-align: center;
 `;
 
 export const BoardPromoTitle = styled.h2`
-  margin: 0 auto;
-  max-width: 22ch;
-  font-family: "Unbounded", system-ui, sans-serif;
+  margin: 0;
+  text-align: left;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(24px, 4vw, 40px);
   line-height: 1.3;
   letter-spacing: -0.03em;
   color: #0a0a0b;
+`;
 
-  span {
-    color: #ffffff;
+export const PromoGrid = styled.div`
+  margin-top: clamp(32px, 5vh, 52px);
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 18px);
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
-export const BoardPromoDesc = styled.p`
-  margin: 18px auto 0;
-  max-width: 46ch;
-  color: rgba(10, 10, 11, 0.65);
-  font-size: clamp(14px, 1.4vw, 16px);
-  line-height: 1.7;
-`;
-
-/* 핀 고정 + 가로 스크럽 (gsap.com 홈 "Tools" 섹션 참고) — 데스크톱에서만 핀 고정,
-   좁은 화면에서는 세로로 쌓아 일반 스크롤로 본다. */
-export const BoardPromoScrollPin = styled.div`
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-
-  @media (min-width: 900px) {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-`;
-
-export const BoardPromoFeatures = styled.div`
-  display: flex;
-  align-items: stretch;
-  gap: clamp(16px, 2.2vw, 28px);
-  width: max-content;
-  padding: 8px clamp(16px, 8vw, 16vw) 8px clamp(16px, 6vw, 12vw);
-  text-align: left;
-  will-change: transform;
-
-  @media (max-width: 899px) {
-    width: auto;
-    flex-direction: column;
-    padding: 8px clamp(16px, 5vw, 48px) 0;
-  }
-`;
-
-const boardPromoCardBase = css`
-  position: relative;
-  flex: 0 0 auto;
-  width: min(400px, 80vw);
-  min-height: clamp(300px, 40vh, 380px);
-  padding: clamp(20px, 2.2vw, 26px);
-  border-radius: 20px;
-  overflow: hidden;
+export const PromoCard = styled(Link)`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  padding: 12px 12px 24px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #17171a;
+  box-shadow: 0 24px 48px -28px rgba(10, 10, 11, 0.55);
+  color: #f7f7f8;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
-  @media (max-width: 899px) {
-    width: auto;
-    min-height: 0;
-  }
-`;
-
-export const BoardPromoFeature = styled.div`
-  ${boardPromoCardBase}
-  border: 1px solid rgba(10, 10, 11, 0.06);
-  background: #f7f7f8;
-  box-shadow: 0 28px 56px -28px rgba(10, 10, 11, 0.55);
-`;
-
-/* 실제 화면 캡처를 하늘색 패널 위에 떠 있는 창처럼 보여준다 */
-export const BoardPromoFeatureShot = styled.div`
-  width: 100%;
-  height: clamp(130px, 19vh, 170px);
-  padding: 14px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  margin-bottom: clamp(16px, 2.2vh, 22px);
-  background: rgba(166, 227, 233, 0.45);
-
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
-    border-radius: 10px;
-    box-shadow: 0 14px 28px -14px rgba(10, 10, 11, 0.6);
-  }
-`;
-
-/* 트랙의 마지막 카드 — 다른 카드(검정)와 반대로 밝은 카드에, 게시물 작성 화면을 미니 목업으로 보여준다 */
-export const BoardPromoFinalCard = styled.div`
-  ${boardPromoCardBase}
-  border: 1px solid rgba(10, 10, 11, 0.06);
-  background: #f7f7f8;
-  box-shadow: 0 28px 56px -28px rgba(10, 10, 11, 0.55);
-
-  @media (min-width: 900px) {
-    width: min(460px, 80vw);
-  }
-`;
-
-const caretBlink = keyframes`
-  0%, 45% { opacity: 1; }
-  55%, 100% { opacity: 0; }
-`;
-
-/* 게시물 작성 화면 미니 목업 */
-export const Composer = styled.div`
-  width: 100%;
-  margin-top: clamp(14px, 2vh, 20px);
-  padding: 16px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  border: 1px solid rgba(10, 10, 11, 0.1);
-  background: #ffffff;
-  box-shadow: 0 10px 24px -16px rgba(10, 10, 11, 0.35);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-export const ComposerTop = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-`;
-
-export const ComposerChips = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-
-  span {
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(10, 10, 11, 0.14);
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #55555c;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 32px 56px -26px rgba(10, 10, 11, 0.65);
   }
 
-  span[data-active="true"] {
-    border-color: transparent;
-    background: #a6e3e9;
-    color: #0a0a0b;
-    font-weight: 700;
-  }
-`;
-
-export const ComposerScore = styled.span`
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 5px;
-  font-family: "Unbounded", system-ui, sans-serif;
-  color: #0a0a0b;
-
-  b {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-
-  small {
-    font-size: 8.5px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    color: #77777f;
-  }
-`;
-
-export const ComposerHeadline = styled.p`
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.45;
-  color: #0a0a0b;
-
-  &::after {
-    content: "";
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    margin-left: 3px;
-    vertical-align: -2px;
-    background: #0a0a0b;
-    animation: ${caretBlink} 1.1s steps(1) infinite;
+  &:hover .promo-arrow {
+    transform: translateX(4px);
+    color: #a6e3e9;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    &::after {
-      animation: none;
+    transition: none;
+
+    &:hover {
+      transform: none;
     }
   }
 `;
 
-export const ComposerLines = styled.div`
+export const PromoPanel = styled.div`
+  padding: 12px;
+  border-radius: 16px;
+  background: #202024;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-
-  i {
-    display: block;
-    height: 7px;
-    border-radius: 4px;
-    background: rgba(10, 10, 11, 0.08);
-  }
-
-  i:nth-of-type(1) {
-    width: 100%;
-  }
-  i:nth-of-type(2) {
-    width: 82%;
-  }
-  i:nth-of-type(3) {
-    width: 56%;
-  }
+  gap: 10px;
 `;
 
-export const BoardPromoFinalActions = styled.div`
-  margin-top: auto;
-  padding-top: clamp(16px, 2.6vh, 24px);
+export const PromoThumb = styled.div`
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ededf0;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  color: #6a6a72;
+  font-size: 12px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+`;
+
+export const PromoPills = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+
+  span {
+    padding: 10px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #2b2b30;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e6e6e8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span[data-tone="high"] {
+    color: #a6e3e9;
+  }
+  span[data-tone="low"] {
+    color: #ff6b5c;
+  }
+`;
+
+export const PromoBody = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 12px;
-  width: 100%;
+  padding: 22px 12px 0;
 `;
 
-export const BoardPromoFeatureNum = styled.span`
-  display: inline-block;
-  margin-bottom: 10px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #0a0a0b;
-  font-family: "Unbounded", system-ui, sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #a6e3e9;
-`;
-
-export const BoardPromoFeatureTitle = styled.h3`
-  margin: 0 0 8px;
-  color: #0a0a0b;
-  font-family: "Unbounded", system-ui, sans-serif;
-  font-size: clamp(17px, 1.6vw, 20px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-`;
-
-export const BoardPromoFeatureDesc = styled.p`
+export const PromoTitle = styled.h3`
   margin: 0;
-  max-width: 32ch;
-  color: #55555c;
-  font-size: clamp(13.5px, 1.1vw, 14.5px);
-  line-height: 1.6;
+  min-height: 2.9em;
+  font-size: clamp(16px, 1.3vw, 18px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: #f7f7f8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: keep-all;
+`;
+
+export const PromoArrow = styled.span`
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #d0d0d5;
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+
+  svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+`;
+
+export const PromoMeta = styled.p`
+  margin: 14px 0 0;
+  padding: 0 12px;
+  font-size: 13.5px;
+  color: #9a9aa2;
+
+  b {
+    font-weight: 600;
+    color: #cfcfd4;
+  }
+
+  .dot {
+    margin: 0 6px;
+    opacity: 0.5;
+  }
+`;
+
+const promoPulse = keyframes`
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+`;
+
+export const PromoSkeleton = styled.div`
+  min-height: 330px;
+  border-radius: 22px;
+  background: rgba(10, 10, 11, 0.12);
+  animation: ${promoPulse} 1.4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+export const PromoEmpty = styled.p`
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 48px 0;
+  text-align: center;
+  font-size: 15px;
+  color: rgba(10, 10, 11, 0.7);
+`;
+
+export const BoardPromoActions = styled.div`
+  margin-top: clamp(28px, 4.5vh, 44px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 `;
 
 export const OutroPrimary = styled(Link)`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  box-sizing: border-box;
   background: #0a0a0b;
   color: #a6e3e9;
   font-size: 15px;
   font-weight: 800;
-  padding: 15px 30px;
+  padding: 16px 32px;
   border-radius: 999px;
   text-decoration: none;
   transition:
@@ -337,19 +259,20 @@ export const OutroPrimary = styled(Link)`
 `;
 
 export const OutroSecondary = styled(Link)`
-  font-size: 13.5px;
+  border: 1px solid rgba(10, 10, 11, 0.35);
+  color: #0a0a0b;
+  font-size: 15px;
   font-weight: 700;
-  color: #55555c;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: rgba(10, 10, 11, 0.25);
+  padding: 15px 28px;
+  border-radius: 999px;
+  text-decoration: none;
   transition:
-    color 0.15s,
-    text-decoration-color 0.15s;
+    border-color 0.15s,
+    background 0.15s;
 
   &:hover {
-    color: #0a0a0b;
-    text-decoration-color: #0a0a0b;
+    border-color: #0a0a0b;
+    background: rgba(10, 10, 11, 0.06);
   }
 `;
 
@@ -476,6 +399,7 @@ export const Content = styled.div`
   text-align: left;
   gap: 12px;
   margin-bottom: 3vh;
+  font-family: "Aggravo", system-ui, sans-serif;
 
   @media (max-width: 1024px) {
     gap: 28px;
@@ -502,16 +426,24 @@ export const Title = styled.h1`
   width: max-content;
   max-width: 100%;
   color: #f7f7f8;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: "Aggravo", system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em;
+
+  * {
+    -webkit-text-stroke-color: currentColor;
+  }
+`;
+
+const heavyStroke = css`
+  -webkit-text-stroke: 0.035em currentColor;
+  paint-order: stroke fill;
 `;
 
 export const Line = styled.span`
   display: block;
   white-space: nowrap;
 
-  /* SplitText가 만드는 조각 */
   .word,
   .char {
     display: inline-block;
@@ -528,6 +460,7 @@ export const Desc = styled.span`
   line-height: 1.4;
   letter-spacing: -0.03em;
   word-spacing: 0.04em;
+  ${heavyStroke}
 `;
 
 export const SecDesc = styled.span`
@@ -538,6 +471,7 @@ export const SecDesc = styled.span`
   font-size: clamp(32px, 7.1vw, 126px);
   line-height: 0.98;
   letter-spacing: -0.03em;
+  ${heavyStroke}
 `;
 
 export const Accent = styled.span`
@@ -555,14 +489,15 @@ export const FormWrap = styled.div`
 `;
 
 const heroCta = css`
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 15px 30px;
-  border-radius: 14px;
   border: none;
-  background: #a6e3e9;
-  color: #0a0a0b;
+  color: #a6e3e9;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -575,9 +510,30 @@ const heroCta = css`
     background 0.2s,
     transform 0.2s;
 
-  &:hover {
-    background: #88f5ff;
-    transform: translateY(-1px);
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: 0.3s;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+  }
+
+
+  &:hover::before,
+  &:hover::after {
+    width: 100%;
   }
 `;
 
@@ -585,7 +541,6 @@ export const HeroCta = styled(Link)`
   ${heroCta}
 `;
 
-/* RevealText 레이어용 시각 복제 (링크 동작 없음) */
 export const HeroCtaGhost = styled.span`
   ${heroCta}
 `;
