@@ -1,14 +1,6 @@
 import styled from "@emotion/styled";
 
-/*
-  서비스 플로우 섹션.
-
-  - 히어로에서 넘어온 고정 포인트 컬러 오버레이(RevealFill, z-index:3) 위에 얹히도록 z-index:5,
-    배경은 투명하게 두어 위 섹션의 포인트 컬러(#a6e3e9)가 그대로 이어진다.
-  - 카드는 스크롤에 따라 "파일이 쌓이듯" 겹쳐 올라간다 (sticky + 단차 offset).
-  - 모든 전환은 하나의 motion system(--flow-ease / --flow-dur)만 쓴다.
-*/
-
+/* 서비스 플로우 섹션 */
 export const Section = styled.section`
   --flow-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --flow-dur: 0.5s;
@@ -18,15 +10,13 @@ export const Section = styled.section`
   --flow-line: rgba(10, 10, 11, 0.1);
   --flow-lime: #a6e3e9;
   --flow-sticky-top: clamp(90px, 14vh, 150px);
-  /* 쌓일 때 카드 사이 단차 */
+  /* 카드 쌓임 단차 */
   --stack-step: clamp(12px, 1.4vw, 20px);
 
   position: relative;
   z-index: 5;
   width: 100%;
-  /* 배경은 투명 — 히어로의 고정 포인트 컬러 오버레이(RevealFill, z-index:3)가 그대로 비쳐서
-     스크롤에 따라 밴드가 넓어지는 연출이 이 섹션까지 이어진다.
-     밴드가 아직 안 덮은 좌우는 뒤의 다크(ProcessAnimation #0a0a0b)가 보이며 대비를 만든다. */
+  /* 배경 투명 */
   background: transparent;
   color: var(--flow-body);
   font-family: "Aggravo", system-ui, sans-serif;
@@ -35,14 +25,13 @@ export const Section = styled.section`
   box-sizing: border-box;
 `;
 
-/* 헤더 컨테이너 — 아래 Layout 과 같은 폭으로 맞춰 왼쪽 정렬선을 공유한다 */
+/* 헤더 컨테이너 */
 export const Inner = styled.div`
   max-width: 1400px;
   margin: 0 auto;
 `;
 
-/* ---------- Header ---------- */
-
+/* 헤더 */
 export const Header = styled.header`
   max-width: 680px;
   margin: 0 0 clamp(40px, 8vh, 80px);
@@ -78,8 +67,7 @@ export const HeaderSub = styled.p`
   line-height: 1.6;
 `;
 
-/* ---------- Layout: 좌측 진행 레일(화면 왼쪽에 붙음) + 가운데 카드 ---------- */
-
+/* 레이아웃 */
 export const Layout = styled.div`
   max-width: 1400px;
   margin: 0 auto;
@@ -97,7 +85,7 @@ export const Layout = styled.div`
 export const Rail = styled.nav`
   position: sticky;
   top: clamp(120px, 24vh, 240px);
-  /* 헤더/카드보다 더 왼쪽, 화면 가장자리 쪽으로 당긴다 */
+  /* 왼쪽으로 당김 */
   margin-left: clamp(-30px, -2.2vw, 0px);
   display: flex;
   flex-direction: column;
@@ -128,7 +116,7 @@ export const RailItem = styled.button`
     color: var(--flow-ink);
   }
 
-  /* 아래 항목으로 이어지는 연결선 */
+  /* 연결선 */
   &::after {
     content: "";
     position: absolute;
@@ -194,7 +182,7 @@ export const RailText = styled.span`
   }
 `;
 
-/* 모바일: 상단에 얇게 붙는 진행 바 */
+/* 모바일 진행 바 */
 export const MobileProgress = styled.div`
   display: none;
 
@@ -238,8 +226,7 @@ export const MobileMeta = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
-/* 파일처럼 쌓이는 스택 */
-
+/* 카드 스택 */
 export const CardsWrap = styled.div`
   position: relative;
   width: 100%;
@@ -290,13 +277,13 @@ export const Card = styled.article`
     transform var(--flow-dur) var(--flow-ease),
     filter var(--flow-dur) var(--flow-ease);
 
-  /* 위에 다른 카드가 쌓여 파묻힌 상태  */
+  /* 위에 카드가 쌓인 상태 */
   &[data-state="completed"] {
     transform: scale(calc(1 - var(--depth, 1) * 0.014));
     filter: blur(calc(var(--depth, 0) * 0.4px));
   }
 
-  /* 파묻힌 정도만큼 어둡게 덮는 오버레이 */
+  /* 어둡게 덮는 오버레이 */
   &::after {
     content: "";
     position: absolute;

@@ -67,7 +67,7 @@ function serializeComment(comment: {
   };
 }
 
-// GET /api/board — list posts, optionally filtered by category
+// 목록
 boardRouter.get("/", async (req, res) => {
   const { category } = req.query as { category?: string };
 
@@ -91,6 +91,7 @@ boardRouter.get("/", async (req, res) => {
   );
 });
 
+// 작성
 boardRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
   const { category, title, lead, body, url, score, authorColor } = req.body as {
     category?: unknown;
@@ -142,6 +143,7 @@ boardRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
   res.status(201).json({ ...serializePost(post), commentCount: 0 });
 });
 
+// 상세
 boardRouter.get("/:id", optionalAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -168,7 +170,7 @@ boardRouter.get("/:id", optionalAuth, async (req: AuthedRequest, res) => {
   });
 });
 
-// PATCH /api/board/:id — update own post
+// 수정
 boardRouter.patch("/:id", requireAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -225,7 +227,7 @@ boardRouter.patch("/:id", requireAuth, async (req: AuthedRequest, res) => {
   res.json({ ...serializePost(post), mine: true });
 });
 
-// DELETE /api/board/:id — delete own post
+// 삭제
 boardRouter.delete("/:id", requireAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -247,7 +249,7 @@ boardRouter.delete("/:id", requireAuth, async (req: AuthedRequest, res) => {
   res.status(204).end();
 });
 
-// POST /api/board/:id/helpful — "도움됐어요" reaction counter
+// 도움됐어요
 boardRouter.post("/:id/helpful", async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -266,7 +268,7 @@ boardRouter.post("/:id/helpful", async (req, res) => {
   }
 });
 
-// POST /api/board/:id/comments — add a comment (login required)
+// 댓글 작성
 boardRouter.post("/:id/comments", requireAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {

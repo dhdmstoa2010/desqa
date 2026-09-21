@@ -1,7 +1,4 @@
-// Deterministic gradient per account: the same seed always yields the same colors.
-
-// FNV-1a + murmur3 finalizer so that even tiny seed differences ("1" vs "2")
-// produce a fully different 32-bit value.
+// 같은 시드는 항상 같은 색
 function hashSeed(seed: string): number {
   let h = 2166136261 >>> 0;
   for (let i = 0; i < seed.length; i += 1) {

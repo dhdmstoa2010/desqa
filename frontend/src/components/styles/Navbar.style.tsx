@@ -38,7 +38,7 @@ export const Brand = styled(Link)`
   text-decoration: none;
 `;
 
-/* 로고 글자를 1초 간격으로 하나씩 색깔 변환*/
+/* 로고 글자 색 변환 */
 export const BrandChar = styled.span`
   display: inline-block;
   white-space: pre;

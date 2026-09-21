@@ -16,7 +16,7 @@ export const Inner = styled.div`
   margin: 0 auto;
 `;
 
-/* ── 헤더 ── */
+/* 헤더 */
 export const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -81,7 +81,7 @@ export const ShareButton = styled(Link)`
   }
 `;
 
-/* ── 필터 바 ── */
+/* 필터 바 */
 export const Toolbar = styled.div`
   margin-top: clamp(36px, 5vw, 56px);
   padding-top: 22px;
@@ -138,6 +138,7 @@ export const Sort = styled.button`
   }
 `;
 
+/* 게시물 리스트 */
 export const List = styled.div`
   font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   margin-top: 20px;
@@ -156,7 +157,7 @@ export const ErrorText = styled(Empty)`
   color: #ff6b6b;
 `;
 
-/* 애니메이션되는 상세 영역 (호버 시 0fr → 1fr) */
+/* 상세 영역 (호버 시 펼침) */
 export const Detail = styled.div`
   display: grid;
   grid-template-rows: 0fr;
