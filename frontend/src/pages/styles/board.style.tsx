@@ -137,10 +137,9 @@ export const Sort = styled.button`
     color: #f7f7f8;
   }
 `;
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
 
-/* ── 게시물 리스트 ── */
 export const List = styled.div`
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   margin-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 `;
