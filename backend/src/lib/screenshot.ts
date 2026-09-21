@@ -216,7 +216,7 @@ export async function captureScreenshot(url: URL): Promise<Screenshot> {
   try {
     const page = await context.newPage();
     const response = await page.goto(url.toString(), {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
       timeout: 30_000,
     });
 
@@ -226,13 +226,15 @@ export async function captureScreenshot(url: URL): Promise<Screenshot> {
       );
     }
 
-    // Close cookie walls / modals / popups before capturing.
+    await page.waitForLoadState("load", { timeout: 10_000 }).catch(() => {});
+    await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => {});
+
     await dismissOverlays(page);
 
     // Give late CSS / web fonts / overlay removal a moment to settle.
     await page.waitForTimeout(600);
 
-    const buffer = await page.screenshot({ type: "png" });
+    const buffer = await page.screenshot({ type: "png", animations: "disabled" });
     const title = (await page.title().catch(() => "")) ?? "";
 
     return {
