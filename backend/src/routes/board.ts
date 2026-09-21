@@ -135,14 +135,13 @@ boardRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
       score: score ?? null,
       authorName: user.name,
       authorColor: typeof authorColor === "string" && authorColor.trim() !== "" ? authorColor : "#bfff6b",
-      userId: req.userId ?? null,
+      userId: user.id,
     },
   });
 
   res.status(201).json({ ...serializePost(post), commentCount: 0 });
 });
 
-// GET /api/board/:id — a single post with its comments (increments view count)
 boardRouter.get("/:id", optionalAuth, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
