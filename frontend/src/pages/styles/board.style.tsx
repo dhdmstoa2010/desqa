@@ -77,7 +77,6 @@ export const ShareButton = styled(Link)`
 
   &:hover {
     background: #8dc7cb;
-    transform: translateY(-1px);
   }
 `;
 

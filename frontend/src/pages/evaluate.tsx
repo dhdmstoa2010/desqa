@@ -200,7 +200,7 @@ function Evaluate() {
                 type="url"
                 inputMode="url"
                 autoFocus
-                placeholder="https://example.com"
+                placeholder="URL을 넣어주세요"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
               />

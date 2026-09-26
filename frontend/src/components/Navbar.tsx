@@ -38,10 +38,10 @@ function Navbar() {
         </Brand>
         <NoticeBoard>
           <NavLink to="/evaluate" aria-label="Evaluate">
-            <Notice $active={isEvaluateActive}>/evaluate</Notice>
+            <Notice $active={isEvaluateActive}>URL 피드백</Notice>
           </NavLink>
           <NavLink to="/board" aria-label="Board">
-            <Notice $active={isBoardActive}>/board</Notice>
+            <Notice $active={isBoardActive}>디자인 게시판</Notice>
           </NavLink>
         </NoticeBoard>
       </LeftGroup>
