@@ -81,8 +81,7 @@ export const PromoCard = styled(Link)`
     box-shadow 0.25s ease;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 32px 56px -26px rgba(10, 10, 11, 0.65);
+    transform: translateY(-2px);
   }
 
   &:hover .promo-arrow {
@@ -245,20 +244,21 @@ export const BoardPromoActions = styled.div`
 `;
 
 export const OutroPrimary = styled(Link)`
-  background: #0a0a0b;
-  color: #a6e3e9;
+  border: 1px solid rgba(10, 10, 11, 0.35);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 15px;
-  font-weight: 800;
-  padding: 16px 32px;
+  font-weight: 700;
+  padding: 15px 28px;
   border-radius: 999px;
   text-decoration: none;
+  background: #000000;
   transition:
-    background 0.2s,
-    transform 0.2s;
+    border-color 0.15s,
+    background 0.15s;
 
   &:hover {
-    background: #1c1c20;
-    transform: translateY(-1px);
+    border-color: #0a0a0b;
+    background: rgba(10, 10, 11, 0.06);
   }
 `;
 
@@ -332,7 +332,7 @@ export const ScrollCue = styled.div`
       transform-origin: top;
       opacity: 1;
     }
-  }
+  } 
 `;
 
 export const RevealFill = styled.div`

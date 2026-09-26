@@ -152,26 +152,32 @@ export const Button = styled.button`
 `;
 
 export const BoardLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 20px;
-  padding: 11px 20px;
+  display: inline-block;
+  padding: 10px 18px;
   border-radius: 12px;
-  border: 1px solid rgba(166, 227, 233, 0.4);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #a6e3e9;
+  border: none;
+  margin-top: 20px;
+  background: #a6e3e9;
+  color: #0a0a0b;
+  font-size: 15px;
+  font-weight: 800;
   text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
   transition:
-    background 0.15s,
-    border-color 0.15s;
+    background 0.2s,
+    opacity 0.2s;
 
-  &:hover {
-    background: rgba(166, 227, 233, 0.1);
-    border-color: #a6e3e9;
+  &:hover:not(:disabled) {
+    background: #8dc7cb;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 `;
+
 
 /* 오른쪽: 최근 평가 */
 export const Right = styled.div`
@@ -184,11 +190,10 @@ export const Right = styled.div`
 
 export const PanelLabel = styled.p`
   margin: 0 0 12px;
-  font-family: var(--mono, ui-monospace, monospace);
-  font-size: 11px;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
   color: #6f6f76;
 `;
 

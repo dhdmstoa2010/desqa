@@ -38,8 +38,8 @@ import {
   PromoSkeleton,
   PromoEmpty,
   BoardPromoActions,
-  OutroPrimary,
   OutroSecondary,
+  OutroPrimary,
 } from "./styles/home.style";
 
 const PROMO_POST_COUNT = 4;
@@ -262,7 +262,7 @@ function Home() {
               <PromoEmpty>
                 {loadFailed
                   ? "게시물을 불러오지 못했어요."
-                  : "아직 올라온 게시물이 없어요. 첫 게시물의 주인공이 되어보세요."}
+                  : "아직 올라온 게시물이 없어요."}
               </PromoEmpty>
             )}
 
