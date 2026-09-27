@@ -50,7 +50,7 @@ export const BrandChar = styled.span`
     }
     6%,
     13% {
-      color: #bfff6b;
+      color: #a6e3e9;
     }
     20% {
       color: #f5f5f5;
@@ -91,7 +91,7 @@ export const Notice = styled.div<{ $active?: boolean }>`
   transition: color 0.15s ease;
 
   &:hover {
-    color: ${({ $active }) => ($active ? "#bfff6b" : "#bfff6b")};
+    color: ${({ $active }) => ($active ? "#a6e3e9" : "#a6e3e9")};
   }
 
   &::after {
@@ -101,7 +101,7 @@ export const Notice = styled.div<{ $active?: boolean }>`
     right: 0;
     bottom: -4px;
     height: 2px;
-    background: #bfff6b;
+    background: #a6e3e9;
     transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
     transform-origin: left;
     transition: transform 0.2s ease;

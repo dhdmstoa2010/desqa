@@ -19,7 +19,7 @@ const METRICS = [
   { label: "Color", to: "88%" },
 ];
 
-const LIME = "#bfff6b";
+const LIME = "#a6e3e9";
 const INK = "#0a0a0b";
 
 function SweepCta({

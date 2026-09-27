@@ -129,7 +129,7 @@ export const PreviewScore = styled.div<{ $tone: "high" | "mid" | "low" }>`
   line-height: 1;
   font-family: "Unbounded", system-ui, sans-serif;
   color: ${({ $tone }) =>
-    $tone === "high" ? "#bfff6b" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
+    $tone === "high" ? "#a6e3e9" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
 
   strong {
     display: block;
@@ -167,7 +167,7 @@ export const PreviewChip = styled.span`
   font-size: 13px;
   font-weight: 700;
   color: #0a0a0b;
-  background: #bfff6b;
+  background: #a6e3e9;
   border-radius: 999px;
   padding: 4px 12px;
 `;
@@ -229,7 +229,7 @@ export const PreviewBody = styled.div`
     color: #cfcfd4;
   }
   a {
-    color: #bfff6b;
+    color: #a6e3e9;
   }
   s {
     color: #9a9aa2;
@@ -237,7 +237,7 @@ export const PreviewBody = styled.div`
   blockquote {
     margin: 0.8em 0;
     padding: 4px 0 4px 14px;
-    border-left: 3px solid rgba(191, 255, 107, 0.5);
+    border-left: 3px solid rgba(166, 227, 233, 0.5);
     color: #cfcfd4;
   }
   pre {
@@ -305,7 +305,7 @@ export const TipList = styled.ul`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #bfff6b;
+    background: #a6e3e9;
   }
 `;
 
@@ -327,8 +327,8 @@ export const BackTop = styled(Link)`
     background 0.15s;
 
   &:hover {
-    border-color: rgba(191, 255, 107, 0.6);
-    background: rgba(191, 255, 107, 0.08);
+    border-color: rgba(166, 227, 233, 0.6);
+    background: rgba(166, 227, 233, 0.08);
   }
 `;
 
@@ -389,7 +389,7 @@ export const Input = styled.input`
   }
 
   &:focus {
-    outline: 2px solid #bfff6b;
+    outline: 2px solid #a6e3e9;
     outline-offset: 0;
   }
 `;
@@ -405,7 +405,7 @@ export const Hint = styled.span`
   color: #d0d0d5;
 
   a {
-    color: #bfff6b;
+    color: #a6e3e9;
     font-weight: 700;
     text-decoration: none;
   }
@@ -422,10 +422,10 @@ export const ScoreNote = styled.div`
   gap: 8px;
   padding: 12px 16px;
   border-radius: 10px;
-  background: rgba(191, 255, 107, 0.08);
-  border: 1px solid rgba(191, 255, 107, 0.2);
+  background: rgba(166, 227, 233, 0.08);
+  border: 1px solid rgba(166, 227, 233, 0.2);
   font-size: 14px;
-  color: #cfe8a6;
+  color: #c3e6ea;
 
   b {
     font-weight: 800;
@@ -441,7 +441,7 @@ export const Chips = styled.div`
 export const Chip = styled.button<{ $active?: boolean }>`
   border: 1px solid
     ${({ $active }) => ($active ? "transparent" : "rgba(255, 255, 255, 0.16)")};
-  background: ${({ $active }) => ($active ? "#bfff6b" : "transparent")};
+  background: ${({ $active }) => ($active ? "#a6e3e9" : "transparent")};
   color: ${({ $active }) => ($active ? "#0a0a0b" : "#e2e2e5")};
   font-size: 14.5px;
   font-weight: 600;
@@ -468,7 +468,7 @@ export const Actions = styled.div`
 `;
 
 export const Submit = styled.button`
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   border: none;
   font-size: 16px;
@@ -481,7 +481,7 @@ export const Submit = styled.button`
     opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 
   &:disabled {

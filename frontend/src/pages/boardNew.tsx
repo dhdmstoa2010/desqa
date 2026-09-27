@@ -95,7 +95,7 @@ function BoardNew() {
         body,
         url: url.trim() || undefined,
         score,
-        authorColor: "#bfff6b",
+        authorColor: "#a6e3e9",
       });
       navigate(`/board/${created.id}`);
     } catch (err) {

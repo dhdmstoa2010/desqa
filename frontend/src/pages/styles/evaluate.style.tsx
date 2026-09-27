@@ -22,8 +22,8 @@ export const Glow = styled.div`
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(191, 255, 107, 0.1) 0%,
-    rgba(191, 255, 107, 0) 70%
+    rgba(166, 227, 233, 0.1) 0%,
+    rgba(166, 227, 233, 0) 70%
   );
   pointer-events: none;
 `;
@@ -70,7 +70,7 @@ export const Title = styled.h1`
   }
 
   .kr {
-    color: #bfff6b;
+    color: #a6e3e9;
   }
 `;
 
@@ -97,7 +97,7 @@ export const InputWrap = styled.div`
     left: 16px;
     font-size: 18px;
     font-weight: 700;
-    color: #bfff6b;
+    color: #a6e3e9;
     pointer-events: none;
   }
 `;
@@ -121,8 +121,8 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #bfff6b;
-    box-shadow: 0 0 0 3px rgba(191, 255, 107, 0.16);
+    border-color: #a6e3e9;
+    box-shadow: 0 0 0 3px rgba(166, 227, 233, 0.16);
   }
 `;
 
@@ -130,7 +130,7 @@ export const Button = styled.button`
   padding: 15px 26px;
   border-radius: 12px;
   border: none;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 15px;
   font-weight: 800;
@@ -141,7 +141,7 @@ export const Button = styled.button`
     opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 
   &:disabled {
@@ -157,18 +157,18 @@ export const BoardLink = styled(Link)`
   margin-top: 20px;
   padding: 11px 20px;
   border-radius: 12px;
-  border: 1px solid rgba(191, 255, 107, 0.4);
+  border: 1px solid rgba(166, 227, 233, 0.4);
   font-size: 13.5px;
   font-weight: 700;
-  color: #bfff6b;
+  color: #a6e3e9;
   text-decoration: none;
   transition:
     background 0.15s,
     border-color 0.15s;
 
   &:hover {
-    background: rgba(191, 255, 107, 0.1);
-    border-color: #bfff6b;
+    background: rgba(166, 227, 233, 0.1);
+    border-color: #a6e3e9;
   }
 `;
 
@@ -204,7 +204,7 @@ export const ReportCard = styled(Link)`
     background 0.15s;
 
   &:hover {
-    border-color: rgba(191, 255, 107, 0.35);
+    border-color: rgba(166, 227, 233, 0.35);
     background: #101014;
   }
 `;
@@ -280,7 +280,7 @@ export const RecentItem = styled(Link)`
     width: 2ch;
     text-align: right;
     font-weight: 800;
-    color: #bfff6b;
+    color: #a6e3e9;
   }
 `;
 
@@ -314,7 +314,7 @@ export const ScoreBig = styled.div`
   font-weight: 800;
   font-size: 44px;
   line-height: 1;
-  color: #bfff6b;
+  color: #a6e3e9;
   letter-spacing: -0.02em;
 
   small {
@@ -361,7 +361,7 @@ export const Bar = styled.div`
   .fill {
     height: 100%;
     border-radius: 999px;
-    background: #bfff6b;
+    background: #a6e3e9;
   }
 `;
 
@@ -381,7 +381,7 @@ export const Notes = styled.div`
   }
 
   .plus b {
-    color: #bfff6b;
+    color: #a6e3e9;
   }
 
   .minus b {
