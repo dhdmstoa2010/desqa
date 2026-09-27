@@ -152,6 +152,10 @@ export const Empty = styled.p`
   font-size: 14px;
 `;
 
+export const ErrorText = styled(Empty)`
+  color: #ff6b6b;
+`;
+
 /* 애니메이션되는 상세 영역 (호버 시 0fr → 1fr) */
 export const Detail = styled.div`
   display: grid;

@@ -1,8 +1,15 @@
-import { useParams } from "react-router-dom";
-import type { Comment } from "../types/board";
-import { getPost } from "../data/posts";
-import { toneOf } from "../utils/board";
-import { useBoardStore } from "../store/boardStore";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import type { Comment, PostDetail } from "../types/board";
+import { toneOf, toPostDetail } from "../utils/board";
+import { useAuthStore } from "../store/authStore";
+import {
+  addCommentRequest,
+  deletePostRequest,
+  fetchPostRequest,
+  reactHelpfulRequest,
+} from "../api/board";
 import { bodyToHtml } from "../utils/html";
 import {
   Wrapper,
@@ -34,6 +41,7 @@ import {
   CommentText,
   CommentForm,
   CommentInput,
+  CommentSubmit,
   LoginButton,
   Aside,
   ScoreCard,
@@ -47,6 +55,7 @@ import {
   ScoreEmpty,
   EvalLink,
   BackLink,
+  ErrorText,
   NotFound,
 } from "./styles/boardDetail.style";
 
@@ -79,15 +88,104 @@ function CommentRow({
   );
 }
 
+function errorMessage(err: unknown, fallback: string) {
+  return axios.isAxiosError(err) ? (err.response?.data?.message ?? fallback) : fallback;
+}
+
 function BoardDetail() {
   const { id } = useParams<{ id: string }>();
   const numericId = Number(id);
-  const userPost = useBoardStore((s) =>
-    s.posts.find((p) => p.id === numericId),
-  );
-  const post = userPost ?? getPost(numericId);
+  const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((s) => s.isAuthenticated);
 
-  if (!post) {
+  const [post, setPost] = useState<PostDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  const [commentText, setCommentText] = useState("");
+  const [commentError, setCommentError] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    if (!Number.isInteger(numericId)) {
+      setLoading(false);
+      setNotFound(true);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    setNotFound(false);
+    fetchPostRequest(numericId)
+      .then((row) => {
+        if (cancelled) return;
+        setPost(toPostDetail(row));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setNotFound(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [numericId]);
+
+  const handleHelpful = async () => {
+    if (!post) return;
+    const prev = post.helpful;
+    setPost({ ...post, helpful: prev + 1 });
+    try {
+      const { helpful } = await reactHelpfulRequest(post.id);
+      setPost((p) => (p ? { ...p, helpful } : p));
+    } catch {
+      setPost((p) => (p ? { ...p, helpful: prev } : p));
+    }
+  };
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!post || commentText.trim() === "") return;
+    setPosting(true);
+    setCommentError(null);
+    try {
+      const created = await addCommentRequest(post.id, commentText.trim());
+      const fresh = await fetchPostRequest(post.id);
+      setPost(toPostDetail(fresh));
+      setCommentText("");
+      void created;
+    } catch (err) {
+      setCommentError(errorMessage(err, "댓글 등록에 실패했습니다"));
+    } finally {
+      setPosting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!post) return;
+    if (!window.confirm("이 게시물을 삭제할까요?")) return;
+    setDeleting(true);
+    try {
+      await deletePostRequest(post.id);
+      navigate("/board");
+    } catch {
+      setDeleting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Wrapper>
+        <NotFound>
+          <p>불러오는 중...</p>
+        </NotFound>
+      </Wrapper>
+    );
+  }
+
+  if (notFound || !post) {
     return (
       <Wrapper>
         <NotFound>
@@ -145,10 +243,17 @@ function BoardDetail() {
                   {post.date} · 조회 {post.views}
                 </AuthorMeta>
               </div>
-              <Actions>
-                <ActionButton type="button">수정</ActionButton>
-                <ActionButton type="button">삭제</ActionButton>
-              </Actions>
+              {post.mine && (
+                <Actions>
+                  <ActionButton
+                    type="button"
+                    disabled={deleting}
+                    onClick={handleDelete}
+                  >
+                    삭제
+                  </ActionButton>
+                </Actions>
+              )}
             </AuthorRow>
 
             {post.lead && <Lead>{post.lead}</Lead>}
@@ -157,7 +262,9 @@ function BoardDetail() {
             />
 
             <Reactions>
-              <ReactButton type="button">도움됐어요 · {post.helpful}</ReactButton>
+              <ReactButton type="button" onClick={handleHelpful}>
+                도움됐어요 · {post.helpful}
+              </ReactButton>
               <ReactButton type="button">공유</ReactButton>
             </Reactions>
 
@@ -166,22 +273,42 @@ function BoardDetail() {
                 댓글 <span>{commentCount}</span>
               </CommentsTitle>
 
-              {post.commentList.map((c, i) => (
+              {post.commentList.map((c) => (
                 <CommentRow
-                  key={i}
+                  key={c.id}
                   comment={c}
                   postAuthor={post.author}
                   authorColor={post.authorColor}
                 />
               ))}
 
-              <CommentForm onSubmit={(e) => e.preventDefault()}>
-                <CommentInput
-                  placeholder="댓글을 남기려면 로그인이 필요합니다"
-                  disabled
-                />
-                <LoginButton to="/login">로그인</LoginButton>
-              </CommentForm>
+              {isLoggedIn ? (
+                <>
+                  <CommentForm onSubmit={handleCommentSubmit}>
+                    <CommentInput
+                      placeholder="댓글을 남겨 주세요"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      disabled={posting}
+                    />
+                    <CommentSubmit
+                      type="submit"
+                      disabled={posting || commentText.trim() === ""}
+                    >
+                      등록
+                    </CommentSubmit>
+                  </CommentForm>
+                  {commentError && <ErrorText>{commentError}</ErrorText>}
+                </>
+              ) : (
+                <CommentForm onSubmit={(e) => e.preventDefault()}>
+                  <CommentInput
+                    placeholder="댓글을 남기려면 로그인이 필요합니다"
+                    disabled
+                  />
+                  <LoginButton to="/login">로그인</LoginButton>
+                </CommentForm>
+              )}
             </Comments>
           </Article>
 
