@@ -23,6 +23,7 @@ export interface Delta {
 }
 
 export interface Comment {
+  id: number;
   author: string;
   at: string;
   text: string;
@@ -51,17 +52,11 @@ export interface Post {
   body: string;
   helpful: number;
   metrics: Metric[];
-  commentList: Comment[];
+  commentCount: number;
 }
 
-/** 새 글 작성 폼 → 스토어 입력 */
-export interface NewPostInput {
-  url: string;
-  category: PostCategory;
-  title: string;
-  lead: string;
-  body: string;
-  author: string;
-  authorColor: string;
-  score?: number;
+export interface PostDetail extends Post {
+  /** 로그인한 본인 글인지 여부 (수정/삭제 버튼 노출용) */
+  mine: boolean;
+  commentList: Comment[];
 }
