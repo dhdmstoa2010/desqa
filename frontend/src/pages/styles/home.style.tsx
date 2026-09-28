@@ -197,8 +197,8 @@ export const Glow = styled.div`
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 232, 59, 0.28) 0%,
-    rgba(170, 59, 255, 0) 70%
+    rgba(227, 253, 253, 0.28) 0%,
+    rgba(227, 253, 253, 0) 70%
   );
   will-change: transform, opacity;
 `;
@@ -313,7 +313,7 @@ const heroCta = css`
     transform 0.2s;
 
   &:hover {
-    background: #a6e34d;
+    background: #88f5ff;
     transform: translateY(-1px);
   }
 `;
