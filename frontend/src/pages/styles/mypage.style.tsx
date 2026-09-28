@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -171,4 +172,99 @@ export const ErrorText = styled.p`
   color: #ff6b6b;
   font-size: 14px;
   margin: 24px 0 0;
+`;
+
+export const ActivityPanel = styled.div`
+  margin-top: 32px;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+export const ActivitySection = styled.section``;
+
+export const SectionHead = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+`;
+
+export const SectionTitle = styled.h2`
+  margin: 0;
+  color: #f5f5f5;
+  font-size: 17px;
+  font-weight: 700;
+`;
+
+export const SectionCount = styled.span`
+  color: #6f6f75;
+  font-size: 13px;
+  font-weight: 600;
+`;
+
+export const ItemList = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #1c1c1f;
+`;
+
+export const ItemRow = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 4px;
+  border-bottom: 1px solid #1c1c1f;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #131316;
+  }
+`;
+
+export const ItemMain = styled.div`
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const ItemTitle = styled.span`
+  color: #f2f2f4;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+export const ItemMeta = styled.span`
+  color: #9a9a9f;
+  font-size: 12px;
+
+  .dot {
+    margin: 0 6px;
+    opacity: 0.5;
+  }
+`;
+
+export const ScoreTag = styled.span<{ $tone: "high" | "mid" | "low" }>`
+  flex-shrink: 0;
+  font-family: "Unbounded", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: ${({ $tone }) =>
+    $tone === "high" ? "#1fd65f" : $tone === "mid" ? "#f2f2f4" : "#ff6b6b"};
+`;
+
+export const EmptyRow = styled.p`
+  margin: 0;
+  padding: 28px 4px;
+  color: #6f6f75;
+  font-size: 13px;
+  text-align: center;
 `;
