@@ -7,7 +7,7 @@ export const Shell = styled.div`
   overflow: hidden;
 
   &:focus-within {
-    outline: 2px solid #bfff6b;
+    outline: 2px solid #a6e3e9;
   }
 `;
 
@@ -28,8 +28,8 @@ export const ToolButton = styled.button<{ $active?: boolean }>`
   border: none;
   border-radius: 8px;
   background: ${({ $active }) =>
-    $active ? "rgba(191, 255, 107, 0.16)" : "transparent"};
-  color: ${({ $active }) => ($active ? "#bfff6b" : "#e2e2e5")};
+    $active ? "rgba(166, 227, 233, 0.16)" : "transparent"};
+  color: ${({ $active }) => ($active ? "#a6e3e9" : "#e2e2e5")};
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -121,7 +121,7 @@ export const Area = styled.div`
     margin: 0 0 0.7em;
   }
   a {
-    color: #bfff6b;
+    color: #a6e3e9;
     text-underline-offset: 2px;
   }
   s {
@@ -130,7 +130,7 @@ export const Area = styled.div`
   blockquote {
     margin: 0.7em 0;
     padding: 4px 0 4px 14px;
-    border-left: 3px solid rgba(191, 255, 107, 0.5);
+    border-left: 3px solid rgba(166, 227, 233, 0.5);
     color: #cfcfd4;
   }
   pre {

@@ -517,7 +517,7 @@ export const Metric = styled.div`
 `;
 
 /*
-  CTA — gsap.com "Get GSAP" 버튼처럼, 커서가 들어온 방향에서 라임 채움이
+  CTA — gsap.com "Get GSAP" 버튼처럼, 커서가 들어온 방향에서 포인트 컬러 채움이
   쓸어 들어오고 나갈 땐 커서가 빠져나간 방향으로 쓸려 나간다. (GSAP 로 구동)
 */
 export const Cta = styled.button`
@@ -531,7 +531,7 @@ export const Cta = styled.button`
   display: inline-flex;
   border-radius: 12px;
   /* 채움이 다 덮였을 때 라운드 모서리에 다크가 비치지 않도록
-     버튼 자체 배경도 라임, 대신 라벨 뒤 다크 판을 따로 깐다. */
+     버튼 자체 배경도 포인트 컬러, 대신 라벨 뒤 다크 판을 따로 깐다. */
   background: var(--flow-lime);
   isolation: isolate;
 

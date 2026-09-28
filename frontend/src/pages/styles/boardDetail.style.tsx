@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { Tone } from "../../types/board";
 
 const toneColor = (t: Tone) =>
-  t === "high" ? "#bfff6b" : t === "mid" ? "#f2f2f4" : "#ff6b5c";
+  t === "high" ? "#a6e3e9" : t === "mid" ? "#f2f2f4" : "#ff6b5c";
 
 export const Wrapper = styled.section`
   width: 100%;
@@ -75,7 +75,7 @@ export const HeroMeta = styled.p`
   color: #d0d0d5;
 
   .domain {
-    color: #bfff6b;
+    color: #a6e3e9;
     font-weight: 600;
   }
 
@@ -232,7 +232,7 @@ export const BodyText = styled.div`
   }
 
   a {
-    color: #bfff6b;
+    color: #a6e3e9;
     text-underline-offset: 2px;
   }
 
@@ -243,7 +243,7 @@ export const BodyText = styled.div`
   blockquote {
     margin: 1em 0;
     padding: 6px 0 6px 16px;
-    border-left: 3px solid rgba(191, 255, 107, 0.5);
+    border-left: 3px solid rgba(166, 227, 233, 0.5);
     color: #cfcfd4;
   }
 
@@ -287,8 +287,8 @@ export const ReactButton = styled.button`
     background 0.15s;
 
   &:hover {
-    border-color: rgba(191, 255, 107, 0.5);
-    background: rgba(191, 255, 107, 0.06);
+    border-color: rgba(166, 227, 233, 0.5);
+    background: rgba(166, 227, 233, 0.06);
   }
 `;
 
@@ -307,7 +307,7 @@ export const CommentsTitle = styled.h2`
 
   span {
     margin-left: 8px;
-    color: #bfff6b;
+    color: #a6e3e9;
     font-size: 13px;
   }
 `;
@@ -385,7 +385,7 @@ export const LoginButton = styled(Link)`
   place-items: center;
   padding: 0 22px;
   border-radius: 12px;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 13px;
   font-weight: 700;
@@ -393,7 +393,7 @@ export const LoginButton = styled(Link)`
   transition: background 0.2s;
 
   &:hover {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 
   @media (max-width: 520px) {
@@ -406,7 +406,7 @@ export const CommentSubmit = styled.button`
   padding: 0 22px;
   border: none;
   border-radius: 12px;
-  background: #bfff6b;
+  background: #a6e3e9;
   color: #0a0a0b;
   font-size: 13px;
   font-weight: 700;
@@ -416,7 +416,7 @@ export const CommentSubmit = styled.button`
     opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #a6e34d;
+    background: #8dc7cb;
   }
 
   &:disabled {
@@ -496,7 +496,7 @@ export const EvalLink = styled(Link)`
   margin-top: 14px;
   font-size: 13px;
   font-weight: 700;
-  color: #bfff6b;
+  color: #a6e3e9;
   text-decoration: none;
 
   &:hover {
@@ -543,7 +543,7 @@ export const BarFill = styled.div<{ $pct: number }>`
   height: 100%;
   width: ${({ $pct }) => Math.max(4, Math.min(100, $pct))}%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #8fd94a, #bfff6b);
+  background: linear-gradient(90deg, #76bdc8, #a6e3e9);
 `;
 
 export const BackLink = styled(Link)`
@@ -561,9 +561,9 @@ export const BackLink = styled(Link)`
     background 0.15s;
 
   &:hover {
-    color: #bfff6b;
-    border-color: rgba(191, 255, 107, 0.55);
-    background: rgba(191, 255, 107, 0.08);
+    color: #a6e3e9;
+    border-color: rgba(166, 227, 233, 0.55);
+    background: rgba(166, 227, 233, 0.08);
   }
 `;
 

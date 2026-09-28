@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 /*
-  히어로의 리빌이 끝나면 화면이 라임(#bfff6b)으로 덮인다.
-  이 섹션은 그 라임 위에 지그재그로 놓인 다크 카드 3장 +
+  히어로의 리빌이 끝나면 화면이 포인트 컬러(#a6e3e9)로 덮인다.
+  이 섹션은 그 포인트 컬러 위에 지그재그로 놓인 다크 카드 3장 +
   스크롤에 따라 손으로 그린 듯 이어지는 다크 경로선으로 구성된다.
 */
 
@@ -30,7 +30,7 @@ export const Heading = styled.h2`
   span {
     padding: 0 0.12em;
     background: #0a0a0b;
-    color: #bfff6b;
+    color: #a6e3e9;
     border-radius: 4px;
   }
 `;
@@ -128,8 +128,8 @@ export const Card = styled.article<{ pos: 1 | 2 | 3 }>`
     border-radius: inherit;
     background: radial-gradient(
       120% 80% at 0% 0%,
-      rgba(191, 255, 107, 0.14) 0%,
-      rgba(191, 255, 107, 0) 58%
+      rgba(166, 227, 233, 0.14) 0%,
+      rgba(166, 227, 233, 0) 58%
     );
     opacity: 0;
     transition: opacity 0.25s ease;
@@ -153,9 +153,9 @@ export const Step = styled.span`
   width: 46px;
   height: 46px;
   border-radius: 13px;
-  border: 1px solid rgba(191, 255, 107, 0.35);
-  background: rgba(191, 255, 107, 0.1);
-  color: #bfff6b;
+  border: 1px solid rgba(166, 227, 233, 0.35);
+  background: rgba(166, 227, 233, 0.1);
+  color: #a6e3e9;
   font-family: "Unbounded", system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
