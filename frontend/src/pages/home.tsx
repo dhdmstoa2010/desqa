@@ -1,28 +1,22 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { SplitText } from "gsap/SplitText";
-import ServiceFlow from "../components/ServiceFlow";
+import { useEffect, useState } from "react";
 import { fetchPostsRequest } from "../api/board";
+import { listPublicReviewsRequest, type PublicReview } from "../api/review";
 import { toneOf, toPost } from "../utils/board";
 import type { Post } from "../types/board";
 import {
-  Wrapper,
-  RevealFill,
-  RevealText,
-  GlowAnchor,
-  Glow,
-  Content,
-  Title,
-  Line,
-  Accent,
-  Desc,
-  SecDesc,
-  FormWrap,
-  HeroCta,
-  HeroCtaGhost,
-  ProcessAnimation,
+  ReviewSection,
+  ReviewSectionInner,
+  ReviewSectionTitle,
+  ReviewSectionDesc,
+  ReviewGrid,
+  ReviewCard,
+  ReviewCardHead,
+  ReviewDomain,
+  ReviewTime,
+  ReviewScore,
+  ReviewSummary,
+  ReviewSkeleton,
+  ReviewEmpty,
   BoardPromo,
   BoardPromoInner,
   BoardPromoTitle,
@@ -42,7 +36,8 @@ import {
   OutroPrimary,
 } from "./styles/home.style";
 
-const PROMO_POST_COUNT = 4;
+const PROMO_POST_COUNT = 8;
+const REVIEW_COUNT = 8;
 
 function ArrowIcon() {
   return (
@@ -59,125 +54,38 @@ function ArrowIcon() {
   );
 }
 
-const SCROLL_EASE = 0.12;
-const FILL_DONE_AT = 0.35;
+function domainOf(u: string) {
+  try {
+    return new URL(u).hostname.replace(/^www\./, "");
+  } catch {
+    return u;
+  }
+}
 
-gsap.registerPlugin(useGSAP, SplitText);
+function relTime(iso: string) {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const diff = Date.now() - then;
+  const m = 60_000;
+  const h = 60 * m;
+  const d = 24 * h;
+  if (diff < h) return `${Math.max(1, Math.round(diff / m))}분 전`;
+  if (diff < d) return `${Math.round(diff / h)}시간 전`;
+  if (diff < 7 * d) return `${Math.round(diff / d)}일 전`;
+  return new Date(iso)
+    .toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replace(/\.$/, "");
+}
 
 function Home() {
-  const container = useRef<HTMLDivElement>(null);
-  const flowRef = useRef<HTMLElement>(null);
-  const line1 = useRef<HTMLSpanElement>(null);
-  const line2 = useRef<HTMLSpanElement>(null);
-  const reveal = useRef({
-    curScroll: 0,
-    tgtScroll: 0,
-    raf: 0,
-  });
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
-  const navigate = useNavigate();
-
-  const handleStart = () => {
-    navigate("/evaluate");
-  };
-
-  const applyReveal = () => {
-    const s = reveal.current;
-    const side = (window.innerWidth / 2) * (1 - s.curScroll);
-    document.documentElement.style.setProperty(
-      "--reveal-clip",
-      `inset(0px ${side}px 0px ${side}px)`,
-    );
-  };
-
-  const paintReveal = () => {
-    const s = reveal.current;
-    s.curScroll += (s.tgtScroll - s.curScroll) * SCROLL_EASE;
-
-    const settled = Math.abs(s.tgtScroll - s.curScroll) < 0.001;
-    if (settled) {
-      s.curScroll = s.tgtScroll;
-    }
-    applyReveal();
-    s.raf = settled ? 0 : requestAnimationFrame(paintReveal);
-  };
-
-  const kickReveal = () => {
-    if (!reveal.current.raf) {
-      reveal.current.raf = requestAnimationFrame(paintReveal);
-    }
-  };
-
-  useEffect(() => {
-    const s = reveal.current;
-    return () => {
-      if (s.raf) cancelAnimationFrame(s.raf);
-      s.raf = 0;
-    };
-  }, []);
-
-  // 스크롤 진행도로 채움 계산
-  useEffect(() => {
-    const s = reveal.current;
-    const onScroll = () => {
-      const flow = flowRef.current;
-      const anchor = flow?.querySelector("header") ?? flow;
-      const anchorTop = anchor
-        ? anchor.getBoundingClientRect().top + window.scrollY
-        : window.innerHeight;
-      const fillEnd = Math.max(1, anchorTop - window.innerHeight * FILL_DONE_AT);
-      s.tgtScroll = Math.min(1, Math.max(0, window.scrollY / fillEnd));
-      s.curScroll += (s.tgtScroll - s.curScroll) * 0.2;
-      applyReveal();
-      kickReveal();
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
-  useGSAP(
-    () => {
-      const splits = [line1.current!, line2.current!].map((el) =>
-        SplitText.create(el, {
-          type: "words,chars",
-          wordsClass: "word",
-          charsClass: "char",
-        }),
-      );
-
-      const line1Chars = splits[0].chars as HTMLElement[];
-      const line2Chars = splits[1].chars as HTMLElement[];
-
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out", duration: 0.95 },
-      });
-
-      tl.from(".hero-glow", { scale: 0.6, opacity: 0, duration: 1.7 })
-
-        // 1줄 슬라이드 인
-        .from(line1Chars, { x: -70, opacity: 0, stagger: 0.05 }, 0.5)
-        // 2줄 슬라이드 인
-        .from(line2Chars, { x: -70, opacity: 0, stagger: 0.05 }, "<0.35")
-
-        // 입력창 등장
-        .from(
-          ".hero-form",
-          { clipPath: "inset(0px 50% 0px 50%)", duration: 1.1 },
-          ">-0.4",
-        );
-
-      return () => {
-        splits.forEach((s) => s.revert());
-      };
-    },
-    { scope: container },
-  );
+  const [reviews, setReviews] = useState<PublicReview[] | null>(null);
+  const [reviewsFailed, setReviewsFailed] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -196,57 +104,64 @@ function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    listPublicReviewsRequest()
+      .then((rows) => {
+        if (cancelled) return;
+        setReviews(rows.slice(0, REVIEW_COUNT));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setReviews([]);
+        setReviewsFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <>
-      <Wrapper ref={container}>
-        <GlowAnchor>
-          <Glow className="hero-glow" />
-        </GlowAnchor>
+      <ReviewSection>
+        <ReviewSectionInner>
+          <ReviewSectionTitle>최근 평가 기록</ReviewSectionTitle>
+          <ReviewSectionDesc>
+            다른 사람들이 평가받은 웹사이트를 확인해보세요.
+          </ReviewSectionDesc>
 
-        <Content>
-          <Title>
-            <Line>
-              <Desc ref={line1}>Drop a link</Desc>
-            </Line>
-            <Line>
-              <SecDesc ref={line2}>
-                See the <Accent>design flaws</Accent>
-              </SecDesc>
-            </Line>
-          </Title>
-          <FormWrap>
-            <HeroCta className="hero-form" to="/evaluate">
-              링크 평가하러 가기 →
-            </HeroCta>
-          </FormWrap>
-        </Content>
+          <ReviewGrid>
+            {reviews === null &&
+              Array.from({ length: REVIEW_COUNT }, (_, i) => (
+                <ReviewSkeleton key={i} aria-hidden="true" />
+              ))}
 
-        <RevealText aria-hidden="true">
-          <Content>
-            <Title>
-              <Line>
-                <Desc>Drop a link</Desc>
-              </Line>
-              <Line>
-                <SecDesc>
-                  See the <Accent className="accent">design flaws</Accent>
-                </SecDesc>
-              </Line>
-            </Title>
-            <FormWrap>
-              <HeroCtaGhost className="hero-form">
-                링크 평가하러 가기 →
-              </HeroCtaGhost>
-            </FormWrap>
-          </Content>
-        </RevealText>
-      </Wrapper>
+            {reviews?.length === 0 && (
+              <ReviewEmpty>
+                {reviewsFailed
+                  ? "평가 기록을 불러오지 못했어요."
+                  : "아직 평가 기록이 없어요."}
+              </ReviewEmpty>
+            )}
 
-      <RevealFill aria-hidden="true" />
+            {reviews?.map((review) => (
+              <ReviewCard key={review.id} to={`/result?id=${review.id}`}>
+                <ReviewCardHead>
+                  <ReviewDomain>{domainOf(review.url)}</ReviewDomain>
+                  <ReviewTime>{relTime(review.createdAt)}</ReviewTime>
+                </ReviewCardHead>
 
-      <ProcessAnimation ref={flowRef}>
-        <ServiceFlow onStart={handleStart} />
-      </ProcessAnimation>
+                <ReviewScore $tone={toneOf(review.score)}>
+                  {review.score}
+                  <small>/100</small>
+                </ReviewScore>
+
+                <ReviewSummary>{review.verdict || review.summary}</ReviewSummary>
+              </ReviewCard>
+            ))}
+          </ReviewGrid>
+        </ReviewSectionInner>
+      </ReviewSection>
 
       <BoardPromo>
         <BoardPromoInner>
