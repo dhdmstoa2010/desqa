@@ -15,7 +15,7 @@ export const Heading = styled.h2`
   max-width: 1160px;
   margin: 0 auto clamp(20px, 5vh, 56px);
   color: #0a0a0b;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(26px, 4.8vw, 60px);
   line-height: 1.08;
@@ -151,7 +151,7 @@ export const Step = styled.span`
   border: 1px solid rgba(166, 227, 233, 0.35);
   background: rgba(166, 227, 233, 0.1);
   color: #a6e3e9;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
 `;
@@ -159,7 +159,7 @@ export const Step = styled.span`
 export const CardTitle = styled.h3`
   margin: 6px 0 0;
   color: #f7f7f8;
-  font-family: "Aggravo", "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(18px, 1.8vw, 24px);
   letter-spacing: -0.02em;
@@ -168,7 +168,7 @@ export const CardTitle = styled.h3`
 export const CardText = styled.p`
   margin: 0;
   color: #9a9aa2;
-  font-family: "Aggravo", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 300;
   font-size: clamp(14px, 1.15vw, 16px);
   line-height: 1.65;

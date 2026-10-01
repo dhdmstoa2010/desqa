@@ -196,7 +196,7 @@ export const ScoreValue = styled.span`
   color: #f7f7f8;
   font-size: 34px;
   font-weight: 800;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   line-height: 1;
 `;
 
@@ -218,7 +218,7 @@ export const Verdict = styled.h1`
   color: #f7f7f8;
   font-size: clamp(20px, 3vw, 26px);
   font-weight: 700;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   letter-spacing: -0.02em;
 `;
 

@@ -55,7 +55,7 @@ export const Left = styled.div`
 
 export const Title = styled.h1`
   margin: 0;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(38px, 5.4vw, 66px);
   line-height: 1.04;
@@ -153,12 +153,10 @@ export const Button = styled.button`
 
 export const BoardLink = styled(Link)`
   display: inline-block;
-  padding: 10px 18px;
   border-radius: 12px;
   border: none;
   margin-top: 20px;
-  background: #a6e3e9;
-  color: #0a0a0b;
+  color: #8dc7cb;
   font-size: 15px;
   font-weight: 800;
   text-decoration: none;
@@ -168,13 +166,8 @@ export const BoardLink = styled(Link)`
     background 0.2s,
     opacity 0.2s;
 
-  &:hover:not(:disabled) {
-    background: #8dc7cb;
-  }
-
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+  &:hover {
+    color: #ffffff;
   }
 `;
 
