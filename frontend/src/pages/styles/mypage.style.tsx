@@ -254,7 +254,7 @@ export const ItemMeta = styled.span`
 
 export const ScoreTag = styled.span<{ $tone: "high" | "mid" | "low" }>`
   flex-shrink: 0;
-  font-family: "Unbounded", system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
   color: ${({ $tone }) =>

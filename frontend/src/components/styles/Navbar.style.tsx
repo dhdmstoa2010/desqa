@@ -30,7 +30,7 @@ export const Bar = styled.nav`
 
 export const Brand = styled(Link)`
   color: #f5f5f5;
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   font-size: 30px;
   font-weight: 800;
   line-height: 1;

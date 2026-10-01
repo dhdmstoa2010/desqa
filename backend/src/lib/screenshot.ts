@@ -218,6 +218,33 @@ export async function captureScreenshot(url: URL): Promise<Screenshot> {
     // 팝업 닫기
     await dismissOverlays(page);
 
+    // 봇 차단 화면(캡차 등) 감지 — 실제 페이지가 아닌 걸 평가하지 않도록 막는다
+    const blocked = await page
+      .evaluate(() => {
+        const text = document.body?.innerText?.slice(0, 2000) ?? "";
+        const patterns = [
+          /unusual traffic/i,
+          /automated queries/i,
+          /자동화된 요청/,
+          /비정상적인 트래픽/,
+          /로봇이 아닙니다/,
+          /사람인지 확인/,
+          /i'm not a robot/i,
+          /recaptcha/i,
+        ];
+        const hasCaptchaEl = !!document.querySelector(
+          'iframe[src*="recaptcha"], iframe[title*="captcha" i], #captcha-form, [id*="captcha" i]',
+        );
+        return hasCaptchaEl || patterns.some((p) => p.test(text));
+      })
+      .catch(() => false);
+
+    if (blocked || /\/sorry\//.test(page.url())) {
+      throw new ScreenshotError(
+        "이 사이트가 자동 접속을 차단(봇 확인/캡차)해서 실제 화면을 캡처하지 못했습니다. 로그인이 필요하거나 Google처럼 봇 차단이 강한 사이트는 평가하기 어려워요.",
+      );
+    }
+
     // 렌더링 안정화 대기
     await page.waitForTimeout(600);
 

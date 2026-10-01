@@ -55,6 +55,15 @@ export type StoredReview = {
   result: DesignReviewResult;
 };
 
+export type PublicReview = {
+  id: number;
+  url: string;
+  score: number;
+  verdict: string;
+  summary: string;
+  createdAt: string;
+};
+
 export async function createReviewRequest(url: string, signal?: AbortSignal) {
   const res = await apiClient.post<StoredReview>(
     "/api/review",
@@ -71,5 +80,10 @@ export async function getReviewRequest(id: number | string) {
 
 export async function listReviewsRequest() {
   const res = await apiClient.get<StoredReview[]>("/api/review");
+  return res.data;
+}
+
+export async function listPublicReviewsRequest() {
+  const res = await apiClient.get<PublicReview[]>("/api/review/public");
   return res.data;
 }

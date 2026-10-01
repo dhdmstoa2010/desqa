@@ -27,8 +27,8 @@ export const Header = styled.header`
 
 export const Title = styled.h1`
   margin: 0;
-  font-family: "Aggravo", system-ui, sans-serif;
-  font-weight: 800;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
   font-size: clamp(34px, 6vw, 76px);
   line-height: 1.04;
   letter-spacing: -0.03em;
