@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Wrapper = styled.div`
   width: 100%;
   flex: 1;
-  background: #0a0a0b;
+  background: var(--bg);
   display: flex;
   flex-direction: column;
   padding: 20px 20px 64px;
@@ -22,10 +22,10 @@ export const Cover = styled.div`
   border-radius: 16px;
   background: linear-gradient(
     100deg,
-    #f5a8e0 0%,
-    #c8a3f0 28%,
-    #7db8f0 55%,
-    #22c1dc 100%
+    #e8c9a0 0%,
+    #d9a679 28%,
+    #c0723f 55%,
+    #8f9a62 100%
   );
 `;
 
@@ -38,7 +38,7 @@ export const Actions = styled.div`
   gap: 4px;
   padding: 4px;
   border-radius: 999px;
-  background: rgba(10, 10, 11, 0.85);
+  background: rgba(249, 245, 234, 0.92);
 `;
 
 export const ActionButton = styled.button`
@@ -49,7 +49,7 @@ export const ActionButton = styled.button`
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: #f5f5f5;
+  color: var(--ink);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -57,7 +57,7 @@ export const ActionButton = styled.button`
   transition: background 0.15s ease;
 
   &:hover {
-    background: #1c1c1f;
+    background: var(--card);
   }
 `;
 
@@ -75,8 +75,8 @@ export const Avatar = styled.div`
   width: 148px;
   height: 148px;
   border-radius: 50%;
-  border: 4px solid #0a0a0b;
-  background: linear-gradient(160deg, #8b6fd4 0%, #7a57c8 100%);
+  border: 4px solid var(--bg);
+  background: linear-gradient(160deg, #c0723f 0%, #a55d2f 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,14 +95,14 @@ export const Identity = styled.div`
 
 export const Name = styled.h1`
   margin: 0;
-  color: #f5f5f5;
+  color: var(--ink);
   font-size: 30px;
   font-weight: 700;
   line-height: 1.1;
 `;
 
 export const Badge = styled.span`
-  color: #9a9a9f;
+  color: var(--ink-2);
   font-size: 15px;
   font-weight: 600;
 `;
@@ -121,7 +121,7 @@ export const Stat = styled.div`
 `;
 
 export const StatLabel = styled.span`
-  color: #f5f5f5;
+  color: var(--ink);
   font-size: 15px;
   font-weight: 600;
 `;
@@ -130,7 +130,7 @@ export const StatValue = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #9a9a9f;
+  color: var(--ink-2);
   font-size: 14px;
 `;
 
@@ -138,7 +138,7 @@ export const Dot = styled.span`
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #1fd65f;
+  background: var(--good);
 `;
 
 export const Tabs = styled.div`
@@ -146,30 +146,30 @@ export const Tabs = styled.div`
   gap: 48px;
   margin-top: 40px;
   padding: 0 8px;
-  border-bottom: 1px solid #1c1c1f;
+  border-bottom: 1px solid var(--card);
 `;
 
 export const Tab = styled.button<{ active?: boolean }>`
   padding: 14px 4px;
   border: none;
   background: transparent;
-  color: ${({ active }) => (active ? "#f5f5f5" : "#6f6f75")};
+  color: ${({ active }) => (active ? "var(--ink)" : "var(--ink-3)")};
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   border-bottom: 2px solid
-    ${({ active }) => (active ? "#1fd65f" : "transparent")};
+    ${({ active }) => (active ? "var(--good)" : "transparent")};
   margin-bottom: -1px;
 `;
 
 export const StatusText = styled.p`
-  color: #9a9a9f;
+  color: var(--ink-2);
   font-size: 14px;
   margin: 24px 0 0;
 `;
 
 export const ErrorText = styled.p`
-  color: #ff6b6b;
+  color: var(--low);
   font-size: 14px;
   margin: 24px 0 0;
 `;
@@ -193,13 +193,13 @@ export const SectionHead = styled.div`
 
 export const SectionTitle = styled.h2`
   margin: 0;
-  color: #f5f5f5;
+  color: var(--ink);
   font-size: 17px;
   font-weight: 700;
 `;
 
 export const SectionCount = styled.span`
-  color: #6f6f75;
+  color: var(--ink-3);
   font-size: 13px;
   font-weight: 600;
 `;
@@ -207,7 +207,7 @@ export const SectionCount = styled.span`
 export const ItemList = styled.div`
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #1c1c1f;
+  border-top: 1px solid var(--card);
 `;
 
 export const ItemRow = styled(Link)`
@@ -215,13 +215,13 @@ export const ItemRow = styled(Link)`
   align-items: center;
   gap: 16px;
   padding: 14px 4px;
-  border-bottom: 1px solid #1c1c1f;
+  border-bottom: 1px solid var(--card);
   text-decoration: none;
   color: inherit;
   transition: background 0.15s ease;
 
   &:hover {
-    background: #131316;
+    background: var(--card-deep);
   }
 `;
 
@@ -234,7 +234,7 @@ export const ItemMain = styled.div`
 `;
 
 export const ItemTitle = styled.span`
-  color: #f2f2f4;
+  color: var(--ink);
   font-size: 14px;
   font-weight: 600;
   overflow: hidden;
@@ -243,7 +243,7 @@ export const ItemTitle = styled.span`
 `;
 
 export const ItemMeta = styled.span`
-  color: #9a9a9f;
+  color: var(--ink-2);
   font-size: 12px;
 
   .dot {
@@ -258,13 +258,13 @@ export const ScoreTag = styled.span<{ $tone: "high" | "mid" | "low" }>`
   font-weight: 800;
   font-size: 18px;
   color: ${({ $tone }) =>
-    $tone === "high" ? "#1fd65f" : $tone === "mid" ? "#f2f2f4" : "#ff6b6b"};
+    $tone === "high" ? "var(--good)" : $tone === "mid" ? "var(--ink)" : "var(--low)"};
 `;
 
 export const EmptyRow = styled.p`
   margin: 0;
   padding: 28px 4px;
-  color: #6f6f75;
+  color: var(--ink-3);
   font-size: 13px;
   text-align: center;
 `;
