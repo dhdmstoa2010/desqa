@@ -1,515 +1,423 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import type { Tone } from "../../types/board";
+import { hatch, TONE, type Tone } from "../../components/styles/shared.style";
 
-const toneColor = (t: Tone) =>
-  t === "high" ? "#a6e3e9" : t === "mid" ? "#f2f2f4" : "#ff6b5c";
-
-export const Wrapper = styled.section`
+export const Wrapper = styled.div`
   width: 100%;
-  min-height: calc(100svh - 70px);
-  background: #0a0a0b;
-  color: #f7f7f8;
-  box-sizing: border-box;
-`;
-
-/* 상단 */
-export const Hero = styled.header`
-  position: relative;
-  padding: clamp(40px, 7vw, 88px) clamp(16px, 5vw, 72px) clamp(32px, 4vw, 52px);
-  background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.028) 0,
-      rgba(255, 255, 255, 0.028) 1px,
-      transparent 1px,
-      transparent 11px
-    ),
-    #0d0d0e;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-`;
-
-export const HeroInner = styled.div`
-  max-width: 1080px;
+  max-width: 1040px;
   margin: 0 auto;
+  padding: clamp(20px, 3vh, 32px) clamp(16px, 4vw, 48px) 96px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
-export const DropZone = styled.div`
-  max-width: 720px;
-  margin: 0 auto clamp(28px, 4vw, 44px);
+export const TopLink = styled(Link)`
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+`;
+
+export const Banner = styled.div`
+  width: 100%;
   aspect-ratio: 16 / 7;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #ededf0;
+  border-radius: 20px;
+  overflow: hidden;
+  ${hatch}
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6a6a72;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-`;
-
-export const HeroShot = styled.div`
-  max-width: 720px;
-  margin: 0 auto clamp(28px, 4vw, 44px);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #0a0a0b;
-  line-height: 0;
+  font-size: 12px;
+  color: var(--ink-3);
 
   img {
     width: 100%;
-    max-height: 460px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
     display: block;
   }
 `;
 
-export const HeroMeta = styled.p`
-  margin: 0 0 14px;
-  font-family: ui-monospace, monospace;
+export const MetaRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 12px;
-  letter-spacing: 0.04em;
-  color: #d0d0d5;
-
-  .domain {
-    color: #a6e3e9;
-    font-weight: 600;
-  }
-
-  .sep {
-    margin: 0 8px;
-    opacity: 0.5;
-  }
+  color: var(--ink-2);
 `;
 
-export const HeroScore = styled.span<{ $tone: Tone }>`
-  color: ${({ $tone }) => toneColor($tone)};
-  font-weight: 700;
-`;
-
-export const HeroTitle = styled.h1`
-  margin: 0;
-  max-width: 15ch;
-  font-family: system-ui, sans-serif;
+export const ScoreBadge = styled.span<{ $tone: Tone }>`
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
   font-weight: 800;
-  font-size: clamp(30px, 5.4vw, 60px);
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  color: #f7f7f8;
+  color: ${({ $tone }) => TONE[$tone].fg};
+  background: ${({ $tone }) => TONE[$tone].bg};
 `;
 
-/* 본문 */
-export const Body = styled.div`
-  padding: clamp(36px, 5vw, 64px) clamp(16px, 5vw, 72px) 120px;
+export const Title = styled.h1`
+  font-family: var(--display);
+  font-size: clamp(24px, 3.6vw, 34px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  word-break: keep-all;
 `;
 
-export const BodyInner = styled.div`
-  max-width: 1080px;
-  margin: 0 auto;
+export const Layout = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: clamp(28px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: clamp(20px, 3vw, 36px);
   align-items: start;
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     grid-template-columns: minmax(0, 1fr);
   }
 `;
 
 export const Article = styled.article`
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const AuthorRow = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 10px;
 `;
 
-export const Avatar = styled.span<{ $bg: string }>`
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
+export const Avatar = styled.div<{ $bg?: string; $muted?: boolean }>`
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  background: ${({ $bg }) => $bg};
-  color: #0a0a0b;
-  font-weight: 800;
-  font-size: 15px;
-  text-transform: uppercase;
-`;
-
-export const AuthorName = styled.span`
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
-  color: #ededf0;
-`;
-
-export const AuthorMeta = styled.span`
-  display: block;
-  margin-top: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
-  color: #d0d0d5;
+  font-weight: 800;
+  color: var(--ink);
+  background: ${({ $bg, $muted }) =>
+    $muted ? "var(--card-deep)" : ($bg ?? "var(--good-bg)")};
+`;
+
+export const AuthorName = styled.div`
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+
+  span {
+    margin-left: 4px;
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+`;
+
+export const AuthorMeta = styled.div`
+  font-size: 11px;
+  color: var(--ink-3);
 `;
 
 export const Actions = styled.div`
+  position: relative;
   margin-left: auto;
-  display: flex;
-  gap: 8px;
 `;
 
-export const ActionButton = styled.button`
+export const DeleteLink = styled.button`
+  border: none;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #dedee1;
+  padding: 0;
   font-size: 12px;
-  font-weight: 600;
-  padding: 7px 14px;
-  border-radius: 999px;
+  font-weight: 700;
+  color: var(--accent-d);
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
 
-  &:hover {
-    color: #f7f7f8;
-    border-color: rgba(255, 255, 255, 0.36);
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+export const ConfirmPop = styled.div`
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 2;
+  width: 220px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 14px 30px -12px rgba(60, 40, 15, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  strong {
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+
+  div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
   }
 `;
 
 export const Lead = styled.p`
-  margin: 26px 0 0;
-  font-size: clamp(16px, 2vw, 19px);
-  font-weight: 700;
-  line-height: 1.6;
-  color: #f2f2f4;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--ink);
 `;
 
 export const BodyText = styled.div`
-  margin: 18px 0 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.85;
-  color: #d6d6da;
+  color: var(--ink);
 
   > *:first-of-type {
     margin-top: 0;
   }
-
   p {
     margin: 0 0 0.9em;
   }
-
   h1,
   h2,
   h3,
   h4 {
     margin: 1.4em 0 0.5em;
     line-height: 1.3;
-    color: #ffffff;
+    color: var(--ink);
     font-weight: 800;
   }
   h1 {
     font-size: 1.5em;
   }
   h2 {
-    font-size: 1.3em;
+    font-size: 1.25em;
   }
   h3 {
-    font-size: 1.13em;
+    font-size: 1.1em;
   }
-  h4 {
-    font-size: 1em;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #cfcfd4;
-  }
-
   a {
-    color: #a6e3e9;
+    color: var(--accent-d);
     text-underline-offset: 2px;
   }
-
   s {
-    color: #9a9aa2;
+    color: var(--ink-3);
   }
-
   blockquote {
     margin: 1em 0;
-    padding: 6px 0 6px 16px;
-    border-left: 3px solid rgba(166, 227, 233, 0.5);
-    color: #cfcfd4;
+    padding: 4px 0 4px 14px;
+    border-left: 3px solid var(--accent);
+    color: var(--ink-2);
   }
-
   pre {
     margin: 1em 0;
     padding: 14px 16px;
-    border-radius: 10px;
-    background: #111113;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    font-family: ui-monospace, Consolas, monospace;
-    font-size: 13.5px;
+    border-radius: 12px;
+    background: #2e261c;
+    color: #f3ebd8;
+    font-family: var(--mono);
+    font-size: 12.5px;
     white-space: pre-wrap;
     word-break: break-word;
   }
-
   img {
     max-width: 100%;
     border-radius: 12px;
-    margin: 12px 0;
+    margin: 8px 0;
     display: block;
   }
 `;
 
 export const Reactions = styled.div`
-  margin-top: 32px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 `;
 
 export const ReactButton = styled.button`
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #cfcfd5;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 9px 18px;
+  padding: 7px 14px;
   border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
+
+  b {
+    margin-left: 4px;
+  }
 
   &:hover {
-    border-color: rgba(166, 227, 233, 0.5);
-    background: rgba(166, 227, 233, 0.06);
+    border-color: var(--accent);
   }
 `;
 
-/* 댓글 */
 export const Comments = styled.section`
-  margin-top: 44px;
-  padding-top: 28px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 export const CommentsTitle = styled.h2`
-  margin: 0 0 20px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #ededf0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
 
   span {
-    margin-left: 8px;
-    color: #a6e3e9;
-    font-size: 13px;
+    margin-left: 4px;
+    font-weight: 600;
+    color: var(--ink-3);
   }
 `;
 
 export const CommentItem = styled.div`
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  gap: 12px;
-  padding: 16px 0;
-
-  & + & {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-  }
-`;
-
-export const CommentAvatar = styled.span<{ $bg: string; $fg: string }>`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: ${({ $bg }) => $bg};
-  color: ${({ $fg }) => $fg};
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
+  display: flex;
+  gap: 10px;
 `;
 
 export const CommentHead = styled.div`
-  font-size: 12px;
-  color: #d0d0d5;
-  margin-bottom: 5px;
+  font-size: 11px;
+  color: var(--ink-3);
 
   b {
-    color: #ffffff;
-    font-weight: 700;
-    margin-right: 8px;
+    margin-right: 6px;
+    font-size: 12px;
+    color: var(--ink);
   }
 `;
 
 export const CommentText = styled.p`
-  margin: 0;
-  font-size: 13.5px;
-  line-height: 1.7;
-  color: #d6d6da;
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
 `;
 
 export const CommentForm = styled.form`
-  margin-top: 18px;
   display: flex;
-  gap: 10px;
-
-  @media (max-width: 520px) {
-    flex-direction: column;
-  }
+  align-items: center;
+  gap: 8px;
+  padding: 5px 5px 5px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
 `;
 
 export const CommentInput = styled.input`
   flex: 1;
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #141416;
-  color: #f5f5f5;
-  font-size: 13px;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-size: 12.5px;
+  color: var(--ink);
 
+  &:focus {
+    outline: none;
+  }
   &::placeholder {
-    color: #9a9aa2;
-  }
-`;
-
-export const LoginButton = styled(Link)`
-  flex-shrink: 0;
-  display: inline-grid;
-  place-items: center;
-  padding: 0 22px;
-  border-radius: 12px;
-  background: #a6e3e9;
-  color: #0a0a0b;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #8dc7cb;
-  }
-
-  @media (max-width: 520px) {
-    padding: 12px 22px;
+    color: var(--ink-3);
   }
 `;
 
 export const CommentSubmit = styled.button`
-  flex-shrink: 0;
-  padding: 0 22px;
   border: none;
-  border-radius: 12px;
-  background: #a6e3e9;
-  color: #0a0a0b;
-  font-size: 13px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
+  padding: 8px 18px;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    opacity 0.2s;
-
-  &:hover:not(:disabled) {
-    background: #8dc7cb;
-  }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.45;
     cursor: not-allowed;
   }
+`;
 
-  @media (max-width: 520px) {
-    padding: 12px 22px;
-  }
+export const LoginButton = styled(Link)`
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  text-decoration: none;
 `;
 
 export const ErrorText = styled.p`
-  margin: 8px 0 0;
-  color: #ff6b6b;
-  font-size: 12.5px;
+  font-size: 12px;
+  color: var(--low);
 `;
 
-/* 사이드 */
 export const Aside = styled.aside`
-  position: sticky;
-  top: 90px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  position: sticky;
+  top: 80px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     position: static;
   }
 `;
 
 export const ScoreCard = styled.div`
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
-  background: #141416;
-  padding: 22px 22px 24px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 `;
 
 export const Overall = styled.span`
-  display: block;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.22em;
-  color: #c9c9cf;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
 `;
 
 export const ScoreBig = styled.div<{ $tone: Tone }>`
-  margin-top: 10px;
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-family: system-ui, sans-serif;
+  color: ${({ $tone }) => TONE[$tone].fg};
 
   strong {
-    font-size: 46px;
-    font-weight: 800;
+    font-family: var(--display);
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
     letter-spacing: -0.03em;
-    color: ${({ $tone }) => toneColor($tone)};
   }
 
   span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #c9c9cf;
-  }
-`;
-
-export const ScoreEmpty = styled.p`
-  margin: 12px 0 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #d0d0d5;
-`;
-
-export const EvalLink = styled(Link)`
-  display: inline-block;
-  margin-top: 14px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #a6e3e9;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    font-size: 11.5px;
+    color: var(--ink-3);
   }
 `;
 
 export const Metrics = styled.div`
-  margin-top: 22px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 `;
 
 export const Metric = styled.div``;
@@ -517,66 +425,120 @@ export const Metric = styled.div``;
 export const MetricHead = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 7px;
-  font-size: 12.5px;
-
-  span {
-    color: #dedee1;
-  }
+  margin-bottom: 5px;
+  font-size: 11.5px;
+  color: var(--ink-2);
 
   b {
-    color: #ffffff;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+    color: var(--ink);
   }
 `;
 
 export const Bar = styled.div`
   height: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--line);
   overflow: hidden;
 `;
 
 export const BarFill = styled.div<{ $pct: number }>`
   height: 100%;
-  width: ${({ $pct }) => Math.max(4, Math.min(100, $pct))}%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #76bdc8, #a6e3e9);
+  width: ${({ $pct }) => $pct}%;
+  background: var(--good);
 `;
 
-export const BackLink = styled(Link)`
-  display: block;
-  padding: 17px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #ffffff;
-  font-size: 15px;
+export const PendingTitle = styled.div`
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ink-3);
+`;
+
+export const ScoreEmpty = styled.p`
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-2);
+`;
+
+export const EvalLink = styled(Link)`
+  align-self: flex-start;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12.5px;
   font-weight: 700;
   text-decoration: none;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
 
   &:hover {
-    color: #a6e3e9;
-    border-color: rgba(166, 227, 233, 0.55);
-    background: rgba(166, 227, 233, 0.08);
+    background: var(--accent-d);
   }
 `;
 
-/* not found */
+export const BackLink = styled(Link)`
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+`;
+
 export const NotFound = styled.div`
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 120px 24px;
+  margin-top: 40px;
+  min-height: 260px;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   text-align: center;
+  border: 1px dashed var(--ink-3);
+  border-radius: 20px;
+
+  strong {
+    font-size: 14px;
+    color: var(--ink);
+  }
 
   p {
-    margin: 0 0 20px;
-    color: #dedee1;
-    font-size: 15px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  a {
+    margin-top: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+`;
+
+export const LoadingBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .box {
+    height: 220px;
+    border-radius: 20px;
+    background: var(--card-deep);
+  }
+  .line {
+    height: 12px;
+    border-radius: 6px;
+    background: var(--card-deep);
+  }
+  .line.short {
+    width: 40%;
   }
 `;

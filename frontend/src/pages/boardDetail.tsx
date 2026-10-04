@@ -13,22 +13,20 @@ import {
 import { bodyToHtml } from "../utils/html";
 import {
   Wrapper,
-  Hero,
-  HeroInner,
-  DropZone,
-  HeroShot,
-  HeroMeta,
-  HeroScore,
-  HeroTitle,
-  Body,
-  BodyInner,
+  TopLink,
+  Banner,
+  MetaRow,
+  ScoreBadge,
+  Title,
+  Layout,
   Article,
   AuthorRow,
   Avatar,
   AuthorName,
   AuthorMeta,
   Actions,
-  ActionButton,
+  DeleteLink,
+  ConfirmPop,
   Lead,
   BodyText,
   Reactions,
@@ -36,7 +34,6 @@ import {
   Comments,
   CommentsTitle,
   CommentItem,
-  CommentAvatar,
   CommentHead,
   CommentText,
   CommentForm,
@@ -52,12 +49,15 @@ import {
   MetricHead,
   Bar,
   BarFill,
+  PendingTitle,
   ScoreEmpty,
   EvalLink,
   BackLink,
   ErrorText,
   NotFound,
+  LoadingBlock,
 } from "./styles/boardDetail.style";
+import { GhostButton, PrimaryButton, TONE } from "../components/styles/shared.style";
 
 function CommentRow({
   comment,
@@ -71,12 +71,9 @@ function CommentRow({
   const isAuthor = comment.author === postAuthor;
   return (
     <CommentItem>
-      <CommentAvatar
-        $bg={isAuthor ? authorColor : "#33333a"}
-        $fg={isAuthor ? "#0a0a0b" : "#e2e2e5"}
-      >
+      <Avatar $bg={authorColor} $muted={!isAuthor}>
         {comment.author[0]}
-      </CommentAvatar>
+      </Avatar>
       <div>
         <CommentHead>
           <b>{comment.author}</b>
@@ -106,6 +103,7 @@ function BoardDetail() {
   const [commentError, setCommentError] = useState<string | null>(null);
   const [posting, setPosting] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     if (!Number.isInteger(numericId)) {
@@ -169,22 +167,24 @@ function BoardDetail() {
 
   const handleDelete = async () => {
     if (!post) return;
-    if (!window.confirm("이 게시물을 삭제할까요?")) return;
     setDeleting(true);
     try {
       await deletePostRequest(post.id);
       navigate("/board");
     } catch {
       setDeleting(false);
+      setConfirming(false);
     }
   };
 
   if (loading) {
     return (
       <Wrapper>
-        <NotFound>
-          <p>불러오는 중...</p>
-        </NotFound>
+        <LoadingBlock aria-hidden="true">
+          <div className="box" />
+          <div className="line" />
+          <div className="line short" />
+        </LoadingBlock>
       </Wrapper>
     );
   }
@@ -193,8 +193,9 @@ function BoardDetail() {
     return (
       <Wrapper>
         <NotFound>
-          <p>존재하지 않는 게시물이에요.</p>
-          <BackLink to="/board">목록으로 돌아가기 →</BackLink>
+          <strong>존재하지 않는 게시물입니다</strong>
+          <p>삭제되었거나 주소가 잘못되었습니다.</p>
+          <BackLink to="/board">목록으로 돌아가기</BackLink>
         </NotFound>
       </Wrapper>
     );
@@ -211,151 +212,163 @@ function BoardDetail() {
 
   return (
     <Wrapper>
-      <Hero>
-        <HeroInner>
-          {post.image ? (
-            <HeroShot>
-              <img src={post.image} alt={`${post.title} 화면 캡처`} />
-            </HeroShot>
-          ) : (
-            <DropZone>사진 없음</DropZone>
-          )}
+      <TopLink to="/board">← 게시판 · {post.category}</TopLink>
 
-          {(hasDomain || hasScore) && (
-            <HeroMeta>
-              {hasDomain && <span className="domain">{post.domain}</span>}
-              {hasScore && (
-                <>
-                  {hasDomain && <span className="sep">·</span>}
-                  SCORE <HeroScore $tone={tone}>{post.score}</HeroScore>
-                </>
-              )}
-            </HeroMeta>
-          )}
-          <HeroTitle>{post.title}</HeroTitle>
-        </HeroInner>
-      </Hero>
+      <Banner>
+        {post.image ? (
+          <img src={post.image} alt={`${post.title} 화면 캡처`} />
+        ) : (
+          "본문 첫 이미지"
+        )}
+      </Banner>
 
-      <Body>
-        <BodyInner>
-          <Article>
-            <AuthorRow>
-              <Avatar $bg={post.authorColor}>{post.author[0]}</Avatar>
-              <div>
-                <AuthorName>{post.author}</AuthorName>
-                <AuthorMeta>
-                  {post.date} · 조회 {post.views}
-                </AuthorMeta>
-              </div>
-              {post.mine && (
-                <Actions>
-                  <ActionButton
-                    type="button"
-                    disabled={deleting}
-                    onClick={handleDelete}
-                  >
-                    삭제
-                  </ActionButton>
-                </Actions>
-              )}
-            </AuthorRow>
+      <div>
+        {(hasDomain || hasScore) && (
+          <MetaRow>
+            {hasDomain && <span>{post.domain}</span>}
+            {hasScore && <ScoreBadge $tone={tone}>SCORE {post.score}</ScoreBadge>}
+          </MetaRow>
+        )}
+        <Title style={{ marginTop: 10 }}>{post.title}</Title>
+      </div>
 
-            {post.lead && <Lead>{post.lead}</Lead>}
-            <BodyText
-              dangerouslySetInnerHTML={{ __html: bodyToHtml(post.body) }}
-            />
+      <Layout>
+        <Article>
+          <AuthorRow>
+            <Avatar $bg={post.authorColor}>{post.author[0]}</Avatar>
+            <div>
+              <AuthorName>
+                {post.author}
+                {post.mine && <span>· 내 글</span>}
+              </AuthorName>
+              <AuthorMeta>
+                {post.date} · 조회 {post.views}
+              </AuthorMeta>
+            </div>
+            {post.mine && (
+              <Actions>
+                <DeleteLink
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => setConfirming((v) => !v)}
+                >
+                  삭제
+                </DeleteLink>
+                {confirming && (
+                  <ConfirmPop role="alertdialog">
+                    <strong>이 게시물을 삭제할까요?</strong>
+                    <div>
+                      <GhostButton type="button" onClick={() => setConfirming(false)}>
+                        취소
+                      </GhostButton>
+                      <PrimaryButton
+                        type="button"
+                        disabled={deleting}
+                        onClick={handleDelete}
+                      >
+                        삭제
+                      </PrimaryButton>
+                    </div>
+                  </ConfirmPop>
+                )}
+              </Actions>
+            )}
+          </AuthorRow>
 
-            <Reactions>
-              <ReactButton type="button" onClick={handleHelpful}>
-                도움됐어요 · {post.helpful}
-              </ReactButton>
-              <ReactButton type="button">공유</ReactButton>
-            </Reactions>
+          {post.lead && <Lead>{post.lead}</Lead>}
+          <BodyText dangerouslySetInnerHTML={{ __html: bodyToHtml(post.body) }} />
 
-            <Comments>
-              <CommentsTitle>
-                댓글 <span>{commentCount}</span>
-              </CommentsTitle>
+          <Reactions>
+            <ReactButton type="button" onClick={handleHelpful}>
+              도움됐어요 <b>{post.helpful}</b>
+            </ReactButton>
+            <ReactButton type="button">공유</ReactButton>
+          </Reactions>
 
-              {post.commentList.map((c) => (
-                <CommentRow
-                  key={c.id}
-                  comment={c}
-                  postAuthor={post.author}
-                  authorColor={post.authorColor}
-                />
-              ))}
+          <Comments>
+            <CommentsTitle>
+              댓글 <span>{commentCount}</span>
+            </CommentsTitle>
 
-              {isLoggedIn ? (
-                <>
-                  <CommentForm onSubmit={handleCommentSubmit}>
-                    <CommentInput
-                      placeholder="댓글을 남겨 주세요"
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                      disabled={posting}
-                    />
-                    <CommentSubmit
-                      type="submit"
-                      disabled={posting || commentText.trim() === ""}
-                    >
-                      등록
-                    </CommentSubmit>
-                  </CommentForm>
-                  {commentError && <ErrorText>{commentError}</ErrorText>}
-                </>
-              ) : (
-                <CommentForm onSubmit={(e) => e.preventDefault()}>
+            {post.commentList.map((c) => (
+              <CommentRow
+                key={c.id}
+                comment={c}
+                postAuthor={post.author}
+                authorColor={post.authorColor}
+              />
+            ))}
+
+            {isLoggedIn ? (
+              <>
+                <CommentForm onSubmit={handleCommentSubmit}>
                   <CommentInput
-                    placeholder="댓글을 남기려면 로그인이 필요합니다"
-                    disabled
+                    placeholder="댓글을 남겨 주세요"
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    disabled={posting}
                   />
-                  <LoginButton to="/login">로그인</LoginButton>
+                  <CommentSubmit
+                    type="submit"
+                    disabled={posting || commentText.trim() === ""}
+                  >
+                    등록
+                  </CommentSubmit>
                 </CommentForm>
-              )}
-            </Comments>
-          </Article>
+                {commentError && <ErrorText>{commentError}</ErrorText>}
+              </>
+            ) : (
+              <CommentForm onSubmit={(e) => e.preventDefault()}>
+                <CommentInput
+                  placeholder="댓글을 남기려면 로그인이 필요합니다"
+                  disabled
+                />
+                <LoginButton to="/login">로그인</LoginButton>
+              </CommentForm>
+            )}
+          </Comments>
+        </Article>
 
-          <Aside>
-            <ScoreCard>
-              <Overall>OVERALL</Overall>
-              {hasScore ? (
-                <>
-                  <ScoreBig $tone={tone}>
-                    <strong>{post.score}</strong>
-                    <span>/100</span>
-                  </ScoreBig>
-                  {post.metrics.length > 0 && (
-                    <Metrics>
-                      {post.metrics.map((m) => (
-                        <Metric key={m.label}>
-                          <MetricHead>
-                            <span>{m.label}</span>
-                            <b>{m.value}</b>
-                          </MetricHead>
-                          <Bar>
-                            <BarFill $pct={m.fill} />
-                          </Bar>
-                        </Metric>
-                      ))}
-                    </Metrics>
-                  )}
-                </>
-              ) : (
-                <>
-                  <ScoreEmpty>
-                    아직 이 화면을 평가하지 않았어요. 평가를 받으면 점수와 항목별
-                    분석이 여기에 표시됩니다.
-                  </ScoreEmpty>
-                  <EvalLink to={evalHref}>지금 평가 받기 →</EvalLink>
-                </>
-              )}
-            </ScoreCard>
+        <Aside>
+          <ScoreCard>
+            <Overall>OVERALL</Overall>
+            {hasScore ? (
+              <>
+                <ScoreBig $tone={tone}>
+                  <strong>{post.score}</strong>
+                  <span>/100 · {TONE[tone].label}</span>
+                </ScoreBig>
+                {post.metrics.length > 0 && (
+                  <Metrics>
+                    {post.metrics.map((m) => (
+                      <Metric key={m.label}>
+                        <MetricHead>
+                          <span>{m.label}</span>
+                          <b>{m.value}</b>
+                        </MetricHead>
+                        <Bar>
+                          <BarFill $pct={m.fill} />
+                        </Bar>
+                      </Metric>
+                    ))}
+                  </Metrics>
+                )}
+              </>
+            ) : (
+              <>
+                <PendingTitle>평가 전</PendingTitle>
+                <ScoreEmpty>
+                  아직 이 화면을 평가하지 않았습니다. 평가를 받으면 점수와 항목별
+                  분석이 여기에 표시됩니다.
+                </ScoreEmpty>
+                <EvalLink to={evalHref}>지금 평가 받기 →</EvalLink>
+              </>
+            )}
+          </ScoreCard>
 
-            <BackLink to="/board">목록으로 돌아가기 →</BackLink>
-          </Aside>
-        </BodyInner>
-      </Body>
+          <BackLink to="/board">← 목록으로 돌아가기</BackLink>
+        </Aside>
+      </Layout>
     </Wrapper>
   );
 }
