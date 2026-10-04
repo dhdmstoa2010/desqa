@@ -1,39 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import {
-  Wrapper,
-  Inner,
-  Header,
-  Title,
-  TitleAccent,
-  HeaderSide,
-  ShareButton,
-  Toolbar,
-  Filters,
-  FilterChip,
-  Sort,
-  List,
-  Empty,
-  ErrorText,
-  RowLink,
-  Row,
-  Thumb,
-  Main,
-  Domain,
-  RowTitle,
-  Badge,
-  Meta,
-  Detail,
-  DetailClip,
-  DetailInner,
-  DetailText,
-  DeltaRow,
-  DeltaChip,
-  Score,
-} from "./styles/board.style";
 import { CATEGORIES, type Category, type Post } from "../types/board";
 import { fetchPostsRequest } from "../api/board";
-import { toneOf, toPost } from "../utils/board";
+import { toPost } from "../utils/board";
+import { PostCard, PostCardSkeleton } from "../components/PostCard";
+import { Grid } from "../components/styles/PostCard.style";
+import { EmptyBox, ErrorBox, PrimaryLink } from "../components/styles/shared.style";
+import { Page, Header, Title, Desc, Filters, FilterChip } from "./styles/board.style";
 
 function Board() {
   const [active, setActive] = useState<Category>("전체");
@@ -52,10 +25,11 @@ function Board() {
       })
       .catch((err) => {
         if (cancelled) return;
-        const message = axios.isAxiosError(err)
-          ? (err.response?.data?.message ?? "게시물을 불러오지 못했습니다")
-          : "게시물을 불러오지 못했습니다";
-        setError(message);
+        setError(
+          axios.isAxiosError(err)
+            ? (err.response?.data?.message ?? "잠시 후 다시 시도하세요.")
+            : "잠시 후 다시 시도하세요.",
+        );
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -71,107 +45,49 @@ function Board() {
   );
 
   return (
-    <Wrapper>
-      <Inner>
-        <Header>
-          <Title>
-            Design
-            <TitleAccent>Board</TitleAccent>
-          </Title>
-          <HeaderSide>
-            <ShareButton to="/board/new">New Post →</ShareButton>
-          </HeaderSide>
-        </Header>
+    <Page>
+      <Header>
+        <div>
+          <Title>디자인 게시판</Title>
+          <Desc>평가 결과를 공유하고 서로의 개선 과정을 봅니다</Desc>
+        </div>
+        <PrimaryLink to="/board/new">게시물 올리러 가기 →</PrimaryLink>
+      </Header>
 
-        <Toolbar>
-          <Filters>
-            {CATEGORIES.map((c) => (
-              <FilterChip
-                key={c}
-                $active={c === active}
-                onClick={() => setActive(c)}
-              >
-                {c}
-              </FilterChip>
-            ))}
-          </Filters>
-          <Sort type="button">최신순 ↓</Sort>
-        </Toolbar>
+      <Filters>
+        {CATEGORIES.map((c) => (
+          <FilterChip key={c} $active={c === active} onClick={() => setActive(c)}>
+            {c}
+          </FilterChip>
+        ))}
+      </Filters>
 
-        <List>
-          {loading && <Empty>불러오는 중...</Empty>}
-          {!loading && error && <ErrorText>{error}</ErrorText>}
+      <Grid>
+        {loading && Array.from({ length: 8 }, (_, i) => <PostCardSkeleton key={i} />)}
 
-          {!loading &&
-            !error &&
-            visible.map((post) => (
-              <RowLink key={post.id} to={`/board/${post.id}`}>
-                <Row className="board-row">
-                  <Thumb className="thumb">
-                    {post.image ? (
-                      <img src={post.image} alt="" loading="lazy" />
-                    ) : (
-                      <span>사진 없음</span>
-                    )}
-                  </Thumb>
+        {!loading && error && (
+          <ErrorBox>
+            <strong>게시물을 불러오지 못했습니다</strong>
+            <p>{error}</p>
+          </ErrorBox>
+        )}
 
-                  <Main>
-                    {post.domain && post.domain !== "—" && (
-                      <Domain>{post.domain}</Domain>
-                    )}
-                    <RowTitle>
-                      {post.badge && <Badge>{post.badge}</Badge>}
-                      {post.title}
-                    </RowTitle>
+        {!loading && !error && visible.length === 0 && (
+          <EmptyBox>
+            <strong>아직 올라온 게시물이 없습니다</strong>
+            <p>
+              {active === "전체"
+                ? "평가 결과를 첫 글로 공유해 보세요."
+                : "이 카테고리에는 아직 글이 없어요."}
+            </p>
+          </EmptyBox>
+        )}
 
-                    <Detail className="board-detail">
-                      <DetailClip>
-                        <DetailInner>
-                          <DetailText>{post.detail ?? post.lead}</DetailText>
-                          {post.deltas.length > 0 && (
-                            <DeltaRow>
-                              {post.deltas.map((d) => (
-                                <DeltaChip key={d.label}>
-                                  {d.label} <b>+{d.delta}</b>
-                                </DeltaChip>
-                              ))}
-                            </DeltaRow>
-                          )}
-                        </DetailInner>
-                      </DetailClip>
-                    </Detail>
-
-                    <Meta>
-                      <b>{post.author}</b>
-                      <span className="dot">·</span>
-                      {post.date}
-                      <span className="dot">·</span>
-                      조회 {post.views}
-                      <span className="dot">·</span>
-                      댓글 {post.commentCount}
-                    </Meta>
-                  </Main>
-
-                  <Score $tone={toneOf(post.score)}>
-                    {post.score != null ? (
-                      <>
-                        <strong>{post.score}</strong>
-                        <span>SCORE</span>
-                      </>
-                    ) : (
-                      <span className="pending">평가 전</span>
-                    )}
-                  </Score>
-                </Row>
-              </RowLink>
-            ))}
-
-          {!loading && !error && visible.length === 0 && (
-            <Empty>아직 이 카테고리에 글이 없어요.</Empty>
-          )}
-        </List>
-      </Inner>
-    </Wrapper>
+        {!loading &&
+          !error &&
+          visible.map((post) => <PostCard key={post.id} post={post} />)}
+      </Grid>
+    </Page>
   );
 }
 
