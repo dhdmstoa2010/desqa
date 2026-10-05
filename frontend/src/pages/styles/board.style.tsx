@@ -1,3 +1,4 @@
+import { EmptyBox } from "../../components/styles/shared.style";
 import styled from "@emotion/styled";
 
 export const Page = styled.div`
@@ -56,4 +57,9 @@ export const FilterChip = styled.button<{ $active?: boolean }>`
   &:hover {
     border-color: ${({ $active }) => ($active ? "var(--ink)" : "var(--ink-3)")};
   }
+`;
+
+export const BoardEmpty = styled(EmptyBox)`
+  border: none;
+  background: transparent;
 `;

@@ -210,7 +210,6 @@ export const ReportCard = styled(Link)`
 `;
 
 export const EmptyCard = styled.div`
-  border: 1px dashed rgba(60, 40, 15, 0.12);
   border-radius: 16px;
   background: rgba(60, 40, 15, 0.015);
   padding: 32px 20px;
@@ -297,7 +296,7 @@ export const ReportMeta = styled.div`
   .domain {
     font-size: 14px;
     font-weight: 600;
-    color: var(--card-deep);
+    color: var(--ink);
     word-break: break-all;
   }
 

@@ -5,8 +5,8 @@ import { fetchPostsRequest } from "../api/board";
 import { toPost } from "../utils/board";
 import { PostCard, PostCardSkeleton } from "../components/PostCard";
 import { Grid } from "../components/styles/PostCard.style";
-import { EmptyBox, ErrorBox, PrimaryLink } from "../components/styles/shared.style";
-import { Page, Header, Title, Desc, Filters, FilterChip } from "./styles/board.style";
+import { ErrorBox, PrimaryLink } from "../components/styles/shared.style";
+import { BoardEmpty, Page, Header, Title, Desc, Filters, FilterChip } from "./styles/board.style";
 
 function Board() {
   const [active, setActive] = useState<Category>("전체");
@@ -73,14 +73,14 @@ function Board() {
         )}
 
         {!loading && !error && visible.length === 0 && (
-          <EmptyBox>
+          <BoardEmpty>
             <strong>아직 올라온 게시물이 없습니다</strong>
             <p>
               {active === "전체"
                 ? "평가 결과를 첫 글로 공유해 보세요."
                 : "이 카테고리에는 아직 글이 없어요."}
             </p>
-          </EmptyBox>
+          </BoardEmpty>
         )}
 
         {!loading &&

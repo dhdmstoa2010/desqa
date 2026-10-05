@@ -80,7 +80,7 @@ function Home() {
           <div>
             <SectionTitle>최근 평가 기록</SectionTitle>
             <SectionDesc>
-              공개 평가 {reviews?.length ?? 0}건 · 블록을 누르면 리포트로 이동
+              공개 평가 {reviews?.length ?? 0}건
             </SectionDesc>
           </div>
           <Legend>

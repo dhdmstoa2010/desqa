@@ -58,7 +58,6 @@ export const EmptyBox = styled.div`
   justify-content: center;
   gap: 8px;
   text-align: center;
-  border: 1px dashed var(--ink-3);
   border-radius: 18px;
   background: var(--bg);
 

@@ -497,7 +497,6 @@ export const NotFound = styled.div`
   justify-content: center;
   gap: 8px;
   text-align: center;
-  border: 1px dashed var(--ink-3);
   border-radius: 20px;
 
   strong {
