@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export const Wrapper = styled.section`
   width: 100%;
   min-height: calc(100svh - 70px);
-  background: #0a0a0b;
-  color: #f7f7f8;
+  background: var(--bg);
+  color: var(--ink);
   padding: clamp(40px, 6vw, 72px) clamp(16px, 5vw, 48px) 120px;
   box-sizing: border-box;
 `;
@@ -49,13 +49,13 @@ export const PreviewLabel = styled.span`
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.01em;
-  color: #ffffff;
+  color: var(--ink);
 `;
 
 export const PreviewCard = styled.div`
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(60, 40, 15, 0.1);
   border-radius: 16px;
-  background: #111113;
+  background: var(--card);
   padding: 22px;
   display: flex;
   flex-direction: column;
@@ -74,14 +74,14 @@ export const PreviewThumb = styled.div`
   height: 84px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #ededf0;
+  border: 1px solid rgba(60, 40, 15, 0.12);
+  background: var(--card-deep);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  color: #6a6a72;
+  color: var(--ink-3);
   font-size: 11px;
   line-height: 1.3;
   text-align: center;
@@ -100,14 +100,14 @@ export const PreviewTitle = styled.p`
   font-size: 17px;
   font-weight: 700;
   line-height: 1.4;
-  color: #ffffff;
+  color: var(--ink);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
   &[data-empty="true"] {
-    color: #8b8b92;
+    color: var(--ink-3);
     font-weight: 600;
   }
 `;
@@ -115,7 +115,7 @@ export const PreviewTitle = styled.p`
 export const PreviewMeta = styled.div`
   margin-top: 8px;
   font-size: 13.5px;
-  color: #e6e6e8;
+  color: var(--ink);
 
   .dot {
     margin: 0 7px;
@@ -129,7 +129,7 @@ export const PreviewScore = styled.div<{ $tone: "high" | "mid" | "low" }>`
   line-height: 1;
   font-family: system-ui, sans-serif;
   color: ${({ $tone }) =>
-    $tone === "high" ? "#a6e3e9" : $tone === "mid" ? "#f2f2f4" : "#ff6b5c"};
+    $tone === "high" ? "var(--accent)" : $tone === "mid" ? "var(--ink)" : "var(--low)"};
 
   strong {
     display: block;
@@ -144,13 +144,13 @@ export const PreviewScore = styled.div<{ $tone: "high" | "mid" | "low" }>`
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.14em;
-    color: #e6e6e8;
+    color: var(--ink);
   }
 
   .pending {
     font-size: 13px;
     letter-spacing: 0.02em;
-    color: #e6e6e8;
+    color: var(--ink);
   }
 `;
 
@@ -160,14 +160,14 @@ export const PreviewFoot = styled.div`
   align-items: flex-start;
   gap: 12px;
   padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(60, 40, 15, 0.08);
 `;
 
 export const PreviewChip = styled.span`
   font-size: 13px;
   font-weight: 700;
-  color: #0a0a0b;
-  background: #a6e3e9;
+  color: #fff;
+  background: var(--accent);
   border-radius: 999px;
   padding: 4px 12px;
 `;
@@ -176,7 +176,7 @@ export const PreviewLead = styled.p`
   margin: 0;
   font-size: 14px;
   line-height: 1.6;
-  color: #e2e2e5;
+  color: var(--ink);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -184,9 +184,9 @@ export const PreviewLead = styled.p`
 `;
 
 export const PreviewBodyCard = styled.div`
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(60, 40, 15, 0.1);
   border-radius: 16px;
-  background: #111113;
+  background: var(--card);
   padding: 22px;
 `;
 
@@ -194,7 +194,7 @@ export const PreviewBody = styled.div`
   margin-top: 14px;
   font-size: 14.5px;
   line-height: 1.75;
-  color: #dcdce0;
+  color: var(--ink);
   max-height: 420px;
   overflow-y: auto;
 
@@ -210,7 +210,7 @@ export const PreviewBody = styled.div`
   h4 {
     margin: 1.2em 0 0.4em;
     line-height: 1.3;
-    color: #ffffff;
+    color: var(--ink);
     font-weight: 800;
   }
   h1 {
@@ -226,26 +226,26 @@ export const PreviewBody = styled.div`
     font-size: 1em;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #cfcfd4;
+    color: var(--ink-2);
   }
   a {
-    color: #a6e3e9;
+    color: var(--accent);
   }
   s {
-    color: #9a9aa2;
+    color: var(--ink-3);
   }
   blockquote {
     margin: 0.8em 0;
     padding: 4px 0 4px 14px;
-    border-left: 3px solid rgba(166, 227, 233, 0.5);
-    color: #cfcfd4;
+    border-left: 3px solid rgba(192, 114, 63, 0.5);
+    color: var(--ink-2);
   }
   pre {
     margin: 0.8em 0;
     padding: 12px 14px;
     border-radius: 10px;
-    background: #0d0d0e;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--card-deep);
+    border: 1px solid rgba(60, 40, 15, 0.08);
     font-family: ui-monospace, Consolas, monospace;
     font-size: 13px;
     white-space: pre-wrap;
@@ -262,13 +262,13 @@ export const PreviewBody = styled.div`
 export const PreviewEmpty = styled.p`
   margin: 14px 0 0;
   font-size: 13.5px;
-  color: #9a9aa2;
+  color: var(--ink-3);
 `;
 
 export const Tips = styled.div`
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(60, 40, 15, 0.1);
   border-radius: 16px;
-  background: #111113;
+  background: var(--card);
   padding: 22px;
 `;
 
@@ -278,7 +278,7 @@ export const TipsTitle = styled.span`
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.01em;
-  color: #ffffff;
+  color: var(--ink);
 `;
 
 export const TipList = styled.ul`
@@ -294,7 +294,7 @@ export const TipList = styled.ul`
     padding-left: 20px;
     font-size: 14.5px;
     line-height: 1.6;
-    color: #e2e2e5;
+    color: var(--ink);
   }
 
   li::before {
@@ -305,7 +305,7 @@ export const TipList = styled.ul`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #a6e3e9;
+    background: var(--accent);
   }
 `;
 
@@ -316,19 +316,19 @@ export const BackTop = styled(Link)`
   margin-bottom: 26px;
   padding: 7px 17px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(60, 40, 15, 0.24);
+  background: rgba(60, 40, 15, 0.04);
   font-size: 15px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--ink);
   text-decoration: none;
   transition:
     border-color 0.15s,
     background 0.15s;
 
   &:hover {
-    border-color: rgba(166, 227, 233, 0.6);
-    background: rgba(166, 227, 233, 0.08);
+    border-color: rgba(192, 114, 63, 0.6);
+    background: rgba(192, 114, 63, 0.08);
   }
 `;
 
@@ -338,14 +338,14 @@ export const Title = styled.h1`
   font-weight: 800;
   font-size: clamp(30px, 5vw, 46px);
   letter-spacing: -0.03em;
-  color: #f7f7f8;
+  color: var(--ink);
 `;
 
 export const Subtitle = styled.p`
   margin: 14px 0 0;
   font-size: 16px;
   line-height: 1.7;
-  color: #f0f0f2;
+  color: var(--ink);
 `;
 
 export const Form = styled.form`
@@ -363,14 +363,14 @@ export const Field = styled.label`
 export const FieldLabel = styled.span`
   font-size: 15px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--ink);
 
   em {
     margin-left: 6px;
     font-style: normal;
     font-weight: 600;
     font-size: 13px;
-    color: #b0b0b8;
+    color: var(--ink-2);
   }
 `;
 
@@ -378,18 +378,18 @@ export const Input = styled.input`
   width: 100%;
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #141416;
-  color: #f5f5f5;
+  border: 1px solid rgba(60, 40, 15, 0.1);
+  background: var(--card);
+  color: var(--ink);
   font-size: 15.5px;
   box-sizing: border-box;
 
   &::placeholder {
-    color: #9a9aa2;
+    color: var(--ink-3);
   }
 
   &:focus {
-    outline: 2px solid #a6e3e9;
+    outline: 2px solid var(--accent);
     outline-offset: 0;
   }
 `;
@@ -402,10 +402,10 @@ export const UrlRow = styled.div`
 
 export const Hint = styled.span`
   font-size: 13.5px;
-  color: #d0d0d5;
+  color: var(--ink-2);
 
   a {
-    color: #a6e3e9;
+    color: var(--accent);
     font-weight: 700;
     text-decoration: none;
   }
@@ -422,10 +422,10 @@ export const ScoreNote = styled.div`
   gap: 8px;
   padding: 12px 16px;
   border-radius: 10px;
-  background: rgba(166, 227, 233, 0.08);
-  border: 1px solid rgba(166, 227, 233, 0.2);
+  background: rgba(192, 114, 63, 0.08);
+  border: 1px solid rgba(192, 114, 63, 0.2);
   font-size: 14px;
-  color: #c3e6ea;
+  color: var(--ink-2);
 
   b {
     font-weight: 800;
@@ -440,9 +440,9 @@ export const Chips = styled.div`
 
 export const Chip = styled.button<{ $active?: boolean }>`
   border: 1px solid
-    ${({ $active }) => ($active ? "transparent" : "rgba(255, 255, 255, 0.16)")};
-  background: ${({ $active }) => ($active ? "#a6e3e9" : "transparent")};
-  color: ${({ $active }) => ($active ? "#0a0a0b" : "#e2e2e5")};
+    ${({ $active }) => ($active ? "transparent" : "rgba(60, 40, 15, 0.16)")};
+  background: ${({ $active }) => ($active ? "var(--accent)" : "transparent")};
+  color: ${({ $active }) => ($active ? "#fff" : "var(--ink)")};
   font-size: 14.5px;
   font-weight: 600;
   padding: 10px 18px;
@@ -454,9 +454,9 @@ export const Chip = styled.button<{ $active?: boolean }>`
     background 0.15s;
 
   &:hover {
-    color: ${({ $active }) => ($active ? "#0a0a0b" : "#ffffff")};
+    color: ${({ $active }) => ($active ? "#fff" : "var(--ink)")};
     border-color: ${({ $active }) =>
-      $active ? "transparent" : "rgba(255, 255, 255, 0.36)"};
+      $active ? "transparent" : "rgba(60, 40, 15, 0.36)"};
   }
 `;
 
@@ -468,8 +468,8 @@ export const Actions = styled.div`
 `;
 
 export const Submit = styled.button`
-  background: #a6e3e9;
-  color: #0a0a0b;
+  background: var(--accent);
+  color: #fff;
   border: none;
   font-size: 16px;
   font-weight: 800;
@@ -481,7 +481,7 @@ export const Submit = styled.button`
     opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #8dc7cb;
+    background: var(--accent-d);
   }
 
   &:disabled {
@@ -492,23 +492,23 @@ export const Submit = styled.button`
 
 export const ErrorText = styled.p`
   margin: 0;
-  color: #ff6b6b;
+  color: var(--low);
   font-size: 13.5px;
 `;
 
 export const LeadWarning = styled.p`
   margin: 0;
-  color: #ffb84d;
+  color: var(--mid);
   font-size: 13.5px;
 `;
 
 export const CancelLink = styled(Link)`
   font-size: 15px;
   font-weight: 600;
-  color: #d0d0d5;
+  color: var(--ink-2);
   text-decoration: none;
 
   &:hover {
-    color: #ffffff;
+    color: var(--ink);
   }
 `;

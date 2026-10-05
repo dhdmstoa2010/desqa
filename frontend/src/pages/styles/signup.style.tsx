@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Wrapper = styled.div`
   width: 100%;
   flex: 1;
-  background: #0a0a0b;
+  background: var(--bg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,7 +21,7 @@ export const Content = styled.div`
 `;
 
 export const Title = styled.h1`
-  color: #f5f5f5;
+  color: var(--ink);
   font-size: 28px;
   font-weight: 700;
   margin: 0;
@@ -42,7 +42,7 @@ export const Field = styled.div`
 export const Label = styled.label`
   font-size: 15px;
   font-weight: 600;
-  color: #f5f5f5;
+  color: var(--ink);
 `;
 
 export const Input = styled.input`
@@ -50,17 +50,17 @@ export const Input = styled.input`
   padding: 16px 18px;
   border-radius: 14px;
   border: none;
-  background: #1c1c1f;
-  color: #f5f5f5;
+  background: var(--card);
+  color: var(--ink);
   font-size: 15px;
   box-sizing: border-box;
 
   &::placeholder {
-    color: #7a7a7f;
+    color: var(--ink-3);
   }
 
   &:focus {
-    outline: 2px solid #4a4a4f;
+    outline: 2px solid var(--accent);
   }
 `;
 
@@ -81,13 +81,13 @@ export const ToggleButton = styled.button`
   align-items: center;
   background: none;
   border: none;
-  color: #9a9a9f;
+  color: var(--ink-2);
   cursor: pointer;
   padding: 0;
 `;
 
 export const ErrorText = styled.p`
-  color: #ff6b6b;
+  color: var(--low);
   font-size: 13px;
   margin: 0;
 `;
@@ -97,27 +97,27 @@ export const SubmitButton = styled.button`
   padding: 16px;
   border-radius: 14px;
   border: none;
-  background: #ffffff;
-  color: #0a0a0b;
+  background: var(--accent);
+  color: #fff;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   margin-top: 8px;
 
   &:hover {
-    background: #e5e5e5;
+    background: var(--accent-d);
   }
 `;
 
 export const Footer = styled.p`
   text-align: center;
-  color: #9a9a9f;
+  color: var(--ink-2);
   font-size: 14px;
   margin: 0;
 `;
 
 export const FooterLink = styled(Link)`
-  color: #f5f5f5;
+  color: var(--ink);
   font-weight: 700;
   text-decoration: none;
 `;

@@ -6,106 +6,63 @@ export const Bar = styled.nav`
   top: 0;
   z-index: 10;
   width: 100%;
-  height: 70px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 32px;
-  padding-right: 32px;
-  background: #0a0a0b;
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: var(--bg);
   box-sizing: border-box;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 32px;
-    right: 32px;
-    bottom: 0;
-    height: 2px;
-    background: #393939;
-  }
-`;
-
-export const Brand = styled(Link)`
-  color: #f5f5f5;
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.3px;
-  text-decoration: none;
-`;
-
-/* 로고 글자 색 변환 */
-export const BrandChar = styled.span`
-  display: inline-block;
-  white-space: pre;
-  animation: brandGlow 7s ease-in-out infinite;
-
-  @keyframes brandGlow {
-    0%,
-    100% {
-      color: #f5f5f5;
-    }
-    6%,
-    13% {
-      color: #a6e3e9;
-    }
-    20% {
-      color: #f5f5f5;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
 `;
 
 export const LeftGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: clamp(16px, 3vw, 28px);
+`;
+
+export const Brand = styled(Link)`
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
 `;
 
 export const NoticeBoard = styled.div`
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   white-space: nowrap;
-  text-align: left;
-
-  &:hover a {
-    opacity: 1;
-  }
 `;
 
-export const Board = styled(Link)`
-  color: #f5f5f5;
-`;
-
-export const Notice = styled.div<{ $active?: boolean }>`
+export const NavItem = styled(Link)<{ $active?: boolean }>`
   position: relative;
-  font-family: var(--mono);
-  color: ${({ $active }) => ($active ? "#ffffff" : "#f5f5f5")};
+  padding: 4px 0;
+  font-size: 14px;
+  font-weight: ${({ $active }) => ($active ? 700 : 500)};
+  color: ${({ $active }) => ($active ? "var(--ink)" : "var(--ink-2)")};
+  text-decoration: none;
   transition: color 0.15s ease;
-
-  &:hover {
-    color: ${({ $active }) => ($active ? "#a6e3e9" : "#a6e3e9")};
-  }
 
   &::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -4px;
+    bottom: -2px;
     height: 2px;
-    background: #a6e3e9;
+    border-radius: 2px;
+    background: var(--accent);
     transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
     transform-origin: left;
     transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--ink);
   }
 `;
 
@@ -115,41 +72,14 @@ export const Links = styled.div`
   gap: 16px;
 `;
 
-export const Myaccount = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const AccountLink = styled(Link)`
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
   white-space: nowrap;
-`;
-
-export const NavLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  border-radius: 999px;
-  margin-right: -4px;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-  transition:
-    background 0.15s ease,
-    opacity 0.15s ease;
 
   &:hover {
-    color: #b6b6b2;
-    opacity: 0.85;
-  }
-`;
-
-export const LoginLink = styled(Link)`
-  color: #f5f5f5;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-
-  &:hover {
-    color: #b8b8b8;
+    color: var(--accent-d);
   }
 `;

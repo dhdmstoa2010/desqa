@@ -5,8 +5,8 @@ export const Wrapper = styled.section`
   position: relative;
   width: 100%;
   min-height: calc(100svh - 70px);
-  background: #0a0a0b;
-  color: #f7f7f8;
+  background: var(--bg);
+  color: var(--ink);
   font-family: system-ui, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   box-sizing: border-box;
@@ -23,8 +23,8 @@ export const Glow = styled.div`
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(166, 227, 233, 0.1) 0%,
-    rgba(166, 227, 233, 0) 70%
+    rgba(192, 114, 63, 0.1) 0%,
+    rgba(192, 114, 63, 0) 70%
   );
   pointer-events: none;
 `;
@@ -55,23 +55,24 @@ export const Left = styled.div`
 
 export const Title = styled.h1`
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: var(--display);
   font-weight: 800;
   font-size: clamp(38px, 5.4vw, 66px);
   line-height: 1.04;
   letter-spacing: -0.03em;
-  color: #f7f7f8;
+  color: var(--ink);
 
   span {
     display: block;
   }
 
   .en {
-    text-transform: uppercase;
+    font-size: 0.62em;
+    line-height: 1.25;
   }
 
   .kr {
-    color: #a6e3e9;
+    color: var(--accent);
   }
 `;
 
@@ -98,7 +99,7 @@ export const InputWrap = styled.div`
     left: 16px;
     font-size: 18px;
     font-weight: 700;
-    color: #a6e3e9;
+    color: var(--accent);
     pointer-events: none;
   }
 `;
@@ -107,9 +108,9 @@ export const Input = styled.input`
   width: 100%;
   padding: 15px 16px 15px 34px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #101012;
-  color: #f5f5f5;
+  border: 1px solid rgba(60, 40, 15, 0.12);
+  background: var(--card);
+  color: var(--ink);
   font-size: 15px;
   box-sizing: border-box;
   transition:
@@ -117,13 +118,13 @@ export const Input = styled.input`
     box-shadow 0.15s;
 
   &::placeholder {
-    color: #7a7a80;
+    color: var(--ink-3);
   }
 
   &:focus {
     outline: none;
-    border-color: #a6e3e9;
-    box-shadow: 0 0 0 3px rgba(166, 227, 233, 0.16);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(192, 114, 63, 0.16);
   }
 `;
 
@@ -131,8 +132,8 @@ export const Button = styled.button`
   padding: 15px 26px;
   border-radius: 12px;
   border: none;
-  background: #a6e3e9;
-  color: #0a0a0b;
+  background: var(--accent);
+  color: #fff;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
@@ -142,7 +143,7 @@ export const Button = styled.button`
     opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #8dc7cb;
+    background: var(--accent-d);
   }
 
   &:disabled {
@@ -156,7 +157,7 @@ export const BoardLink = styled(Link)`
   border-radius: 12px;
   border: none;
   margin-top: 20px;
-  color: #8dc7cb;
+  color: var(--accent-d);
   font-size: 15px;
   font-weight: 800;
   text-decoration: none;
@@ -167,7 +168,7 @@ export const BoardLink = styled(Link)`
     opacity 0.2s;
 
   &:hover {
-    color: #ffffff;
+    color: var(--ink);
   }
 `;
 
@@ -187,14 +188,14 @@ export const PanelLabel = styled.p`
   font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: #6f6f76;
+  color: var(--ink-3);
 `;
 
 export const ReportCard = styled(Link)`
   display: block;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(60, 40, 15, 0.08);
   border-radius: 16px;
-  background: #0e0e10;
+  background: var(--card);
   padding: 20px;
   text-decoration: none;
   color: inherit;
@@ -203,15 +204,14 @@ export const ReportCard = styled(Link)`
     background 0.15s;
 
   &:hover {
-    border-color: rgba(166, 227, 233, 0.35);
-    background: #101014;
+    border-color: rgba(192, 114, 63, 0.35);
+    background: var(--card-deep);
   }
 `;
 
 export const EmptyCard = styled.div`
-  border: 1px dashed rgba(255, 255, 255, 0.12);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(60, 40, 15, 0.015);
   padding: 32px 20px;
   text-align: center;
 
@@ -219,14 +219,14 @@ export const EmptyCard = styled.div`
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #cececf;
+    color: var(--ink-2);
   }
 
   span {
     display: block;
     margin-top: 6px;
     font-size: 12.5px;
-    color: #7c7c83;
+    color: var(--ink-3);
   }
 `;
 
@@ -244,7 +244,7 @@ export const RecentItem = styled(Link)`
   border-radius: 8px;
   font-size: 13px;
   text-decoration: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(60, 40, 15, 0.06);
   transition: background 0.15s;
 
   &:first-of-type {
@@ -252,11 +252,11 @@ export const RecentItem = styled(Link)`
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(60, 40, 15, 0.04);
   }
 
   &:hover .domain {
-    color: #ffffff;
+    color: var(--ink);
   }
 
   .domain {
@@ -265,13 +265,13 @@ export const RecentItem = styled(Link)`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #cececf;
+    color: var(--ink-2);
   }
 
   .date {
     flex-shrink: 0;
     font-size: 11.5px;
-    color: #6f6f76;
+    color: var(--ink-3);
   }
 
   .score {
@@ -279,7 +279,7 @@ export const RecentItem = styled(Link)`
     width: 2ch;
     text-align: right;
     font-weight: 800;
-    color: #a6e3e9;
+    color: var(--accent);
   }
 `;
 
@@ -296,14 +296,14 @@ export const ReportMeta = styled.div`
   .domain {
     font-size: 14px;
     font-weight: 600;
-    color: #ededf0;
+    color: var(--ink);
     word-break: break-all;
   }
 
   .sub {
     margin-top: 4px;
     font-size: 12px;
-    color: #7c7c83;
+    color: var(--ink-3);
   }
 `;
 
@@ -312,13 +312,13 @@ export const ScoreBig = styled.div`
   font-weight: 800;
   font-size: 44px;
   line-height: 1;
-  color: #a6e3e9;
+  color: var(--accent);
   letter-spacing: -0.02em;
 
   small {
     font-size: 13px;
     font-weight: 600;
-    color: #7c7c83;
+    color: var(--ink-3);
     letter-spacing: 0;
   }
 `;
@@ -340,33 +340,33 @@ export const Bar = styled.div`
 
   .label {
     font-size: 12.5px;
-    color: #b6b6bc;
+    color: var(--ink-2);
   }
 
   .val {
     font-size: 12.5px;
     font-weight: 700;
-    color: #f2f2f4;
+    color: var(--ink);
   }
 
   .track {
     height: 4px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(60, 40, 15, 0.08);
     overflow: hidden;
   }
 
   .fill {
     height: 100%;
     border-radius: 999px;
-    background: #a6e3e9;
+    background: var(--accent);
   }
 `;
 
 export const Notes = styled.div`
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(60, 40, 15, 0.06);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -375,14 +375,14 @@ export const Notes = styled.div`
     margin: 0;
     font-size: 12.5px;
     line-height: 1.5;
-    color: #9a9aa2;
+    color: var(--ink-3);
   }
 
   .plus b {
-    color: #a6e3e9;
+    color: var(--accent);
   }
 
   .minus b {
-    color: #e6a15c;
+    color: var(--mid);
   }
 `;

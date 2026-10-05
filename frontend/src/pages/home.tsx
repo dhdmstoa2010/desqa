@@ -2,84 +2,36 @@ import { useEffect, useState } from "react";
 import { fetchPostsRequest } from "../api/board";
 import { listPublicReviewsRequest, type PublicReview } from "../api/review";
 import { toneOf, toPost } from "../utils/board";
+import { domainOf, relTime } from "../utils/format";
 import type { Post } from "../types/board";
+import { PostCard, PostCardSkeleton } from "../components/PostCard";
+import { Grid as PostGrid } from "../components/styles/PostCard.style";
 import {
-  ReviewSection,
-  ReviewSectionInner,
-  ReviewSectionTitle,
-  ReviewSectionDesc,
+  EmptyBox,
+  ErrorBox,
+  GhostLink,
+  PrimaryLink,
+  TONE,
+} from "../components/styles/shared.style";
+import {
+  Page,
+  Section,
+  SectionHead,
+  SectionTitle,
+  SectionDesc,
+  Legend,
+  HeadActions,
   ReviewGrid,
   ReviewCard,
-  ReviewCardHead,
-  ReviewDomain,
-  ReviewTime,
+  ToneTag,
   ReviewScore,
   ReviewSummary,
+  ReviewFoot,
   ReviewSkeleton,
-  ReviewEmpty,
-  BoardPromo,
-  BoardPromoInner,
-  BoardPromoTitle,
-  PromoGrid,
-  PromoCard,
-  PromoPanel,
-  PromoThumb,
-  PromoPills,
-  PromoBody,
-  PromoTitle,
-  PromoArrow,
-  PromoMeta,
-  PromoSkeleton,
-  PromoEmpty,
-  BoardPromoActions,
-  OutroSecondary,
-  OutroPrimary,
 } from "./styles/home.style";
 
-const PROMO_POST_COUNT = 8;
+const POST_COUNT = 8;
 const REVIEW_COUNT = 8;
-
-function ArrowIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M9 5l7 7-7 7" />
-    </svg>
-  );
-}
-
-function domainOf(u: string) {
-  try {
-    return new URL(u).hostname.replace(/^www\./, "");
-  } catch {
-    return u;
-  }
-}
-
-function relTime(iso: string) {
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return "";
-  const diff = Date.now() - then;
-  const m = 60_000;
-  const h = 60 * m;
-  const d = 24 * h;
-  if (diff < h) return `${Math.max(1, Math.round(diff / m))}분 전`;
-  if (diff < d) return `${Math.round(diff / h)}시간 전`;
-  if (diff < 7 * d) return `${Math.round(diff / d)}일 전`;
-  return new Date(iso)
-    .toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\.$/, "");
-}
 
 function Home() {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -92,7 +44,7 @@ function Home() {
     fetchPostsRequest()
       .then((rows) => {
         if (cancelled) return;
-        setPosts(rows.slice(0, PROMO_POST_COUNT).map(toPost));
+        setPosts(rows.slice(0, POST_COUNT).map(toPost));
       })
       .catch(() => {
         if (cancelled) return;
@@ -122,110 +74,101 @@ function Home() {
   }, []);
 
   return (
-    <>
-      <ReviewSection>
-        <ReviewSectionInner>
-          <ReviewSectionTitle>최근 평가 기록</ReviewSectionTitle>
-          <ReviewSectionDesc>
-            다른 사람들이 평가받은 웹사이트를 확인해보세요.
-          </ReviewSectionDesc>
+    <Page>
+      <Section>
+        <SectionHead>
+          <div>
+            <SectionTitle>최근 평가 기록</SectionTitle>
+            <SectionDesc>
+              공개 평가 {reviews?.length ?? 0}건
+            </SectionDesc>
+          </div>
+          <Legend>
+            <span style={{ "--c": "var(--good)" } as React.CSSProperties}>
+              <i />
+              80+ 좋음
+            </span>
+            <span style={{ "--c": "var(--mid)" } as React.CSSProperties}>
+              <i />
+              65–79 보통
+            </span>
+            <span style={{ "--c": "var(--low)" } as React.CSSProperties}>
+              <i />
+              64 이하 낮음
+            </span>
+          </Legend>
+        </SectionHead>
 
-          <ReviewGrid>
-            {reviews === null &&
-              Array.from({ length: REVIEW_COUNT }, (_, i) => (
-                <ReviewSkeleton key={i} aria-hidden="true" />
-              ))}
+        <ReviewGrid>
+          {reviews === null &&
+            Array.from({ length: 4 }, (_, i) => (
+              <ReviewSkeleton key={i} aria-hidden="true" />
+            ))}
 
-            {reviews?.length === 0 && (
-              <ReviewEmpty>
-                {reviewsFailed
-                  ? "평가 기록을 불러오지 못했어요."
-                  : "아직 평가 기록이 없어요."}
-              </ReviewEmpty>
-            )}
+          {reviews?.length === 0 &&
+            (reviewsFailed ? (
+              <ErrorBox>
+                <strong>평가 기록을 불러오지 못했습니다</strong>
+                <p>네트워크 상태를 확인한 뒤 새로고침하세요.</p>
+              </ErrorBox>
+            ) : (
+              <EmptyBox>
+                <strong>아직 공개된 평가가 없습니다</strong>
+                <p>첫 번째로 URL을 평가해 보세요.</p>
+                <GhostLink to="/evaluate">URL 평가하기</GhostLink>
+              </EmptyBox>
+            ))}
 
-            {reviews?.map((review) => (
+          {reviews?.map((review) => {
+            const tone = toneOf(review.score);
+            return (
               <ReviewCard key={review.id} to={`/result?id=${review.id}`}>
-                <ReviewCardHead>
-                  <ReviewDomain>{domainOf(review.url)}</ReviewDomain>
-                  <ReviewTime>{relTime(review.createdAt)}</ReviewTime>
-                </ReviewCardHead>
-
-                <ReviewScore $tone={toneOf(review.score)}>
-                  {review.score}
-                  <small>/100</small>
-                </ReviewScore>
-
+                <ToneTag $tone={tone}>{TONE[tone].label}</ToneTag>
+                <ReviewScore $tone={tone}>{review.score}</ReviewScore>
                 <ReviewSummary>{review.verdict || review.summary}</ReviewSummary>
+                <ReviewFoot>
+                  <b>{domainOf(review.url)}</b>
+                  <span>{relTime(review.createdAt)}</span>
+                </ReviewFoot>
               </ReviewCard>
+            );
+          })}
+        </ReviewGrid>
+      </Section>
+
+      <Section>
+        <SectionHead>
+          <div>
+            <SectionTitle>디자인 게시판</SectionTitle>
+            <SectionDesc>평가 결과를 공유하고 서로의 개선 과정을 봅니다</SectionDesc>
+          </div>
+          <HeadActions>
+            <GhostLink to="/board">게시판 둘러보기</GhostLink>
+            <PrimaryLink to="/board/new">게시물 올리러 가기 →</PrimaryLink>
+          </HeadActions>
+        </SectionHead>
+
+        <PostGrid>
+          {posts === null &&
+            Array.from({ length: 4 }, (_, i) => <PostCardSkeleton key={i} />)}
+
+          {posts?.length === 0 &&
+            (loadFailed ? (
+              <ErrorBox>
+                <strong>게시물을 불러오지 못했습니다</strong>
+                <p>잠시 후 다시 시도하세요.</p>
+              </ErrorBox>
+            ) : (
+              <EmptyBox>
+                <strong>아직 올라온 게시물이 없습니다</strong>
+                <p>평가 결과를 첫 글로 공유해 보세요.</p>
+              </EmptyBox>
             ))}
-          </ReviewGrid>
-        </ReviewSectionInner>
-      </ReviewSection>
 
-      <BoardPromo>
-        <BoardPromoInner>
-          <BoardPromoTitle>디자인 게시판</BoardPromoTitle>
-
-          <PromoGrid>
-            {posts === null &&
-              Array.from({ length: PROMO_POST_COUNT }, (_, i) => (
-                <PromoSkeleton key={i} aria-hidden="true" />
-              ))}
-
-            {posts?.length === 0 && (
-              <PromoEmpty>
-                {loadFailed
-                  ? "게시물을 불러오지 못했어요."
-                  : "아직 올라온 게시물이 없어요."}
-              </PromoEmpty>
-            )}
-
-            {posts?.map((post) => (
-              <PromoCard key={post.id} to={`/board/${post.id}`}>
-                <PromoPanel>
-                  <PromoThumb>
-                    {post.image ? (
-                      <img src={post.image} alt="" loading="lazy" />
-                    ) : (
-                      <span>사진 없음</span>
-                    )}
-                  </PromoThumb>
-                  <PromoPills>
-                    <span>{post.category}</span>
-                    <span data-tone={toneOf(post.score)}>
-                      {post.score != null ? `${post.score} SCORE` : "평가 전"}
-                    </span>
-                  </PromoPills>
-                </PromoPanel>
-
-                <PromoBody>
-                  <PromoTitle>{post.title}</PromoTitle>
-                  <PromoArrow className="promo-arrow" aria-hidden="true">
-                    <ArrowIcon />
-                  </PromoArrow>
-                </PromoBody>
-
-                <PromoMeta>
-                  <b>{post.author}</b>
-                  <span className="dot">·</span>
-                  {post.date}
-                  <span className="dot">·</span>
-                  조회 {post.views}
-                  <span className="dot">·</span>
-                  댓글 {post.commentCount}
-                </PromoMeta>
-              </PromoCard>
-            ))}
-          </PromoGrid>
-
-          <BoardPromoActions>
-            <OutroPrimary to="/board/new">게시물 올리러 가기 →</OutroPrimary>
-            <OutroSecondary to="/board">게시판 둘러보기</OutroSecondary>
-          </BoardPromoActions>
-        </BoardPromoInner>
-      </BoardPromo>
-    </>
+          {posts?.map((post) => <PostCard key={post.id} post={post} />)}
+        </PostGrid>
+      </Section>
+    </Page>
   );
 }
 
