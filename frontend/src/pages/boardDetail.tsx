@@ -107,8 +107,10 @@ function BoardDetail() {
 
   useEffect(() => {
     if (!Number.isInteger(numericId)) {
+      /* eslint-disable react-hooks/set-state-in-effect */
       setLoading(false);
       setNotFound(true);
+      /* eslint-enable react-hooks/set-state-in-effect */
       return;
     }
     let cancelled = false;
