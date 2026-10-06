@@ -16,8 +16,6 @@ function Board() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     fetchPostsRequest()
       .then((rows) => {
         if (cancelled) return;

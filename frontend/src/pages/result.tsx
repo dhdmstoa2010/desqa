@@ -305,9 +305,11 @@ function ResultPage() {
   useEffect(() => {
     if (!id && !url) return;
     let active = true;
+    /* eslint-disable react-hooks/set-state-in-effect */
     setLoading(true);
     setError(null);
     setResult(null);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     const task = id
       ? getReviewRequest(id)

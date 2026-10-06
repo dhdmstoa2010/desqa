@@ -64,10 +64,13 @@ function RichEditor({ value, onChange, placeholder }: Props) {
   useEffect(() => {
     try {
       document.execCommand("defaultParagraphSeparator", false, "p");
-    } catch {}
+    } catch {
+      // 일부 브라우저는 defaultParagraphSeparator 미지원
+    }
     if (ref.current) {
       ref.current.innerHTML = value || "<p><br></p>";
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const normalize = () => {
